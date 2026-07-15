@@ -113,6 +113,9 @@ App đã được code để:
 3. Add env vars:
    - `MONGODB_URI`
    - `MONGODB_DB`
+   - `ADMIN_USERNAME`
+   - `ADMIN_PASSWORD`
+   - `ADMIN_SESSION_SECRET`
 4. Deploy
 
 ## Gợi ý trước khi public chính thức
@@ -122,3 +125,12 @@ App đã được code để:
 - Cập nhật logo/banner chính thức
 - Cấu hình domain thật
 - Mở MongoDB Atlas network access đúng chuẩn production
+
+## Admin login
+
+Admin đã được khóa.
+
+- Route đăng nhập: `/admin/login`
+- Route quản trị: `/admin`
+
+Nếu chưa có session, truy cập `/admin` sẽ tự chuyển sang màn hình login.

@@ -43,10 +43,22 @@ export function AdminShell({
         </aside>
         <main className="space-y-8">
           <div className="rounded-[2rem] border border-white/10 bg-linear-to-br from-cyan-500 to-blue-700 p-8 text-slate-950">
-            <h1 className="text-3xl font-semibold">{title}</h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-900/80">
-              {description}
-            </p>
+            <div className="flex flex-wrap items-start justify-between gap-6">
+              <div>
+                <h1 className="text-3xl font-semibold">{title}</h1>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-900/80">
+                  {description}
+                </p>
+              </div>
+              <form action="/api/auth/logout" method="post">
+                <button
+                  type="submit"
+                  className="rounded-full border border-slate-950/20 bg-white/70 px-5 py-3 text-sm font-semibold text-slate-950"
+                >
+                  Đăng xuất
+                </button>
+              </form>
+            </div>
           </div>
           {children}
         </main>
