@@ -15,10 +15,12 @@ export async function POST(request: NextRequest) {
     const loginUrl = new URL("/admin/login", request.url);
     loginUrl.searchParams.set("error", "1");
     loginUrl.searchParams.set("next", nextPath);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(loginUrl, { status: 303 });
   }
 
-  const response = NextResponse.redirect(new URL(nextPath, request.url));
+  const response = NextResponse.redirect(new URL(nextPath, request.url), {
+    status: 303,
+  });
   response.cookies.set(ADMIN_SESSION_COOKIE, credentials.sessionSecret, {
     httpOnly: true,
     sameSite: "lax",
@@ -28,4 +30,10 @@ export async function POST(request: NextRequest) {
   });
 
   return response;
+}
+
+export async function GET(request: NextRequest) {
+  return NextResponse.redirect(new URL("/admin/login", request.url), {
+    status: 303,
+  });
 }
