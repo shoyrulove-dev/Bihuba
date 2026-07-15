@@ -1,19 +1,24 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SiteSettingsShape } from "@/types/cms";
 
 export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#031634]/88 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-6 py-4">
         <Link href="/" className="flex items-center gap-4">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl border border-cyan-300/40 bg-linear-to-br from-cyan-300 to-blue-700 font-black text-slate-950">
-            B
-          </div>
+          <Image
+            src="/bihuba-mark.svg"
+            alt="BIHUBA"
+            width={56}
+            height={56}
+            className="h-14 w-14 rounded-full border border-cyan-300/20 bg-white/10 p-1.5"
+          />
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">
               {settings.shortName}
             </p>
-            <p className="max-w-xs text-sm text-slate-300">{settings.slogan}</p>
+            <p className="max-w-sm text-sm text-slate-300">{settings.slogan}</p>
           </div>
         </Link>
 
@@ -22,7 +27,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-slate-200 transition hover:text-cyan-300"
+              className="text-sm font-medium text-slate-100 transition hover:text-cyan-300"
             >
               {item.label}
             </Link>

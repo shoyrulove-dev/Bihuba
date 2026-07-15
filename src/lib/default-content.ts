@@ -7,181 +7,226 @@ import {
 } from "@/types/cms";
 
 export const defaultSettings: SiteSettingsShape = {
-  siteName: "Hội Doanh Nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh",
+  siteName: "Hoi Doanh Nghiep Xa Binh Hung Thanh pho Ho Chi Minh",
   shortName: "BIHUBA",
-  slogan: "Đoàn kết - Đổi mới - Hội nhập - Phát triển",
-  heroTitle: "Cộng đồng doanh nghiệp BIHUBA kết nối và phát triển bền vững",
+  slogan: "Doan ket - Doi moi - Hoi nhap - Phat trien",
+  heroTitle: "Cong dong doanh nghiep Binh Hung ket noi nguon luc va mo rong co hoi phat trien",
   heroSubtitle:
-    "Nền tảng số cho tin tức, sự kiện, hội viên, đối tác và điều hành nội dung tập trung.",
-  heroCtaLabel: "Đăng ký hội viên",
-  heroCtaHref: "/hoi-vien",
-  introTitle: "Về BIHUBA",
+    "Cong thong tin BIHUBA duoc xay dung theo huong hien dai, quan tri tap trung, phu hop cho tin tuc, su kien, hoi vien, doi tac va cac chuong trinh ket noi giao thuong.",
+  heroCtaLabel: "Kham pha tin hoat dong",
+  heroCtaHref: "/tin-tuc",
+  introTitle: "Ve BIHUBA",
   introBody:
-    "BIHUBA được xây dựng theo mô hình tương đương HUBA nhưng tối ưu cho quản trị nội dung tập trung. Toàn bộ banner, bài viết, hội viên, đối tác và tài liệu đều có thể cập nhật từ admin panel.",
+    "BIHUBA dinh huong tro thanh diem ket noi doanh nghiep tai khu vuc Binh Hung, thuc day hop tac, doi moi va chia se co hoi tang truong. Toan bo noi dung tren website co the duoc van hanh va cap nhat tu admin panel rieng.",
   memberStats: [
-    { label: "Hội viên doanh nghiệp", value: "120+" },
-    { label: "Đối tác chiến lược", value: "25+" },
-    { label: "Sự kiện thường niên", value: "40+" },
-    { label: "Tài liệu & thông báo", value: "100+" },
+    { label: "Hoi vien doanh nghiep", value: "120+" },
+    { label: "Chuong trinh ket noi", value: "36+" },
+    { label: "Doi tac dong hanh", value: "24+" },
+    { label: "Tai lieu va thong bao", value: "100+" },
   ],
   nav: [
-    { label: "Trang chủ", href: "/" },
-    { label: "Tin tức", href: "/tin-tuc" },
-    { label: "Sự kiện", href: "/su-kien" },
-    { label: "Kết nối giao thương", href: "/ket-noi-giao-thuong" },
-    { label: "Hội viên", href: "/hoi-vien" },
-    { label: "Đối tác", href: "/doi-tac" },
+    { label: "Trang chu", href: "/" },
+    { label: "Tin tuc", href: "/tin-tuc" },
+    { label: "Su kien", href: "/su-kien" },
+    { label: "Ket noi giao thuong", href: "/ket-noi-giao-thuong" },
+    { label: "Hoi vien", href: "/hoi-vien" },
+    { label: "Doi tac", href: "/doi-tac" },
     { label: "Download", href: "/download" },
-    { label: "Liên hệ", href: "/lien-he" },
+    { label: "Lien he", href: "/lien-he" },
   ],
   contact: {
-    address: "Bình Hưng, TP. Hồ Chí Minh",
+    address: "Xa Binh Hung, Thanh pho Ho Chi Minh",
     email: "vanphong@bihuba.vn",
     phone: "0900 000 000",
-    website: "https://bihuba.vn",
+    website: "https://bihuba.vercel.app",
   },
 };
 
 export const defaultPosts: PostShape[] = [
   {
-    title: "BIHUBA ra mắt cổng thông tin số cho hội viên",
-    slug: "bihuba-ra-mat-cong-thong-tin-so",
-    type: "news",
-    category: "Tin tức",
-    excerpt:
-      "Cổng thông tin số mới cho phép điều hành nội dung, hội viên và sự kiện tập trung trên một nền tảng.",
-    content:
-      "BIHUBA triển khai nền tảng số mới để quản lý bài viết, đối tác, hội viên và tài liệu theo mô hình quản trị tập trung. Đây là bản khởi tạo sẵn để đội ngũ nội bộ cập nhật nội dung thật sau khi bàn giao.",
-    featuredImage:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
-    publishedAt: "2026-07-16",
-    isFeatured: true,
-  },
-  {
-    title: "Chương trình kết nối doanh nghiệp quý III",
-    slug: "chuong-trinh-ket-noi-doanh-nghiep-quy-iii",
-    type: "event",
-    category: "Kết nối doanh nghiệp",
-    excerpt:
-      "Sự kiện kết nối giữa hội viên, đối tác và các đơn vị đồng hành trong khu vực.",
-    content:
-      "Sự kiện tập trung vào kết nối giao thương, giới thiệu sản phẩm và mở rộng mạng lưới doanh nghiệp hội viên.",
-    featuredImage:
-      "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
-    publishedAt: "2026-07-21",
-    isFeatured: true,
-  },
-  {
-    title: "Lịch tuần điều hành BIHUBA",
-    slug: "lich-tuan-dieu-hanh-bihuba",
+    title: "Lich cong tac HUBA tu ngay 13.7.2026 den ngay 19.7.2026",
+    slug: "lich-cong-tac-huba-tu-ngay-13-7-2026-den-ngay-19-7-2026",
     type: "schedule",
-    category: "Lịch tuần",
+    category: "Lich tuan",
     excerpt:
-      "Lịch công tác, họp điều hành và tiếp đối tác trong tuần làm việc hiện tại.",
+      "Ban demo tong hop lich cong tac va dieu hanh theo cau truc HUBA, phu hop de BIHUBA cap nhat lich hop, lich tiep khach va ke hoach tuan.",
     content:
-      "Admin có thể cập nhật lịch tuần từng tuần từ backoffice để hiển thị công khai hoặc nội bộ theo nhu cầu.",
+      "Noi dung demo duoc dua vao de mo phong chuyen muc lich tuan. Khi van hanh that, BIHUBA co the thay bang lich dieu hanh, lich tiep doi tac va cac cong viec trong tuan tu admin panel.",
     featuredImage:
-      "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=1200&q=80",
+      "https://huba.vn/wp-content/uploads/2026/07/Lich-cong-tac-HUBA-tu-ngay-13.7.2026-den-ngay-19.7.2026.webp",
     publishedAt: "2026-07-14",
     isFeatured: true,
   },
   {
-    title: "Chuyên đề xúc tiến thương mại cho hội viên",
-    slug: "chuyen-de-xuc-tien-thuong-mai-cho-hoi-vien",
-    type: "trade",
-    category: "Hội chợ - xúc tiến thương mại",
+    title: "AI trong doanh nghiep: 10 xu huong se thay doi mo hinh kinh doanh trong 5 nam toi",
+    slug: "ai-trong-doanh-nghiep-10-xu-huong-se-thay-doi-mo-hinh-kinh-doanh-trong-5-nam-toi",
+    type: "news",
+    category: "Tin tuc",
     excerpt:
-      "Hoạt động hỗ trợ hội viên tiếp cận đối tác và thị trường mới qua các chương trình xúc tiến thương mại.",
+      "Bai demo theo huong bai viet chuyen de cua HUBA, giup homepage hien thi khoi tin moi va tao cam giac website da co noi dung van hanh that.",
     content:
-      "Nội dung mẫu để thay thế cho các chuyên mục tương tự trên HUBA, sẵn sàng để nhập liệu BIHUBA chính thức.",
+      "AI dang chuyen tu cong cu ho tro thanh nen tang van hanh trong doanh nghiep. BIHUBA co the dung nhom bai viet chuyen de nhu the nay de thu hut hoi vien, chia se tri thuc va tao diem den noi dung cho cong dong.",
     featuredImage:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
-    publishedAt: "2026-07-18",
+      "https://huba.vn/wp-content/uploads/2026/07/featured-image-1.png",
+    publishedAt: "2026-07-14",
+    isFeatured: true,
+  },
+  {
+    title: "Cafe doanh nhan va khong gian trung bay san pham hoi vien",
+    slug: "cafe-doanh-nhan-va-khong-gian-trung-bay-san-pham-hoi-vien",
+    type: "event",
+    category: "Su kien",
+    excerpt:
+      "Mo phong mot su kien ket noi va trung bay san pham theo chat lieu HUBA, rat hop de BIHUBA trinh dien hinh anh hoat dong tren homepage.",
+    content:
+      "Chuyen muc nay co the dung de dang tin ve cac buoi gap go doanh nghiep, gioi thieu san pham, toa dam chuyen de va cac phien ket noi giao thuong tai dia phuong.",
+    featuredImage:
+      "https://huba.vn/wp-content/uploads/2026/07/Trien-lam-tai-chuong-trinh-cafe-huba-scaled.webp",
+    publishedAt: "2026-07-10",
+    isFeatured: true,
+  },
+  {
+    title: "Doanh nghiep tang doanh thu nhung van thieu tien: nhin tu quan tri dong tien",
+    slug: "doanh-nghiep-tang-doanh-thu-nhung-van-thieu-tien",
+    type: "news",
+    category: "Tin tuc",
+    excerpt:
+      "Mot bai demo ve quan tri tai chinh doanh nghiep, giup khu vuc tin tuc cua BIHUBA co do phong phu ngay tu dau.",
+    content:
+      "Doanh thu tang khong dong nghia voi dong tien tang. Noi dung dang bai theo chu de quan tri, tai chinh, phap ly va chuyen doi so se rat phu hop voi doi tuong hoi vien doanh nghiep.",
+    featuredImage:
+      "https://huba.vn/wp-content/uploads/2026/06/featured-image-4.png",
+    publishedAt: "2026-07-03",
     isFeatured: false,
   },
   {
-    title: "Doanh nghiệp đồng hành cùng BIHUBA 2026",
-    slug: "doanh-nghiep-dong-hanh-cung-bihuba-2026",
-    type: "sponsor",
-    category: "Đồng hành",
+    title: "Ra mat hoi vien va mo rong mang luoi ket noi doanh nghiep",
+    slug: "ra-mat-hoi-vien-va-mo-rong-mang-luoi-ket-noi-doanh-nghiep",
+    type: "trade",
+    category: "Ket noi giao thuong",
     excerpt:
-      "Khối doanh nghiệp đồng hành được dùng cho bài quảng bá, giới thiệu thương hiệu và tài trợ hoạt động.",
+      "Khoi noi dung demo cho module ket noi giao thuong, su dung hinh anh su kien doanh nghiep de homepage sinh dong hon.",
     content:
-      "Đây là module tương ứng nhóm advertisement/doanh nghiệp đồng hành trên HUBA.",
+      "BIHUBA co the phat trien chuyen muc nay thanh noi dang nhu cau hop tac, gioi thieu san pham, tim kiem nha cung cap va thong tin ket noi theo tung linh vuc.",
     featuredImage:
-      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
-    publishedAt: "2026-07-12",
+      "https://huba.vn/wp-content/uploads/2026/07/Ra-mat-hoi-vien-tai-chuong-trinh-cafe-doanh-nhan-huba-scaled.webp",
+    publishedAt: "2026-07-09",
     isFeatured: true,
+  },
+  {
+    title: "Dien dan logistics va bai toan giu loi nhuan cho doanh nghiep",
+    slug: "dien-dan-logistics-va-bai-toan-giu-loi-nhuan-cho-doanh-nghiep",
+    type: "sponsor",
+    category: "Dong hanh",
+    excerpt:
+      "Them mot bai demo co hinh anh san khau, nhan vat va hoi thao de tang do day cho layout trang chu va danh muc bai viet.",
+    content:
+      "Noi dung loai nay phu hop cho doi tac dong hanh, nha tai tro, don vi co gian hang hoac tham gia cac chuong trinh cua hoi doanh nghiep.",
+    featuredImage:
+      "https://huba.vn/wp-content/uploads/2026/07/Toa-dam-tai-chuong-trinh-cafe-doanh-nhan-huba-scaled.webp",
+    publishedAt: "2026-07-08",
+    isFeatured: false,
   },
 ];
 
 export const defaultMembers: MemberShape[] = [
   {
-    name: "Hội Doanh Nghiệp Xã Bình Hưng",
+    name: "Hoi Doanh Nghiep Xa Binh Hung",
     slug: "hoi-doanh-nghiep-xa-binh-hung",
     memberType: "club",
-    groupType: "Hội cơ sở",
+    groupType: "Hoi co so",
     description:
-      "Đơn vị đầu mối đại diện kết nối doanh nghiệp trong khu vực Bình Hưng.",
+      "Don vi dau moi ket noi cong dong doanh nghiep, xuc tien giao thuong va dong hanh cung cac chuong trinh phat trien dia phuong.",
     logo: "",
-    address: "Bình Hưng, TP. Hồ Chí Minh",
+    address: "Xa Binh Hung, Thanh pho Ho Chi Minh",
     phone: "0901 111 111",
     email: "info@bihuba.vn",
-    website: "https://bihuba.vn",
-    industry: "Hiệp hội - Tổ chức xã hội",
+    website: "https://bihuba.vercel.app",
+    industry: "Hiep hoi - To chuc xa hoi",
   },
   {
-    name: "Công ty TNHH Mẫu Bình Hưng",
-    slug: "cong-ty-tnhh-mau-binh-hung",
+    name: "Cong ty TNHH Thuong mai Binh Hung",
+    slug: "cong-ty-tnhh-thuong-mai-binh-hung",
     memberType: "business",
-    groupType: "Hội viên doanh nghiệp",
+    groupType: "Hoi vien doanh nghiep",
     description:
-      "Doanh nghiệp mẫu để hiển thị danh sách hội viên trước khi thay bằng dữ liệu thật.",
+      "Doanh nghiep demo cho nhom thuong mai - dich vu, phu hop de trinh dien giao dien danh sach hoi vien va trang chi tiet.",
     logo: "",
-    address: "Khu dân cư Bình Hưng",
+    address: "Khu dan cu Binh Hung",
     phone: "0902 222 222",
-    email: "contact@example.vn",
+    email: "contact@thuongmaibinhhung.vn",
     website: "https://example.vn",
-    industry: "Thương mại - Dịch vụ",
+    industry: "Thuong mai - Dich vu",
+  },
+  {
+    name: "Cong ty Co phan Ky thuat Nam Sai Gon",
+    slug: "cong-ty-co-phan-ky-thuat-nam-sai-gon",
+    memberType: "business",
+    groupType: "Hoi vien doanh nghiep",
+    description:
+      "Doanh nghiep demo linh vuc ky thuat va ha tang, phuc vu trinh dien nhieu nhom hoi vien khac nhau tren website.",
+    logo: "",
+    address: "Khu vuc Nam Sai Gon",
+    phone: "0903 333 333",
+    email: "hello@namsaigontech.vn",
+    website: "https://example.org",
+    industry: "Ky thuat - Ha tang",
   },
 ];
 
 export const defaultPartners: PartnerShape[] = [
   {
-    name: "Đối tác chiến lược A",
-    slug: "doi-tac-chien-luoc-a",
+    name: "Doi tac chien luoc Sai Gon Connect",
+    slug: "doi-tac-chien-luoc-sai-gon-connect",
     description:
-      "Đối tác chiến lược mẫu cho trang giới thiệu đối tác và liên kết hợp tác.",
+      "Doi tac demo cho khoi ket noi, truyen thong va to chuc su kien cua BIHUBA.",
     logo: "",
     website: "https://example.com",
-    partnerType: "Đối tác chiến lược",
+    partnerType: "Doi tac chien luoc",
   },
   {
-    name: "Đối tác đào tạo B",
-    slug: "doi-tac-dao-tao-b",
+    name: "Trung tam Ho tro Chuyen doi so",
+    slug: "trung-tam-ho-tro-chuyen-doi-so",
     description:
-      "Đối tác mẫu phục vụ trình diễn danh mục đối tác tương tự HUBA.",
+      "Doi tac demo linh vuc chuyen doi so, tu van van hanh va dao tao hoi vien doanh nghiep.",
     logo: "",
     website: "https://example.org",
-    partnerType: "Đối tác đào tạo",
+    partnerType: "Doi tac chuyen doi so",
+  },
+  {
+    name: "Lien minh Xuc tien thuong mai dia phuong",
+    slug: "lien-minh-xuc-tien-thuong-mai-dia-phuong",
+    description:
+      "Nhom doi tac dong hanh cho hoi cho, ket noi giao thuong va cac chuong trinh gioi thieu san pham.",
+    logo: "",
+    website: "https://example.net",
+    partnerType: "Doi tac xuc tien thuong mai",
   },
 ];
 
 export const defaultDownloads: DownloadShape[] = [
   {
-    title: "Thông báo hội phí BIHUBA 2026",
-    slug: "thong-bao-hoi-phi-bihuba-2026",
-    summary: "Tài liệu mẫu cho module thông báo và download.",
-    fileUrl: "https://example.com/files/thong-bao-hoi-phi.pdf",
+    title: "Thong bao lich sinh hoat va ket noi doanh nghiep quy III",
+    slug: "thong-bao-lich-sinh-hoat-va-ket-noi-doanh-nghiep-quy-iii",
+    summary: "Tai lieu demo cho khu vuc thong bao, su kien va dieu phoi hoat dong hoi vien.",
+    fileUrl: "https://example.com/files/thong-bao-ket-noi-doanh-nghiep.pdf",
     category: "thong-bao",
-    publishedAt: "2026-07-10",
+    publishedAt: "2026-07-12",
   },
   {
-    title: "Báo cáo hoạt động 6 tháng đầu năm",
-    slug: "bao-cao-hoat-dong-6-thang-dau-nam",
-    summary: "Báo cáo mẫu để kiểm tra chức năng tải file từ admin.",
+    title: "Bao cao tong hop hoat dong 6 thang dau nam",
+    slug: "bao-cao-tong-hop-hoat-dong-6-thang-dau-nam",
+    summary: "Tai lieu demo de trinh dien module bao cao va luu tru van ban dieu hanh.",
     fileUrl: "https://example.com/files/bao-cao-6-thang.pdf",
     category: "bao-cao",
     publishedAt: "2026-07-08",
+  },
+  {
+    title: "Mau phieu dang ky hoi vien BIHUBA",
+    slug: "mau-phieu-dang-ky-hoi-vien-bihuba",
+    summary: "Tep demo phuc vu module download tai lieu, don dang ky va bieu mau noi bo.",
+    fileUrl: "https://example.com/files/phieu-dang-ky-hoi-vien.pdf",
+    category: "bieu-mau",
+    publishedAt: "2026-07-06",
   },
 ];

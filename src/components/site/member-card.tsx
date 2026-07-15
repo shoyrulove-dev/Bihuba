@@ -9,9 +9,7 @@ export function MemberCard({ member }: { member: MemberShape }) {
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
             {member.groupType}
           </p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-950">
-            {member.name}
-          </h3>
+          <h3 className="mt-2 text-xl font-semibold text-slate-950">{member.name}</h3>
         </div>
         <div className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-medium text-cyan-800">
           {member.memberType}
@@ -26,7 +24,7 @@ export function MemberCard({ member }: { member: MemberShape }) {
         href={`/hoi-vien/${member.slug}`}
         className="mt-6 inline-flex rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
       >
-        Xem hồ sơ
+        Xem ho so
       </Link>
     </article>
   );

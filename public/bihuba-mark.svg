@@ -1,0 +1,28 @@
+<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gear" x1="32" y1="24" x2="291" y2="298" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E4FAF"/>
+      <stop offset="1" stop-color="#56D6FF"/>
+    </linearGradient>
+    <linearGradient id="skyline" x1="115" y1="80" x2="220" y2="185" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6BE0FF"/>
+      <stop offset="1" stop-color="#0E4FAF"/>
+    </linearGradient>
+  </defs>
+  <path d="M160 18L183 26L205 18L221 36L245 34L254 56L278 62L279 86L299 98L292 121L307 140L293 159L299 182L279 194L278 218L254 224L245 246L221 244L205 262L183 254L160 262L137 254L115 262L99 244L75 246L66 224L42 218L41 194L21 182L28 159L13 140L27 121L21 98L41 86L42 62L66 56L75 34L99 36L115 18L137 26L160 18Z" fill="url(#gear)"/>
+  <circle cx="160" cy="140" r="106" fill="white"/>
+  <circle cx="160" cy="140" r="93" stroke="#0E4FAF" stroke-width="8"/>
+  <path d="M101 188C122 160 148 145 183 140C209 136 228 142 245 154" stroke="#0E4FAF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M93 198C120 164 151 149 191 146C214 144 232 149 252 162" stroke="#56D6FF" stroke-width="5" stroke-linecap="round"/>
+  <path d="M117 175V116H134V175H117Z" fill="url(#skyline)"/>
+  <path d="M140 175V92H160V175H140Z" fill="url(#skyline)"/>
+  <path d="M167 175V106H184V175H167Z" fill="url(#skyline)"/>
+  <path d="M190 175V130H204V175H190Z" fill="url(#skyline)"/>
+  <path d="M95 165C89 153 87 140 89 127C92 111 101 97 114 87" stroke="#56D6FF" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="225" cy="95" r="8" fill="#0E4FAF"/>
+  <path d="M100 210H220" stroke="#56D6FF" stroke-width="5" stroke-linecap="round"/>
+  <text x="160" y="236" text-anchor="middle" fill="#0E4FAF" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="800">BIHUBA</text>
+  <text x="160" y="286" text-anchor="middle" fill="#0E4FAF" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="2">
+    BINH HUNG BUSINESS ASSOCIATION
+  </text>
+</svg>

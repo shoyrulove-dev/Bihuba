@@ -3,7 +3,7 @@ import { PartnerShape } from "@/types/cms";
 
 export function PartnerCard({ partner }: { partner: PartnerShape }) {
   return (
-    <article className="rounded-[2rem] border border-slate-200 bg-white p-6">
+    <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
         {partner.partnerType}
       </p>
@@ -12,9 +12,9 @@ export function PartnerCard({ partner }: { partner: PartnerShape }) {
       <div className="mt-6 flex gap-3">
         <Link
           href={`/doi-tac/${partner.slug}`}
-          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-700"
         >
-          Chi tiết
+          Chi tiet
         </Link>
         {partner.website ? (
           <a
