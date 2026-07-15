@@ -21,6 +21,26 @@ export default async function Home() {
   const featuredPosts = posts.filter((item) => item.isFeatured).slice(0, 3);
   const featuredMembers = members.slice(0, 3);
   const featuredDownloads = downloads.slice(0, 3);
+  const quickAreas = [
+    "Ban chấp hành và điều hành",
+    "Kết nối doanh nghiệp địa phương",
+    "Tin tức và lịch hoạt động",
+    "Hội viên, đối tác, tài liệu",
+  ];
+  const valuePillars = [
+    {
+      title: "Kết nối",
+      body: "Liên kết doanh nghiệp trong khu vực Bình Hưng và mở rộng mạng lưới hợp tác.",
+    },
+    {
+      title: "Điều hành số",
+      body: "Một admin panel duy nhất để quản lý banner, bài viết, hội viên và tài liệu.",
+    },
+    {
+      title: "Phát triển cộng đồng",
+      body: "Tạo hạ tầng nội dung bền vững để BIHUBA tự vận hành sau khi bàn giao.",
+    },
+  ];
 
   return (
     <div>
@@ -51,20 +71,48 @@ export default async function Home() {
                 Vào admin panel
               </Link>
             </div>
+            <div className="mt-10 flex flex-wrap gap-3">
+              {quickAreas.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-cyan-300/20 bg-white/5 px-4 py-2 text-sm text-cyan-100"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
 
           <div className="grid gap-4 rounded-[2.5rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_80px_rgba(8,47,73,0.45)] backdrop-blur">
             <div className="rounded-[2rem] bg-linear-to-br from-cyan-300 via-sky-500 to-blue-800 p-8 text-slate-950">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em]">
-                Core modules
-              </p>
-              <div className="mt-5 grid grid-cols-2 gap-3 text-sm font-semibold">
+              <div className="flex items-center gap-5">
+                <div className="grid h-24 w-24 place-items-center rounded-full border-4 border-white/60 bg-white/40 text-center shadow-inner">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em]">
+                      Hội
+                    </p>
+                    <p className="mt-1 text-2xl font-black">BIHUBA</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.3em]">
+                    Hệ quản trị trung tâm
+                  </p>
+                  <p className="mt-3 max-w-sm text-sm leading-6 text-slate-900/80">
+                    Khối hiển thị này thay cho logo/banner thật ở giai đoạn scaffold. Khi bạn cung cấp asset chính thức, mình chỉ cần thay vào đây.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 grid grid-cols-2 gap-3 text-sm font-semibold">
                 <div className="rounded-2xl bg-white/70 p-4">Tin tức</div>
                 <div className="rounded-2xl bg-white/70 p-4">Sự kiện</div>
                 <div className="rounded-2xl bg-white/70 p-4">Hội viên</div>
                 <div className="rounded-2xl bg-white/70 p-4">Đối tác</div>
                 <div className="rounded-2xl bg-white/70 p-4">Download</div>
                 <div className="rounded-2xl bg-white/70 p-4">Admin CMS</div>
+              </div>
+              <div className="mt-6 rounded-2xl border border-slate-900/10 bg-slate-950/10 p-4 text-sm font-semibold">
+                Đoàn kết - Đổi mới - Hội nhập - Phát triển
               </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
@@ -88,6 +136,17 @@ export default async function Home() {
           title={settings.introTitle}
           body={settings.introBody}
         />
+        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          {valuePillars.map((item) => (
+            <article
+              key={item.title}
+              className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-[0_20px_45px_rgba(15,23,42,0.05)]"
+            >
+              <h3 className="text-2xl font-semibold text-slate-950">{item.title}</h3>
+              <p className="mt-4 text-sm leading-7 text-slate-600">{item.body}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-12">

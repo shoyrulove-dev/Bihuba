@@ -88,13 +88,13 @@ npm run build
 
 ## Ghi chú MongoDB Atlas
 
-Trong quá trình build từ máy hiện tại, app đang fallback sang dữ liệu mẫu vì MongoDB Atlas trả lỗi DNS/SRV:
+Trong quá trình build từ máy hiện tại, app đang fallback sang dữ liệu mẫu vì MongoDB Atlas từng trả lỗi DNS/SRV:
 
 ```text
 querySrv ECONNREFUSED _mongodb._tcp.bihuba.wjq9cxx.mongodb.net
 ```
 
-Để dùng DB thật, cần kiểm tra:
+Repo hiện đã chuyển sang ưu tiên chuỗi `mongodb://...` thường để tránh phụ thuộc SRV. Nếu vẫn chưa ghi được dữ liệu thật, cần kiểm tra:
 
 1. `Network Access` trên MongoDB Atlas
 2. IP allowlist hoặc bật tạm `0.0.0.0/0`
