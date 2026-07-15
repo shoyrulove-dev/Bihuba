@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BIHUBA Site
 
-## Getting Started
+Website BIHUBA dựng bằng `Next.js 16 + MongoDB + Vercel`, mô phỏng cấu trúc nội dung của `huba.vn` nhưng tối ưu để quản trị tập trung từ admin panel.
 
-First, run the development server:
+## Stack
+
+- `Next.js 16`
+- `React 19`
+- `MongoDB Atlas`
+- `Mongoose`
+- `Tailwind CSS 4`
+- Deploy target: `Vercel`
+
+## Module đã có
+
+- Trang chủ BIHUBA
+- Tin tức
+- Sự kiện
+- Lịch tuần
+- Kết nối giao thương
+- Hội viên
+- Đối tác
+- Download
+- Liên hệ
+- Admin dashboard
+- CRUD admin cho:
+  - bài viết
+  - hội viên
+  - đối tác
+  - tài liệu
+  - site settings
+
+## Admin routes
+
+- `/admin`
+- `/admin/posts`
+- `/admin/members`
+- `/admin/partners`
+- `/admin/downloads`
+- `/admin/settings`
+
+## Public routes
+
+- `/`
+- `/tin-tuc`
+- `/su-kien`
+- `/lich-tuan`
+- `/ket-noi-giao-thuong`
+- `/hoi-vien`
+- `/doi-tac`
+- `/download`
+- `/lien-he`
+
+## Environment variables
+
+Tạo env như sau:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+MONGODB_URI=your-mongodb-uri
+MONGODB_DB=bihuba
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+File mẫu đã có sẵn ở `.env.example`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run local
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+## Seed dữ liệu mẫu
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run seed
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Lưu ý:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Script seed đang đọc `.env.local`.
+- Nếu MongoDB Atlas chưa mở quyền truy cập mạng hoặc URI chưa đúng, seed sẽ fail.
 
-## Deploy on Vercel
+## Build production
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Ghi chú MongoDB Atlas
+
+Trong quá trình build từ máy hiện tại, app đang fallback sang dữ liệu mẫu vì MongoDB Atlas trả lỗi DNS/SRV:
+
+```text
+querySrv ECONNREFUSED _mongodb._tcp.bihuba.wjq9cxx.mongodb.net
+```
+
+Để dùng DB thật, cần kiểm tra:
+
+1. `Network Access` trên MongoDB Atlas
+2. IP allowlist hoặc bật tạm `0.0.0.0/0`
+3. URI connection string có còn đúng không
+4. Cluster có đang hoạt động không
+
+App đã được code để:
+
+- Nếu MongoDB kết nối được: dùng dữ liệu thật từ DB
+- Nếu MongoDB chưa kết nối được: vẫn build/deploy bằng dữ liệu mẫu
+
+## Deploy Vercel
+
+1. Push repo lên GitHub
+2. Import project vào Vercel
+3. Add env vars:
+   - `MONGODB_URI`
+   - `MONGODB_DB`
+4. Deploy
+
+## Gợi ý trước khi public chính thức
+
+- Thêm auth cho `/admin`
+- Thay nội dung mẫu bằng dữ liệu BIHUBA thật
+- Cập nhật logo/banner chính thức
+- Cấu hình domain thật
+- Mở MongoDB Atlas network access đúng chuẩn production
