@@ -14,7 +14,7 @@ export function DownloadCard({ item }: { item: DownloadShape }) {
         href={`/download/${item.slug}`}
         className="mt-6 inline-flex rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-700"
       >
-        Xem tai lieu
+        Xem tài liệu
       </Link>
     </article>
   );

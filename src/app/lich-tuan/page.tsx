@@ -10,7 +10,7 @@ export default async function SchedulePage() {
       <SectionHeading
         eyebrow="Lịch tuần"
         title="Lịch điều hành và lịch công tác"
-        body="Bên BIHUBA có thể cập nhật theo tuần trực tiếp từ admin mà không cần sửa code."
+        body="BIHUBA có thể cập nhật theo tuần trực tiếp từ admin mà không cần sửa code."
       />
       <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
         {posts.map((post) => (

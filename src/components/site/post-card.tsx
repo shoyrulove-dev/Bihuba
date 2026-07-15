@@ -19,7 +19,7 @@ export function PostCard({ post }: { post: PostShape }) {
           href={`/bai-viet/${post.slug}`}
           className="inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-700"
         >
-          Xem chi tiet
+          Xem chi tiết
         </Link>
       </div>
     </article>

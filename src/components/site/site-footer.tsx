@@ -28,7 +28,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
 
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
-            Dieu huong
+            Điều hướng
           </h4>
           <div className="mt-4 flex flex-col gap-3 text-sm">
             {settings.nav.map((item) => (
@@ -45,7 +45,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
 
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
-            Lien he
+            Liên hệ
           </h4>
           <div className="mt-4 space-y-3 text-sm text-slate-200">
             <p>{settings.contact.address}</p>
