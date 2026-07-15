@@ -7,7 +7,7 @@ const nav = [
   { label: "Hội viên", href: "/admin/members" },
   { label: "Đối tác", href: "/admin/partners" },
   { label: "Tài liệu", href: "/admin/downloads" },
-  { label: "Site settings", href: "/admin/settings" },
+  { label: "Cấu hình site", href: "/admin/settings" },
 ];
 
 export function AdminShell({

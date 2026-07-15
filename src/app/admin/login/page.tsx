@@ -24,8 +24,8 @@ export default async function AdminLoginPage({
             Khu quản trị riêng cho BIHUBA
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300">
-            Đăng nhập để quản lý bài viết, hội viên, đối tác, tài liệu và cấu
-            hình landing page. Toàn bộ module public sẽ được điều hành từ đây.
+            Đăng nhập để quản lý bài viết, hội viên, đối tác, tài liệu và cấu hình
+            landing page. Toàn bộ module public sẽ được điều hành từ đây.
           </p>
         </section>
 
