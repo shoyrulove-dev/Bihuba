@@ -76,6 +76,15 @@ function LogoutIcon() {
   );
 }
 
+function HomeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M4 10.5 12 4l8 6.5" />
+      <path d="M6.5 9.5V20h11V9.5" />
+    </svg>
+  );
+}
+
 const nav = [
   { label: "Tổng quan", href: "/admin", icon: DashboardIcon },
   { label: "Bài viết", href: "/admin/posts", icon: PostIcon },
@@ -146,6 +155,13 @@ export function AdminShell({
               <h1 className="text-3xl font-semibold text-white">{title}</h1>
               <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300">{description}</p>
             </div>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+            >
+              <HomeIcon />
+              <span>Trang chủ</span>
+            </Link>
           </div>
           {children}
         </main>

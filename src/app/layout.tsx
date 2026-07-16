@@ -30,7 +30,7 @@ export default async function RootLayout({
   const headerStore = await headers();
   const pathname = headerStore.get("x-pathname") || "";
   const isAdminRoute = pathname.startsWith("/admin");
-  const settings = await getSiteSettings();
+  const settings = isAdminRoute ? null : await getSiteSettings();
 
   return (
     <html
@@ -41,20 +41,20 @@ export default async function RootLayout({
         className="min-h-full bg-slate-50 text-slate-950"
         style={
           {
-            "--theme-primary": settings.theme?.primaryColor || "#0E4FAF",
-            "--theme-accent": settings.theme?.accentColor || "#56D6FF",
-            "--theme-surface": settings.theme?.surfaceColor || "#F8FAFC",
-            "--theme-heading-scale": settings.theme?.headingScale || "1",
-            "--theme-body-scale": settings.theme?.bodyScale || "1",
+            "--theme-primary": settings?.theme?.primaryColor || "#0E4FAF",
+            "--theme-accent": settings?.theme?.accentColor || "#56D6FF",
+            "--theme-surface": settings?.theme?.surfaceColor || "#F8FAFC",
+            "--theme-heading-scale": settings?.theme?.headingScale || "1",
+            "--theme-body-scale": settings?.theme?.bodyScale || "1",
           } as React.CSSProperties
         }
       >
-        {!isAdminRoute ? <SiteHeader settings={settings} /> : null}
-        <main className="page-turn-shell">{children}</main>
-        {!isAdminRoute ? (
+        {!isAdminRoute && settings ? <SiteHeader settings={settings} /> : null}
+        <main>{children}</main>
+        {!isAdminRoute && settings ? (
           <FloatingContactButtons actions={settings.floatingActions} />
         ) : null}
-        {!isAdminRoute ? <SiteFooter settings={settings} /> : null}
+        {!isAdminRoute && settings ? <SiteFooter settings={settings} /> : null}
       </body>
     </html>
   );
