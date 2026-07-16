@@ -8,12 +8,12 @@ export default async function AdminMembersPage() {
   return (
     <AdminShell
       title="Quản lý hội viên"
-      description="Quản trị hội viên doanh nghiệp, hội viên cá nhân và hội/câu lạc bộ thành viên."
+      description="Quản trị hội viên doanh nghiệp, hội viên cá nhân và hội hoặc câu lạc bộ thành viên."
     >
       <CollectionManager
         collection="members"
         title="Danh sách hội viên"
-        description="Đây là module tương ứng custom post type hội viên trên site mẫu HUBA."
+        description="Đây là module tương ứng với khu hội viên trên site mẫu HUBA."
         initialItems={members as unknown as Record<string, unknown>[]}
         fields={[
           { name: "name", label: "Tên hội viên" },

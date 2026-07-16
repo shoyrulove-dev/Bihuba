@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { getSiteSettings } from "@/lib/content";
 import { Geist, Geist_Mono } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,6 +26,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerStore = await headers();
+  const pathname = headerStore.get("x-pathname") || "";
+  const isAdminRoute = pathname.startsWith("/admin");
   const settings = await getSiteSettings();
 
   return (
@@ -32,10 +36,10 @@ export default async function RootLayout({
       lang="vi"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-950">
-        <SiteHeader settings={settings} />
-        <main className="flex-1">{children}</main>
-        <SiteFooter settings={settings} />
+      <body className="min-h-full bg-slate-50 text-slate-950">
+        {!isAdminRoute ? <SiteHeader settings={settings} /> : null}
+        <main>{children}</main>
+        {!isAdminRoute ? <SiteFooter settings={settings} /> : null}
       </body>
     </html>
   );

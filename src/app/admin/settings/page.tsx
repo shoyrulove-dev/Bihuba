@@ -8,7 +8,7 @@ export default async function AdminSettingsPage() {
   return (
     <AdminShell
       title="Cấu hình website"
-      description="Cấu hình tên site, logo, hero, CTA và các khối giới thiệu chính. Đây là phần tối thiểu để quản trị landing page."
+      description="Cấu hình tên site, logo, hero, CTA và các khối giới thiệu chính."
     >
       <CollectionManager
         collection="settings"

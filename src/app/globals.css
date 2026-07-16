@@ -26,6 +26,15 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
+body:has(.admin-root) > header,
+body:has(.admin-root) > footer {
+  display: none;
+}
+
+body:has(.admin-root) > main {
+  min-height: 100vh;
+}
+
 a {
   text-decoration: none;
 }

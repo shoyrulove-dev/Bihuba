@@ -68,25 +68,27 @@ export default async function Home() {
             </div>
 
             <div className="mt-8 flex items-center gap-5">
-              <Image
-                src={settings.logoUrl || "/bihuba-mark.svg"}
-                alt="Bihuba mark"
-                width={112}
-                height={112}
-                className="h-24 w-24 rounded-full border border-white/25 bg-white/10 p-2 shadow-[0_20px_60px_rgba(0,0,0,0.35)] md:h-28 md:w-28"
-              />
+              <div className="flex h-30 w-30 items-center justify-center rounded-[2rem] border border-white/20 bg-white/8 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+                <Image
+                  src={settings.logoUrl || "/bihuba-mark.svg"}
+                  alt="BIHUBA"
+                  width={160}
+                  height={160}
+                  className="h-full w-full object-contain"
+                  priority
+                />
+              </div>
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.38em] text-cyan-200">
                   {settings.shortName}
                 </p>
-                <p className="mt-2 max-w-md text-sm text-blue-100/90">
-                  {settings.slogan}
-                </p>
+                <p className="mt-2 max-w-md text-sm text-blue-100/90">{settings.slogan}</p>
               </div>
             </div>
 
             <h1 className="mt-8 max-w-4xl text-4xl font-black uppercase leading-tight md:text-6xl">
-              {settings.heroTitle || "Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh"}
+              {settings.heroTitle ||
+                "Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh"}
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-50/90">
               {settings.heroSubtitle}
@@ -140,21 +142,17 @@ export default async function Home() {
                     </h2>
                     <p className="mt-3 text-sm leading-7 text-blue-100/85">
                       {heroPost?.excerpt ??
-                        "Không gian trang chủ đã được chuyển sang hướng hiệp hội doanh nghiệp, có banner sự kiện, logo trung tâm và khối nội dung nổi bật."}
+                        "Không gian trang chủ được dựng theo hướng hiệp hội doanh nghiệp, có banner sự kiện, logo trung tâm và các khối nội dung nổi bật."}
                     </p>
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <span className="rounded-full bg-cyan-300/18 px-3 py-1 text-xs font-semibold text-cyan-100">
-                        Đoàn kết
-                      </span>
-                      <span className="rounded-full bg-cyan-300/18 px-3 py-1 text-xs font-semibold text-cyan-100">
-                        Đổi mới
-                      </span>
-                      <span className="rounded-full bg-cyan-300/18 px-3 py-1 text-xs font-semibold text-cyan-100">
-                        Hội nhập
-                      </span>
-                      <span className="rounded-full bg-cyan-300/18 px-3 py-1 text-xs font-semibold text-cyan-100">
-                        Phát triển
-                      </span>
+                      {["Đoàn kết", "Đổi mới", "Hội nhập", "Phát triển"].map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full bg-cyan-300/18 px-3 py-1 text-xs font-semibold text-cyan-100"
+                        >
+                          {item}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -191,9 +189,7 @@ export default async function Home() {
                 key={item.value}
                 className="rounded-[1.8rem] border border-sky-100 bg-white p-6 shadow-[0_18px_45px_rgba(14,79,175,0.08)]"
               >
-                <p className="text-2xl font-black uppercase text-[#0E4FAF]">
-                  {item.value}
-                </p>
+                <p className="text-2xl font-black uppercase text-[#0E4FAF]">{item.value}</p>
                 <p className="mt-4 text-sm leading-7 text-slate-600">{item.label}</p>
               </article>
             ))}
@@ -205,7 +201,7 @@ export default async function Home() {
         <SectionHeading
           eyebrow="Nổi bật"
           title="Tin tức và hoạt động demo từ cấu trúc HUBA"
-          body="Homepage đã được nạp sẵn bài demo để nhanh có độ dày nội dung. Sau này BIHUBA có thể thay thế bằng bài viết, hình ảnh và lịch hoạt động chính thức ngay trong admin."
+          body="Trang chủ đã được nạp sẵn bài demo để có độ dày nội dung. Sau này BIHUBA có thể thay bằng bài viết, hình ảnh và lịch hoạt động chính thức ngay trong admin."
         />
         <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
           {featuredPosts.map((post) => (
@@ -224,9 +220,9 @@ export default async function Home() {
               Giao diện phù hợp cho tổ chức hội, câu lạc bộ và cộng đồng doanh nghiệp địa phương
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/88">
-              Mục tiêu của bản này là để BIHUBA có thể lên sóng với hình ảnh rõ ràng,
-              có đủ block tin tức, sự kiện, hội viên và tài liệu. Toàn bộ khối nội dung
-              hiện tại vẫn được quản lý từ admin panel nên rất dễ thay đổi sau bàn giao.
+              Mục tiêu của bản này là để BIHUBA có thể lên sóng với hình ảnh rõ ràng, có
+              đủ block tin tức, sự kiện, hội viên và tài liệu. Toàn bộ nội dung hiện tại vẫn
+              được quản lý từ admin panel nên rất dễ thay đổi sau bàn giao.
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {latestPosts.map((post) => (

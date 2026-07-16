@@ -8,13 +8,15 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-3">
         <div>
           <div className="flex items-center gap-4">
-            <Image
-              src={settings.logoUrl || "/bihuba-mark.svg"}
-              alt="BIHUBA"
-              width={56}
-              height={56}
-              className="h-14 w-14 rounded-full border border-cyan-300/20 bg-white/10 p-1.5"
-            />
+            <div className="flex h-22 w-22 shrink-0 items-center justify-center rounded-[1.75rem] bg-white/8 p-3">
+              <Image
+                src={settings.logoUrl || "/bihuba-mark.svg"}
+                alt="BIHUBA"
+                width={112}
+                height={112}
+                className="h-full w-full object-contain"
+              />
+            </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300">
                 {settings.shortName}

@@ -1,13 +1,68 @@
+"use client";
+
 import Link from "next/link";
 import { ReactNode } from "react";
 
+function DashboardIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M4 13h7V4H4zM13 20h7v-9h-7zM13 11h7V4h-7zM4 20h7v-5H4z" />
+    </svg>
+  );
+}
+
+function PostIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M6 4h12v16H6z" />
+      <path d="M9 8h6M9 12h6M9 16h4" />
+    </svg>
+  );
+}
+
+function GroupIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M7.5 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM16.5 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+      <path d="M3.5 19a4 4 0 0 1 8 0M13.5 19a3.5 3.5 0 0 1 7 0" />
+    </svg>
+  );
+}
+
+function PartnerIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M8 8l4 4 4-4" />
+      <path d="M6 16l6-6 6 6" />
+    </svg>
+  );
+}
+
+function FileIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M7 3h7l4 4v14H7z" />
+      <path d="M14 3v5h5M9 13h6M9 17h4" />
+    </svg>
+  );
+}
+
+function SettingsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
+      <path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a2 2 0 1 1-4 0v-.2a1 1 0 0 0-.6-.9 1 1 0 0 0-1.1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H4a2 2 0 1 1 0-4h.2a1 1 0 0 0 .9-.6 1 1 0 0 0-.2-1.1l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V4a2 2 0 1 1 4 0v.2a1 1 0 0 0 .6.9 1 1 0 0 0 1.1-.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6H20a2 2 0 1 1 0 4h-.2a1 1 0 0 0-.9.6Z" />
+    </svg>
+  );
+}
+
 const nav = [
-  { label: "Tổng quan", href: "/admin" },
-  { label: "Bài viết", href: "/admin/posts" },
-  { label: "Hội viên", href: "/admin/members" },
-  { label: "Đối tác", href: "/admin/partners" },
-  { label: "Tài liệu", href: "/admin/downloads" },
-  { label: "Cấu hình site", href: "/admin/settings" },
+  { label: "Tổng quan", href: "/admin", icon: DashboardIcon },
+  { label: "Bài viết", href: "/admin/posts", icon: PostIcon },
+  { label: "Hội viên", href: "/admin/members", icon: GroupIcon },
+  { label: "Đối tác", href: "/admin/partners", icon: PartnerIcon },
+  { label: "Tài liệu", href: "/admin/downloads", icon: FileIcon },
+  { label: "Cấu hình", href: "/admin/settings", icon: SettingsIcon },
 ];
 
 export function AdminShell({
@@ -20,27 +75,37 @@ export function AdminShell({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[240px_1fr]">
-        <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
-          <Link
-            href="/"
-            className="block rounded-2xl bg-cyan-400 px-4 py-3 font-black text-slate-950"
-          >
-            BIHUBA CMS
-          </Link>
-          <nav className="mt-8 flex flex-col gap-2">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+    <div className="admin-root min-h-screen bg-slate-950 text-white">
+      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[112px_1fr]">
+        <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-4">
+          <div className="flex flex-col items-center gap-3">
+            <Link
+              href="/admin"
+              className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400 text-slate-950 shadow-[0_14px_40px_rgba(34,211,238,0.35)]"
+              aria-label="Tổng quan"
+              title="Tổng quan"
+            >
+              <DashboardIcon />
+            </Link>
+            <nav className="flex w-full flex-col items-center gap-2">
+              {nav.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex h-12 w-12 items-center justify-center rounded-2xl text-slate-300 transition hover:bg-white/10 hover:text-white"
+                    title={item.label}
+                    aria-label={item.label}
+                  >
+                    <Icon />
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
         </aside>
+
         <main className="space-y-8">
           <div className="rounded-[2rem] border border-white/10 bg-linear-to-br from-cyan-500 to-blue-700 p-8 text-slate-950">
             <div className="flex flex-wrap items-start justify-between gap-6">

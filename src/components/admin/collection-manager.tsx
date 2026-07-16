@@ -36,6 +36,31 @@ type CollectionManagerProps = {
 
 type FormState = Record<string, string | boolean>;
 
+function EditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M4 20h4l10-10-4-4L4 16v4Z" />
+      <path d="M13 7l4 4" />
+    </svg>
+  );
+}
+
+function DeleteIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M5 7h14M9 7V4h6v3M8 7l1 12h6l1-12" />
+    </svg>
+  );
+}
+
+function AddIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
 function buildInitialState(fields: FieldConfig[]): FormState {
   return fields.reduce<FormState>((accumulator, field) => {
     accumulator[field.name] = field.type === "checkbox" ? false : "";
@@ -60,7 +85,7 @@ function summarizeValue(field: FieldConfig, rawValue: unknown) {
     .trim();
 
   if (!text) return "—";
-  return text.length > 70 ? `${text.slice(0, 70)}...` : text;
+  return text.length > 120 ? `${text.slice(0, 120)}...` : text;
 }
 
 export function CollectionManager({
@@ -122,15 +147,14 @@ export function CollectionManager({
     }));
   }
 
-  async function uploadAsset(file: File, fieldName: string) {
+  async function uploadAsset(file: File) {
     setIsUploading(true);
     setStatus("Đang upload media...");
 
     const payload = new FormData();
     payload.append("file", file);
-    payload.append("folder", `/bihuba/${collection}`);
+    payload.append("folder", collection);
     payload.append("fileName", file.name);
-    payload.append("field", fieldName);
 
     const response = await fetch("/api/admin/upload", {
       method: "POST",
@@ -161,8 +185,8 @@ export function CollectionManager({
         const raw = form[field.name];
 
         if (field.type === "json") {
-          const jsonValue = typeof raw === "string" && raw.trim() ? JSON.parse(raw) : null;
-          accumulator[field.name] = jsonValue;
+          accumulator[field.name] =
+            typeof raw === "string" && raw.trim() ? JSON.parse(raw) : null;
         } else {
           accumulator[field.name] = raw;
         }
@@ -218,7 +242,7 @@ export function CollectionManager({
   }
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
       <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -229,63 +253,69 @@ export function CollectionManager({
             <button
               type="button"
               onClick={resetForm}
-              className="rounded-full border border-white/15 px-4 py-2 text-sm"
+              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm"
             >
+              <AddIcon />
               Thêm mới
             </button>
           ) : null}
         </div>
 
-        <div className="mt-6 overflow-x-auto">
-          <table className="w-full min-w-[680px] text-left text-sm">
-            <thead className="text-slate-400">
-              <tr>
-                {fields.slice(0, 4).map((field) => (
-                  <th key={field.name} className="border-b border-white/10 px-3 py-3">
-                    {field.label}
-                  </th>
-                ))}
-                <th className="border-b border-white/10 px-3 py-3">Tác vụ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => {
-                const record = item as Record<string, unknown>;
-                return (
-                  <tr key={String(record._id)} className="align-top">
-                    {fields.slice(0, 4).map((field) => (
-                      <td
-                        key={field.name}
-                        className="border-b border-white/5 px-3 py-4 text-slate-200"
+        <div className="mt-6 grid gap-4">
+          {items.map((item) => {
+            const record = item as Record<string, unknown>;
+            const headline = String(record.title ?? record.name ?? record.siteName ?? "Bản ghi");
+            const subhead = String(record.slug ?? record.category ?? record.partnerType ?? "");
+
+            return (
+              <article
+                key={String(record._id)}
+                className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <h3 className="truncate text-base font-semibold text-white">{headline}</h3>
+                    {subhead ? (
+                      <p className="mt-1 text-xs uppercase tracking-[0.22em] text-cyan-300">
+                        {subhead}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => startEdit(record)}
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400 text-slate-950"
+                      title="Sửa"
+                      aria-label="Sửa"
+                    >
+                      <EditIcon />
+                    </button>
+                    {allowDelete && !singleton ? (
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(String(record._id))}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-red-400/40 text-red-300"
+                        title="Xóa"
+                        aria-label="Xóa"
                       >
-                        {summarizeValue(field, record[field.name])}
-                      </td>
-                    ))}
-                    <td className="border-b border-white/5 px-3 py-4">
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => startEdit(record)}
-                          className="rounded-full bg-cyan-400 px-3 py-2 text-xs font-semibold text-slate-950"
-                        >
-                          Sửa
-                        </button>
-                        {allowDelete && !singleton ? (
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(String(record._id))}
-                            className="rounded-full border border-red-400/40 px-3 py-2 text-xs font-semibold text-red-300"
-                          >
-                            Xóa
-                          </button>
-                        ) : null}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                        <DeleteIcon />
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-2 text-sm text-slate-300">
+                  {fields.slice(0, 4).map((field) => (
+                    <div key={field.name}>
+                      <span className="font-medium text-slate-100">{field.label}: </span>
+                      <span>{summarizeValue(field, record[field.name])}</span>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -310,7 +340,7 @@ export function CollectionManager({
                   value={String(form[field.name] ?? "")}
                   placeholder={field.placeholder}
                   onChange={(value) => updateField(field.name, value)}
-                  onUploadImage={(file) => uploadAsset(file, field.name)}
+                  onUploadImage={uploadAsset}
                 />
               ) : field.type === "select" ? (
                 <select
@@ -352,20 +382,18 @@ export function CollectionManager({
                           const file = event.target.files?.[0];
                           event.currentTarget.value = "";
                           if (!file) return;
-                          const url = await uploadAsset(file, field.name);
+                          const url = await uploadAsset(file);
                           updateField(field.name, url);
                         }}
                       />
                     </label>
                     {field.type === "image" && form[field.name] ? (
-                      <>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={String(form[field.name])}
-                          alt={field.label}
-                          className="h-16 w-16 rounded-2xl border border-slate-200 object-cover"
-                        />
-                      </>
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={String(form[field.name])}
+                        alt={field.label}
+                        className="h-16 w-16 rounded-2xl border border-slate-200 object-cover"
+                      />
                     ) : null}
                   </div>
                 </div>

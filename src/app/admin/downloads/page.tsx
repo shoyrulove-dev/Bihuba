@@ -13,7 +13,7 @@ export default async function AdminDownloadsPage() {
       <CollectionManager
         collection="downloads"
         title="Tài liệu"
-        description="Tương đương nhóm download/download-category trên HUBA."
+        description="Tương đương nhóm download và tài liệu trên HUBA."
         initialItems={downloads as unknown as Record<string, unknown>[]}
         fields={[
           { name: "title", label: "Tiêu đề" },

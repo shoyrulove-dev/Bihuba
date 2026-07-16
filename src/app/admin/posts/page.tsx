@@ -13,7 +13,7 @@ export default async function AdminPostsPage() {
       <CollectionManager
         collection="posts"
         title="Bài viết"
-        description="Tất cả nhóm bài viết đều đi qua một bảng quản trị chung để thao tác nhanh."
+        description="Tất cả nhóm bài viết đi qua một khu quản trị chung để thao tác nhanh."
         initialItems={posts as unknown as Record<string, unknown>[]}
         fields={[
           { name: "title", label: "Tiêu đề" },

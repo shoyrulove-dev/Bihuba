@@ -14,7 +14,7 @@ export default async function AdminLoginPage({
   const nextPath = params.next || "/admin";
 
   return (
-    <div className="min-h-screen bg-slate-950 px-6 py-12 text-white">
+    <div className="admin-root min-h-screen bg-slate-950 px-6 py-12 text-white">
       <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[1fr_420px]">
         <section className="rounded-[2.5rem] border border-white/10 bg-linear-to-br from-cyan-500/20 to-blue-800/20 p-10">
           <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">
@@ -25,7 +25,7 @@ export default async function AdminLoginPage({
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300">
             Đăng nhập để quản lý bài viết, hội viên, đối tác, tài liệu và cấu hình
-            landing page. Toàn bộ module public sẽ được điều hành từ đây.
+            website. Toàn bộ nội dung public được điều hành từ đây.
           </p>
         </section>
 
