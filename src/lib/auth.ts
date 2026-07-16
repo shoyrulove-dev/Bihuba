@@ -4,7 +4,8 @@ import { connectToDatabase } from "@/lib/db";
 import { UserModel } from "@/models/user";
 
 export const ADMIN_SESSION_COOKIE = "bihuba_admin_session";
-const SESSION_MAX_AGE = 60 * 60 * 8;
+export const SESSION_MAX_AGE_DEFAULT = 60 * 60 * 8;
+export const SESSION_MAX_AGE_REMEMBER = 60 * 60 * 24 * 30;
 
 export type AdminRole = "admin" | "manager";
 
@@ -113,10 +114,13 @@ export async function authenticateAdmin(username: string, password: string) {
   } satisfies SessionUser;
 }
 
-export function createSessionToken(user: SessionUser) {
+export function createSessionToken(
+  user: SessionUser,
+  maxAge: number = SESSION_MAX_AGE_DEFAULT
+) {
   const payload: SessionPayload = {
     ...user,
-    exp: Math.floor(Date.now() / 1000) + SESSION_MAX_AGE,
+    exp: Math.floor(Date.now() / 1000) + maxAge,
   };
 
   const encodedPayload = base64UrlEncode(JSON.stringify(payload));

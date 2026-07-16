@@ -1,4 +1,10 @@
-import { ADMIN_SESSION_COOKIE, authenticateAdmin, createSessionToken } from "@/lib/auth";
+import {
+  ADMIN_SESSION_COOKIE,
+  SESSION_MAX_AGE_DEFAULT,
+  SESSION_MAX_AGE_REMEMBER,
+  authenticateAdmin,
+  createSessionToken,
+} from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -6,6 +12,7 @@ export async function POST(request: NextRequest) {
   const username = String(formData.get("username") ?? "");
   const password = String(formData.get("password") ?? "");
   const nextPath = String(formData.get("next") ?? "/admin");
+  const remember = String(formData.get("remember") ?? "") === "30d";
   const user = await authenticateAdmin(username, password);
 
   if (!user) {
@@ -18,12 +25,13 @@ export async function POST(request: NextRequest) {
   const response = NextResponse.redirect(new URL(nextPath, request.url), {
     status: 303,
   });
-  response.cookies.set(ADMIN_SESSION_COOKIE, createSessionToken(user), {
+  const maxAge = remember ? SESSION_MAX_AGE_REMEMBER : SESSION_MAX_AGE_DEFAULT;
+  response.cookies.set(ADMIN_SESSION_COOKIE, createSessionToken(user, maxAge), {
     httpOnly: true,
     sameSite: "lax",
     secure: request.nextUrl.protocol === "https:",
     path: "/",
-    maxAge: 60 * 60 * 8,
+    maxAge,
   });
 
   return response;
