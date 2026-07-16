@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 function DashboardIcon() {
   return (
@@ -74,27 +75,30 @@ export function AdminShell({
   description: string;
   children: ReactNode;
 }) {
+  const pathname = usePathname();
+
   return (
     <div className="admin-root min-h-screen bg-slate-950 text-white">
       <div className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[112px_1fr]">
         <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-4">
-          <div className="flex flex-col items-center gap-3">
-            <Link
-              href="/admin"
-              className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400 text-slate-950 shadow-[0_14px_40px_rgba(34,211,238,0.35)]"
-              aria-label="Tổng quan"
-              title="Tổng quan"
-            >
-              <DashboardIcon />
-            </Link>
+          <div className="flex flex-col items-center gap-2">
             <nav className="flex w-full flex-col items-center gap-2">
               {nav.map((item) => {
                 const Icon = item.icon;
+                const isActive =
+                  item.href === "/admin"
+                    ? pathname === "/admin"
+                    : pathname?.startsWith(item.href);
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex h-12 w-12 items-center justify-center rounded-2xl text-slate-300 transition hover:bg-white/10 hover:text-white"
+                    className={`flex h-12 w-12 items-center justify-center rounded-2xl transition ${
+                      isActive
+                        ? "bg-cyan-400 text-slate-950 shadow-[0_14px_40px_rgba(34,211,238,0.35)]"
+                        : "text-slate-300 hover:bg-white/10 hover:text-white"
+                    }`}
                     title={item.label}
                     aria-label={item.label}
                   >

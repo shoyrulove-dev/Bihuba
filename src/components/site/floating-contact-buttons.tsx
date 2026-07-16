@@ -31,13 +31,13 @@ export function FloatingContactButtons({ actions }: { actions: FloatingActions }
   if (!hasAnyAction) return null;
 
   return (
-    <div className="fixed bottom-6 right-5 z-40 flex flex-col gap-3">
+    <div className="fixed bottom-4 right-3 z-40 flex flex-col gap-2">
       {actions.zaloUrl ? (
         <Link
           href={actions.zaloUrl}
           target="_blank"
           rel="noreferrer"
-          className="flex h-13 w-13 items-center justify-center rounded-full bg-[#0068FF] text-white shadow-[0_18px_30px_rgba(0,104,255,0.35)] transition hover:scale-105"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0068FF] text-white shadow-[0_14px_24px_rgba(0,104,255,0.28)] transition hover:scale-105"
           aria-label="Zalo"
           title="Zalo"
         >
@@ -49,7 +49,7 @@ export function FloatingContactButtons({ actions }: { actions: FloatingActions }
           href={actions.facebookUrl}
           target="_blank"
           rel="noreferrer"
-          className="flex h-13 w-13 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-[0_18px_30px_rgba(24,119,242,0.35)] transition hover:scale-105"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-[0_14px_24px_rgba(24,119,242,0.28)] transition hover:scale-105"
           aria-label="Facebook"
           title="Facebook"
         >
@@ -59,12 +59,11 @@ export function FloatingContactButtons({ actions }: { actions: FloatingActions }
       {actions.callNumber ? (
         <a
           href={`tel:${actions.callNumber}`}
-          className="inline-flex h-13 min-w-13 items-center justify-center gap-2 rounded-full bg-[#0E4FAF] px-4 text-sm font-semibold text-white shadow-[0_18px_30px_rgba(14,79,175,0.35)] transition hover:scale-105"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0E4FAF] text-white shadow-[0_14px_24px_rgba(14,79,175,0.28)] transition hover:scale-105"
           aria-label={actions.callLabel || "Gọi ngay"}
           title={actions.callLabel || "Gọi ngay"}
         >
           <PhoneIcon />
-          <span className="hidden sm:inline">{actions.callLabel || "Gọi ngay"}</span>
         </a>
       ) : null}
     </div>

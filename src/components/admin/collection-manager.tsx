@@ -159,42 +159,6 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
   return String(rawValue ?? "");
 }
 
-function summarizeValue(field: FieldConfig, rawValue: unknown) {
-  if (field.type === "checkbox") return rawValue ? "Có" : "Không";
-  if (field.type === "stats") {
-    return `${Array.isArray(rawValue) ? rawValue.length : 0} mục thống kê`;
-  }
-  if (field.type === "nav") {
-    return `${Array.isArray(rawValue) ? rawValue.length : 0} mục menu`;
-  }
-  if (field.type === "contact") {
-    const contact = rawValue as ContactItem | undefined;
-    return contact?.address || "Chưa có thông tin";
-  }
-  if (field.type === "social") {
-    const social = rawValue as FloatingActions | undefined;
-    return social?.callNumber || social?.zaloUrl || social?.facebookUrl || "Chưa cấu hình";
-  }
-  if (field.type === "supporters") {
-    return `${Array.isArray(rawValue) ? rawValue.length : 0} doanh nghiệp`;
-  }
-  if (field.type === "products") {
-    return `${Array.isArray(rawValue) ? rawValue.length : 0} sản phẩm / dịch vụ`;
-  }
-  if (field.type === "theme") {
-    const theme = rawValue as ThemeSettings | undefined;
-    return theme?.primaryColor || "Chưa cấu hình";
-  }
-
-  const text = String(rawValue ?? "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (!text) return "—";
-  return text.length > 120 ? `${text.slice(0, 120)}...` : text;
-}
-
 function buildFormFromRecord(fields: FieldConfig[], baseState: FormState, record: Record<string, unknown>) {
   const nextState = { ...baseState };
   fields.forEach((field) => {
@@ -1027,9 +991,9 @@ export function CollectionManager({
           )}
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 space-y-3">
           {!singleton ? (
-            <div className="md:col-span-2 xl:col-span-3">
+            <div>
               <input
                 type="text"
                 value={search}
@@ -1053,58 +1017,51 @@ export function CollectionManager({
             return (
               <article
                 key={String(record._id ?? headline)}
-                className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-5"
+                className="flex flex-wrap items-center gap-3 rounded-[1.4rem] border border-white/10 bg-slate-950/35 px-4 py-3"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex min-w-0 items-start gap-3">
-                    {previewImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={previewImage}
-                        alt={headline}
-                        className="h-14 w-14 shrink-0 rounded-2xl object-cover"
-                      />
-                    ) : null}
-                    <div className="min-w-0">
-                      <h3 className="truncate text-base font-semibold text-white">{headline}</h3>
-                      {subhead ? (
-                        <p className="mt-1 text-xs uppercase tracking-[0.22em] text-cyan-300">
-                          {subhead}
-                        </p>
-                      ) : null}
+                <div className="flex min-w-0 flex-1 items-center gap-3">
+                  {previewImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={previewImage}
+                      alt={headline}
+                      className="h-11 w-11 shrink-0 rounded-xl object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/8 text-xs font-semibold uppercase text-cyan-300">
+                      {headline.slice(0, 1)}
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openEditPanel(record)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400 text-slate-950 transition hover:scale-105"
-                      title="Sửa"
-                      aria-label="Sửa"
-                    >
-                      <EditIcon />
-                    </button>
-                    {allowDelete && !singleton && record._id ? (
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(String(record._id))}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-red-400/40 text-red-300 transition hover:scale-105 hover:bg-red-500/10"
-                        title="Xóa"
-                        aria-label="Xóa"
-                      >
-                        <DeleteIcon />
-                      </button>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-sm font-semibold text-white">{headline}</h3>
+                    {subhead ? (
+                      <p className="truncate text-xs uppercase tracking-[0.18em] text-cyan-300">
+                        {subhead}
+                      </p>
                     ) : null}
                   </div>
                 </div>
-
-                <div className="mt-4 space-y-2 text-sm text-slate-300">
-                  {fields.slice(0, 4).map((field) => (
-                    <div key={field.name}>
-                      <span className="font-medium text-slate-100">{field.label}: </span>
-                      <span>{summarizeValue(field, record[field.name])}</span>
-                    </div>
-                  ))}
+                <div className="ml-auto flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => openEditPanel(record)}
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400 text-slate-950 transition hover:scale-105"
+                    title="Sửa"
+                    aria-label="Sửa"
+                  >
+                    <EditIcon />
+                  </button>
+                  {allowDelete && !singleton && record._id ? (
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(String(record._id))}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-red-400/40 text-red-300 transition hover:scale-105 hover:bg-red-500/10"
+                      title="Xóa"
+                      aria-label="Xóa"
+                    >
+                      <DeleteIcon />
+                    </button>
+                  ) : null}
                 </div>
               </article>
             );

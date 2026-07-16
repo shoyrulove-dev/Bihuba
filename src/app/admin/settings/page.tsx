@@ -9,55 +9,48 @@ export default async function AdminSettingsPage() {
       process.env.IMAGEKIT_PRIVATE_KEY &&
       process.env.IMAGEKIT_URL_ENDPOINT
   );
-  const systemCards = [
-    {
-      label: "Website",
-      value: settings.contact.website || "Chưa cấu hình",
-      helper: "Địa chỉ website công khai",
-    },
-    {
-      label: "Trang quản trị",
-      value: "/admin/login",
-      helper: "Đường dẫn đăng nhập quản trị",
-    },
-    {
-      label: "ImageKit",
-      value: imageKitConfigured ? "Đã kết nối" : "Chưa cấu hình",
-      helper:
-        process.env.IMAGEKIT_URL_ENDPOINT ||
-        "Thiếu IMAGEKIT_PUBLIC_KEY / IMAGEKIT_PRIVATE_KEY / IMAGEKIT_URL_ENDPOINT",
-    },
-    {
-      label: "Thư mục upload",
-      value: process.env.IMAGEKIT_BASE_FOLDER || "bihuba",
-      helper: "Thư mục media đang dùng cho website",
-    },
-  ];
 
   return (
     <AdminShell
       title="Cấu hình website"
-      description="Cấu hình tên site, logo, hero, CTA và các khối giới thiệu chính."
+      description="Tất cả thông tin website, menu, liên hệ, ImageKit, nút nổi, doanh nghiệp đồng hành và giao diện đều chỉnh trong một nơi."
     >
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {systemCards.map((item) => (
-          <article
-            key={item.label}
-            className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5"
-          >
+      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6 text-sm leading-7 text-slate-300">
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
-              {item.label}
+              Website
             </p>
-            <p className="mt-3 text-lg font-semibold text-white">{item.value}</p>
-            <p className="mt-2 text-sm leading-6 text-slate-300">{item.helper}</p>
-          </article>
-        ))}
+            <p className="mt-2 text-base font-semibold text-white">
+              {settings.contact.website || "Chưa cấu hình"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
+              ImageKit
+            </p>
+            <p className="mt-2 text-base font-semibold text-white">
+              {imageKitConfigured ? "Đã kết nối" : "Chưa cấu hình"}
+            </p>
+            <p className="text-xs text-slate-400">
+              {process.env.IMAGEKIT_URL_ENDPOINT || "Thiếu biến môi trường ImageKit"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
+              Thư mục upload
+            </p>
+            <p className="mt-2 text-base font-semibold text-white">
+              {process.env.IMAGEKIT_BASE_FOLDER || "bihuba"}
+            </p>
+          </div>
+        </div>
       </section>
 
       <CollectionManager
         collection="settings"
         title="Cấu hình website"
-        description="Cập nhật tên website, khu vực nổi bật, menu điều hướng, số liệu hiển thị và thông tin liên hệ."
+        description="Tại đây bạn chỉnh toàn bộ logo, nội dung trang chủ, menu, thông tin liên hệ, nút nổi, doanh nghiệp đồng hành và giao diện website."
         initialItems={[settings as unknown as Record<string, unknown>]}
         singleton
         allowDelete={false}
@@ -109,9 +102,9 @@ export default async function AdminSettingsPage() {
           },
           {
             name: "theme",
-            label: "Màu sắc và cỡ chữ giao diện",
+            label: "Giao diện website",
             type: "theme",
-            helpText: "Điều chỉnh màu chính, màu nhấn, nền sáng và tỷ lệ cỡ chữ toàn website.",
+            helpText: "Điều chỉnh màu chính, màu nhấn, nền sáng và cỡ chữ toàn website.",
           },
         ]}
       />
