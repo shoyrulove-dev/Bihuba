@@ -8,12 +8,12 @@ export default async function AdminMembersPage() {
   return (
     <AdminShell
       title="Quản lý hội viên"
-      description="Quản trị hội viên doanh nghiệp, hội viên cá nhân và hội hoặc câu lạc bộ thành viên."
+      description="Quản lý hồ sơ hội viên doanh nghiệp, cá nhân và hội, câu lạc bộ thành viên."
     >
       <CollectionManager
         collection="members"
         title="Danh sách hội viên"
-        description="Quản lý hồ sơ hội viên, phân nhóm hiển thị và thông tin liên hệ."
+        description="Danh sách hồ sơ hội viên đang hiển thị ngoài website."
         initialItems={members as unknown as Record<string, unknown>[]}
         fields={[
           { name: "name", label: "Tên hội viên" },
@@ -34,19 +34,19 @@ export default async function AdminMembersPage() {
             name: "logo",
             label: "Logo",
             type: "image",
-            helpText: "Upload logo hội viên lên ImageKit hoặc dán URL có sẵn. Gợi ý: PNG vuông 1200 x 1200 nền trong suốt.",
+            helpText: "Dán link hoặc upload logo. Gợi ý: 1200 x 1200.",
           },
           {
             name: "coverImage",
             label: "Ảnh bìa doanh nghiệp",
             type: "image",
-            helpText: "Ảnh ngang cho phần đầu hồ sơ. Gợi ý: 1600 x 900 hoặc 1920 x 1080.",
+            helpText: "Ảnh ngang phần đầu hồ sơ. Gợi ý: 1600 x 900.",
           },
           {
             name: "introImage",
             label: "Ảnh / logo giới thiệu",
             type: "image",
-            helpText: "Ảnh minh họa trong khung giới thiệu. Gợi ý: 1200 x 900.",
+            helpText: "Ảnh trong khung giới thiệu. Gợi ý: 1200 x 900.",
           },
           { name: "companyTagline", label: "Dòng giới thiệu ngắn" },
           { name: "address", label: "Địa chỉ" },
@@ -58,7 +58,7 @@ export default async function AdminMembersPage() {
             name: "products",
             label: "Sản phẩm / dịch vụ",
             type: "products",
-            helpText: "Hiển thị ở cuối hồ sơ doanh nghiệp để giới thiệu và quảng bá sản phẩm, dịch vụ.",
+            helpText: "Hiển thị ở cuối hồ sơ doanh nghiệp.",
           },
         ]}
       />

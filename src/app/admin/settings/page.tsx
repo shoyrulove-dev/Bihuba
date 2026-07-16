@@ -1,6 +1,34 @@
+import Link from "next/link";
 import { AdminShell } from "@/components/admin/admin-shell";
-import { CollectionManager } from "@/components/admin/collection-manager";
 import { getSiteSettings } from "@/lib/content";
+
+const sections = [
+  {
+    href: "/admin/settings/branding",
+    title: "Nhận diện website",
+    description: "Tên website, tên ngắn, logo và slogan.",
+  },
+  {
+    href: "/admin/settings/homepage",
+    title: "Nội dung trang chủ",
+    description: "Hero, giới thiệu và các thống kê đang hiện ngoài trang chủ.",
+  },
+  {
+    href: "/admin/settings/contact",
+    title: "Menu và liên hệ",
+    description: "Menu đầu trang, thông tin liên hệ và 3 nút nổi bên phải.",
+  },
+  {
+    href: "/admin/settings/supporters",
+    title: "Doanh nghiệp đồng hành",
+    description: "Danh sách logo chạy dưới footer.",
+  },
+  {
+    href: "/admin/settings/theme",
+    title: "Giao diện",
+    description: "Màu sắc và cỡ chữ chính của website.",
+  },
+];
 
 export default async function AdminSettingsPage() {
   const settings = await getSiteSettings();
@@ -13,7 +41,7 @@ export default async function AdminSettingsPage() {
   return (
     <AdminShell
       title="Cấu hình website"
-      description="Tất cả thông tin website, menu, liên hệ, ImageKit, nút nổi, doanh nghiệp đồng hành và giao diện đều chỉnh trong một nơi."
+      description="Chọn từng nhóm nhỏ để chỉnh sửa nhanh và gọn hơn."
     >
       <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6 text-sm leading-7 text-slate-300">
         <div className="grid gap-4 lg:grid-cols-3">
@@ -32,9 +60,6 @@ export default async function AdminSettingsPage() {
             <p className="mt-2 text-base font-semibold text-white">
               {imageKitConfigured ? "Đã kết nối" : "Chưa cấu hình"}
             </p>
-            <p className="text-xs text-slate-400">
-              {process.env.IMAGEKIT_URL_ENDPOINT || "Thiếu biến môi trường ImageKit"}
-            </p>
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
@@ -47,80 +72,18 @@ export default async function AdminSettingsPage() {
         </div>
       </section>
 
-      <CollectionManager
-        collection="settings"
-        title="Nội dung và giao diện"
-        description="Chỉnh logo, nội dung trang chủ, menu, liên hệ, nút nổi, dải doanh nghiệp đồng hành và phần hiển thị của website."
-        initialItems={[settings as unknown as Record<string, unknown>]}
-        singleton
-        allowDelete={false}
-        fields={[
-          { name: "siteName", label: "Tên đầy đủ", section: "Nhận diện website" },
-          { name: "shortName", label: "Tên ngắn", section: "Nhận diện website" },
-          {
-            name: "logoUrl",
-            label: "Logo website",
-            type: "image",
-            section: "Nhận diện website",
-            helpText: "Logo hiển thị ở header, footer và hero. Gợi ý: PNG vuông 1200 x 1200 nền trong suốt.",
-          },
-          { name: "slogan", label: "Slogan", section: "Nhận diện website" },
-          { name: "heroTitle", label: "Tiêu đề hero", section: "Trang chủ" },
-          { name: "heroSubtitle", label: "Mô tả hero", type: "textarea", section: "Trang chủ", fullWidth: true },
-          { name: "heroCtaLabel", label: "Nhãn CTA", section: "Trang chủ" },
-          { name: "heroCtaHref", label: "Link CTA", section: "Trang chủ" },
-          { name: "introTitle", label: "Tiêu đề giới thiệu", section: "Trang chủ" },
-          { name: "introBody", label: "Nội dung giới thiệu", type: "textarea", section: "Trang chủ", fullWidth: true },
-          {
-            name: "memberStats",
-            label: "Thống kê trang chủ",
-            type: "stats",
-            section: "Trang chủ",
-            fullWidth: true,
-            helpText: "Mỗi dòng gồm nhãn hiển thị và con số tương ứng.",
-          },
-          {
-            name: "nav",
-            label: "Menu điều hướng",
-            type: "nav",
-            section: "Điều hướng và liên hệ",
-            fullWidth: true,
-            helpText: "Cập nhật tên mục menu và đường dẫn hiển thị ở đầu trang.",
-          },
-          {
-            name: "contact",
-            label: "Thông tin liên hệ",
-            type: "contact",
-            section: "Điều hướng và liên hệ",
-            fullWidth: true,
-            helpText: "Thông tin hiển thị ở footer và trang liên hệ.",
-          },
-          {
-            name: "floatingActions",
-            label: "Nút nổi bên phải",
-            type: "social",
-            section: "Điều hướng và liên hệ",
-            fullWidth: true,
-            helpText: "Cấu hình Zalo, Facebook và nút gọi nhanh hiển thị ở góc phải màn hình.",
-          },
-          {
-            name: "supporterCompanies",
-            label: "Doanh nghiệp đồng hành",
-            type: "supporters",
-            section: "Đối tác đồng hành",
-            helpText: "Danh sách logo chạy ngang phía dưới footer.",
-            fullWidth: true,
-          },
-          {
-            name: "theme",
-            label: "Giao diện website",
-            type: "theme",
-            section: "Giao diện",
-            helpText: "Điều chỉnh màu chính, màu nhấn, nền sáng và cỡ chữ toàn website.",
-            fullWidth: true,
-          },
-        ]}
-      />
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {sections.map((section) => (
+          <Link
+            key={section.href}
+            href={section.href}
+            className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5 transition hover:border-cyan-300/30 hover:bg-white/8"
+          >
+            <p className="text-sm font-semibold text-white">{section.title}</p>
+            <p className="mt-2 text-sm leading-7 text-slate-300">{section.description}</p>
+          </Link>
+        ))}
+      </section>
     </AdminShell>
   );
 }

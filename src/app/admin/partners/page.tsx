@@ -8,12 +8,12 @@ export default async function AdminPartnersPage() {
   return (
     <AdminShell
       title="Quản lý đối tác"
-      description="Dùng cho danh sách đối tác chiến lược, đối tác đào tạo, truyền thông hoặc đơn vị liên kết."
+      description="Quản lý danh sách đối tác và đơn vị đồng hành."
     >
       <CollectionManager
         collection="partners"
         title="Đối tác"
-        description="Quản lý đối tác, đơn vị đồng hành và thông tin giới thiệu."
+        description="Danh sách đối tác đang hiển thị ngoài website."
         initialItems={partners as unknown as Record<string, unknown>[]}
         fields={[
           { name: "name", label: "Tên đối tác" },
@@ -25,7 +25,7 @@ export default async function AdminPartnersPage() {
             name: "logo",
             label: "Logo",
             type: "image",
-            helpText: "Upload logo đối tác lên ImageKit hoặc dán URL có sẵn.",
+            helpText: "Dán link hoặc upload logo.",
           },
         ]}
       />

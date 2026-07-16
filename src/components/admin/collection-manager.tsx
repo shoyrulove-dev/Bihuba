@@ -35,7 +35,7 @@ type FieldType =
   | "products"
   | "theme";
 
-type FieldConfig = {
+export type FieldConfig = {
   name: string;
   label: string;
   type?: FieldType;

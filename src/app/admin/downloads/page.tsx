@@ -8,12 +8,12 @@ export default async function AdminDownloadsPage() {
   return (
     <AdminShell
       title="Quản lý tài liệu"
-      description="Quản trị download, báo cáo, thông báo và tài liệu công khai cho hội viên."
+      description="Quản lý tài liệu, biểu mẫu, báo cáo và thông báo."
     >
       <CollectionManager
         collection="downloads"
         title="Tài liệu"
-        description="Quản lý file tải về, thông báo và tài liệu phục vụ hội viên."
+        description="Danh sách tài liệu đang hiển thị ngoài website."
         initialItems={downloads as unknown as Record<string, unknown>[]}
         fields={[
           { name: "title", label: "Tiêu đề" },
@@ -25,7 +25,7 @@ export default async function AdminDownloadsPage() {
             name: "fileUrl",
             label: "Link file",
             type: "file",
-            helpText: "Upload PDF, DOC, XLS hoặc dán đường dẫn tài liệu.",
+            helpText: "Upload file hoặc dán đường dẫn tài liệu.",
           },
         ]}
       />

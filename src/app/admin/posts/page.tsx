@@ -8,12 +8,12 @@ export default async function AdminPostsPage() {
   return (
     <AdminShell
       title="Quản lý bài viết"
-      description="Dùng cho tin tức, sự kiện, lịch tuần, kết nối giao thương và doanh nghiệp đồng hành."
+      description="Quản lý tin tức, sự kiện, lịch tuần và bài kết nối giao thương."
     >
       <CollectionManager
         collection="posts"
         title="Bài viết"
-        description="Tập trung quản lý tin tức, sự kiện, lịch tuần và các nội dung nổi bật."
+        description="Danh sách bài viết đang hiển thị ngoài website."
         initialItems={posts as unknown as Record<string, unknown>[]}
         fields={[
           { name: "title", label: "Tiêu đề" },
@@ -36,13 +36,13 @@ export default async function AdminPostsPage() {
             name: "content",
             label: "Nội dung",
             type: "richtext",
-            helpText: "Editor hỗ trợ heading, link, highlight, ảnh upload và video YouTube.",
+            helpText: "Có thể chèn ảnh, link và video YouTube.",
           },
           {
             name: "featuredImage",
             label: "Ảnh đại diện",
             type: "image",
-            helpText: "Có thể dán URL hoặc upload ảnh trực tiếp qua ImageKit. Gợi ý: 1600 x 900 hoặc 1920 x 1080.",
+            helpText: "Dán link hoặc upload ảnh. Gợi ý: 1600 x 900.",
           },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
           { name: "isFeatured", label: "Nổi bật", type: "checkbox" },

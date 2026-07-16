@@ -14,14 +14,14 @@ Tài liệu này dùng để bàn giao nhanh cho đội vận hành BIHUBA sau k
 
 ## Sửa trang chủ
 
-Vào `Nội dung và giao diện`, sau đó chỉnh các nhóm sau:
+Vào `Cấu hình website`, sau đó chọn từng mục nhỏ:
 
 - `Nhận diện website`
   - Tên đầy đủ
   - Tên ngắn
   - Logo website
   - Slogan
-- `Trang chủ`
+- `Nội dung trang chủ`
   - Tiêu đề hero
   - Mô tả hero
   - Nút CTA
@@ -31,7 +31,7 @@ Vào `Nội dung và giao diện`, sau đó chỉnh các nhóm sau:
 
 ## Sửa menu và liên hệ
 
-Vào `Nội dung và giao diện`, nhóm `Điều hướng và liên hệ`:
+Vào `Cấu hình website` > `Menu và liên hệ`:
 
 - `Menu điều hướng`
   - Thêm, sửa, sắp xếp thứ tự menu trên đầu trang
@@ -47,7 +47,7 @@ Vào `Nội dung và giao diện`, nhóm `Điều hướng và liên hệ`:
 
 ## Sửa dải doanh nghiệp đồng hành
 
-Vào `Nội dung và giao diện`, nhóm `Đối tác đồng hành`:
+Vào `Cấu hình website` > `Doanh nghiệp đồng hành`:
 
 - Thêm logo mới
 - Sửa tên doanh nghiệp
@@ -56,7 +56,7 @@ Vào `Nội dung và giao diện`, nhóm `Đối tác đồng hành`:
 
 ## Sửa giao diện
 
-Vào `Nội dung và giao diện`, nhóm `Giao diện`:
+Vào `Cấu hình website` > `Giao diện`:
 
 - Màu chính
 - Màu nhấn
