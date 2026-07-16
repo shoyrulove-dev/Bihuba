@@ -17,7 +17,7 @@ export default async function AdminLoginPage({
   return (
     <div className="admin-root flex min-h-screen items-center justify-center bg-slate-950 px-6 py-12 text-white">
       <section className="w-full max-w-md rounded-[2.5rem] bg-white p-8 text-slate-950 shadow-[0_30px_90px_rgba(2,6,23,0.45)]">
-        <h1 className="text-center text-3xl font-semibold">Quản Trị BIHUBA</h1>
+        <h1 className="text-center text-3xl font-semibold">BIHUBA</h1>
         <AdminLoginForm nextPath={nextPath} hasError={Boolean(params.error)} />
       </section>
     </div>
