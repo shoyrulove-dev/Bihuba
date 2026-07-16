@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getMemberBySlug } from "@/lib/content";
 
@@ -13,13 +14,19 @@ export default async function MemberDetailPage({
     notFound();
   }
 
+  const heroImage =
+    member.coverImage ||
+    member.introImage ||
+    member.logo ||
+    "https://huba.vn/wp-content/uploads/2026/07/soket-3.webp";
+
   return (
     <div className="pb-16">
       <section className="relative overflow-hidden bg-[#031634] text-white">
         <div
-          className="min-h-[320px] bg-cover bg-center"
+          className="min-h-[340px] bg-cover bg-center"
           style={{
-            backgroundImage: `linear-gradient(180deg, rgba(2,6,23,0.25), rgba(2,6,23,0.82)), url('${member.coverImage || member.introImage || member.logo || "https://huba.vn/wp-content/uploads/2026/07/soket-3.webp"}')`,
+            backgroundImage: `linear-gradient(180deg, rgba(2,6,23,0.28), rgba(2,6,23,0.86)), url('${heroImage}')`,
           }}
         >
           <div className="mx-auto max-w-7xl px-6 py-18">
@@ -32,39 +39,130 @@ export default async function MemberDetailPage({
             <p className="mt-5 max-w-3xl text-lg leading-8 text-blue-50/90">
               {member.companyTagline || member.description}
             </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {member.website ? (
+                <Link
+                  href={member.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950"
+                >
+                  Truy cập website
+                </Link>
+              ) : null}
+              {member.phone ? (
+                <a
+                  href={`tel:${member.phone}`}
+                  className="rounded-full border border-white/30 px-5 py-3 text-sm font-semibold text-white"
+                >
+                  Gọi ngay
+                </a>
+              ) : null}
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="mx-auto mt-10 grid max-w-7xl gap-8 px-6 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="mx-auto mt-10 grid max-w-7xl gap-8 px-6 lg:grid-cols-[1.08fr_0.92fr]">
         <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-          <h2 className="text-2xl font-semibold text-slate-950">Giới thiệu doanh nghiệp</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--theme-primary)]">
+            Giới thiệu
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold text-slate-950">
+            Hồ sơ doanh nghiệp
+          </h2>
           <p className="mt-4 text-base leading-8 text-slate-600">{member.description}</p>
 
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            <p><strong>Lĩnh vực:</strong> {member.industry}</p>
-            <p><strong>Địa chỉ:</strong> {member.address}</p>
-            <p><strong>Điện thoại:</strong> {member.phone}</p>
-            <p><strong>Email:</strong> {member.email}</p>
-            <p><strong>Website:</strong> {member.website}</p>
-            <p><strong>Loại hội viên:</strong> {member.memberType}</p>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <div className="rounded-[1.4rem] bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Lĩnh vực
+              </p>
+              <p className="mt-2 text-sm font-medium text-slate-900">{member.industry}</p>
+            </div>
+            <div className="rounded-[1.4rem] bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Loại hội viên
+              </p>
+              <p className="mt-2 text-sm font-medium text-slate-900">{member.memberType}</p>
+            </div>
+            <div className="rounded-[1.4rem] bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Địa chỉ
+              </p>
+              <p className="mt-2 text-sm font-medium text-slate-900">{member.address}</p>
+            </div>
+            <div className="rounded-[1.4rem] bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Điện thoại
+              </p>
+              <p className="mt-2 text-sm font-medium text-slate-900">{member.phone}</p>
+            </div>
+            <div className="rounded-[1.4rem] bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Email
+              </p>
+              <p className="mt-2 text-sm font-medium text-slate-900">{member.email}</p>
+            </div>
+            <div className="rounded-[1.4rem] bg-slate-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Website
+              </p>
+              <p className="mt-2 text-sm font-medium text-slate-900">{member.website || "Đang cập nhật"}</p>
+            </div>
           </div>
         </section>
 
-        <aside className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-          <div className="overflow-hidden rounded-[1.6rem] bg-slate-100">
-            {member.introImage || member.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={member.introImage || member.logo}
-                alt={member.name}
-                className="h-[280px] w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-[280px] items-center justify-center px-8 text-center text-3xl font-black text-[var(--theme-primary)]">
-                {member.name}
-              </div>
-            )}
+        <aside className="space-y-6">
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+            <div className="overflow-hidden rounded-[1.6rem] bg-slate-100">
+              {member.introImage || member.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={member.introImage || member.logo}
+                  alt={member.name}
+                  className="h-[280px] w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-[280px] items-center justify-center px-8 text-center text-3xl font-black text-[var(--theme-primary)]">
+                  {member.name}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--theme-primary)]">
+              Liên hệ nhanh
+            </p>
+            <div className="mt-4 space-y-3">
+              {member.phone ? (
+                <a
+                  href={`tel:${member.phone}`}
+                  className="flex items-center justify-center rounded-full bg-[var(--theme-primary)] px-4 py-3 text-sm font-semibold text-white"
+                >
+                  Gọi tư vấn
+                </a>
+              ) : null}
+              {member.email ? (
+                <a
+                  href={`mailto:${member.email}`}
+                  className="flex items-center justify-center rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-900"
+                >
+                  Gửi email
+                </a>
+              ) : null}
+              {member.website ? (
+                <Link
+                  href={member.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-900"
+                >
+                  Xem website
+                </Link>
+              ) : null}
+            </div>
           </div>
         </aside>
       </div>
