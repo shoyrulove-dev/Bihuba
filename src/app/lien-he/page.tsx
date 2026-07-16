@@ -9,7 +9,7 @@ export default async function ContactPage() {
       <SectionHeading
         eyebrow="Liên hệ"
         title="Văn phòng BIHUBA"
-        body="Trang liên hệ đang dùng dữ liệu từ site settings. Sau này có thể mở rộng thêm form gửi liên hệ và quản lý lead trong admin."
+        body="Thông tin liên hệ chính thức của BIHUBA được cập nhật tập trung từ khu quản trị để đồng bộ trên toàn website."
       />
       <div className="mt-10 rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_20px_45px_rgba(15,23,42,0.06)]">
         <div className="space-y-4 text-lg text-slate-700">

@@ -10,7 +10,7 @@ export default async function DownloadsPage() {
       <SectionHeading
         eyebrow="Tài liệu"
         title="Download và thông báo"
-        body="Khu vực này phục vụ báo cáo, thông báo, biểu mẫu và các tài liệu cần gửi tới hội viên."
+        body="Khu vực lưu trữ thông báo, biểu mẫu, báo cáo và các tài liệu cần gửi tới hội viên, đối tác và ban điều hành."
       />
       <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
         {downloads.map((item) => (

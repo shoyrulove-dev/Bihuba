@@ -10,7 +10,7 @@ export default async function PartnersPage() {
       <SectionHeading
         eyebrow="Đối tác"
         title="Mạng lưới đối tác chiến lược"
-        body="Trang đối tác giúp cập nhật danh sách liên kết, đơn vị đồng hành và các mối quan hệ hợp tác của hội."
+        body="Danh sách các đơn vị liên kết, doanh nghiệp đồng hành và đối tác chiến lược đang kết nối cùng BIHUBA."
       />
       <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
         {partners.map((partner) => (

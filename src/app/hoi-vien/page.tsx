@@ -11,7 +11,7 @@ export default async function MembersPage() {
       <SectionHeading
         eyebrow="Hội viên"
         title="Danh bạ hội viên BIHUBA"
-        body="Dùng cho hội viên doanh nghiệp, hội viên cá nhân và các hội/câu lạc bộ thành viên."
+        body="Không gian giới thiệu hội viên doanh nghiệp, hội viên cá nhân và các hội, câu lạc bộ thành viên đang đồng hành cùng BIHUBA."
       />
       <MemberLogoMarquee members={members} />
       <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">

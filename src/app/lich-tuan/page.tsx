@@ -10,7 +10,7 @@ export default async function SchedulePage() {
       <SectionHeading
         eyebrow="Lịch tuần"
         title="Lịch điều hành và lịch công tác"
-        body="Lịch điều hành và kế hoạch công tác được cập nhật nhanh từ khu quản trị nội dung."
+        body="Lịch điều hành, lịch họp và kế hoạch công tác được cập nhật tập trung để ban điều hành và hội viên tiện theo dõi."
       />
       <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
         {posts.map((post) => (

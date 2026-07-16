@@ -32,14 +32,14 @@ export default async function AdminLoginPage({
         <section className="rounded-[2.5rem] bg-white p-8 text-slate-950 shadow-[0_30px_90px_rgba(2,6,23,0.45)]">
           <h2 className="text-2xl font-semibold">Đăng nhập admin</h2>
           <p className="mt-3 text-sm leading-7 text-slate-600">
-            Dùng tài khoản quản trị đã cấu hình trong biến môi trường.
+            Dùng tài khoản quản trị đã được cấp để cập nhật toàn bộ nội dung website.
           </p>
 
           <form action="/api/auth/login" method="post" className="mt-8 space-y-5">
             <input type="hidden" name="next" value={nextPath} />
 
             <label className="block">
-              <span className="mb-2 block text-sm font-medium">Username</span>
+              <span className="mb-2 block text-sm font-medium">Tài khoản</span>
               <input
                 name="username"
                 type="text"
@@ -50,7 +50,7 @@ export default async function AdminLoginPage({
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-sm font-medium">Password</span>
+              <span className="mb-2 block text-sm font-medium">Mật khẩu</span>
               <input
                 name="password"
                 type="password"
