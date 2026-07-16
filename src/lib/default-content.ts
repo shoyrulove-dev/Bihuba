@@ -14,6 +14,7 @@ export const defaultSettings: SiteSettingsShape = {
   heroTitle: "Cộng đồng doanh nghiệp Bình Hưng kết nối nguồn lực và mở rộng cơ hội phát triển",
   heroSubtitle:
     "Cổng thông tin BIHUBA được xây dựng theo hướng hiện đại, quản trị tập trung, phù hợp cho tin tức, sự kiện, hội viên, đối tác và các chương trình kết nối giao thương.",
+  heroImage: "/bihuba-hero-generated.svg",
   heroCtaLabel: "Khám phá tin hoạt động",
   heroCtaHref: "/tin-tuc",
   introTitle: "Về BIHUBA",

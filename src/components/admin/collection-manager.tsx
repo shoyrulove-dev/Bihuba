@@ -56,6 +56,7 @@ type CollectionManagerProps = {
   singleton?: boolean;
   allowDelete?: boolean;
   hideSingletonEditButton?: boolean;
+  closeHref?: string;
 };
 
 type StatItem = { label: string; value: string };
@@ -786,6 +787,7 @@ export function CollectionManager({
   singleton = false,
   allowDelete = true,
   hideSingletonEditButton = false,
+  closeHref,
 }: CollectionManagerProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -810,6 +812,7 @@ export function CollectionManager({
   const mode = searchParams.get("mode");
   const editId = searchParams.get("edit");
   const isPanelOpen = singleton ? mode === "edit" : mode === "new" || Boolean(editId);
+  const returnPath = closeHref || pathname;
   const pageSize = 9;
 
   const filteredItems = useMemo(() => {
@@ -854,6 +857,11 @@ export function CollectionManager({
   }, [fields]);
 
   useEffect(() => {
+    if (singleton && hideSingletonEditButton && closeHref && !isPanelOpen) {
+      router.replace(closeHref, { scroll: false });
+      return;
+    }
+
     if (singleton) {
       if (!isPanelOpen) return;
       const record = (items[0] as Record<string, unknown> | undefined) ?? {};
@@ -888,7 +896,7 @@ export function CollectionManager({
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [baseState, editId, fields, isPanelOpen, items, singleton]);
+  }, [baseState, closeHref, editId, fields, hideSingletonEditButton, isPanelOpen, items, router, singleton]);
 
   async function refresh() {
     const response = await fetch(`/api/admin/${collection}`, { cache: "no-store" });
@@ -914,7 +922,7 @@ export function CollectionManager({
 
   function closePanel() {
     setStatus("");
-    router.replace(pathname, { scroll: false });
+    router.replace(returnPath, { scroll: false });
   }
 
   function updateField(name: string, value: unknown) {
@@ -978,6 +986,7 @@ export function CollectionManager({
     if (response.ok) {
       await refresh();
       if (singleton) {
+        closePanel();
         return;
       }
       closePanel();

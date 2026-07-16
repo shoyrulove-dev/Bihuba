@@ -48,7 +48,7 @@ export default async function Home() {
   const heroPost = featuredPosts[0];
 
   return (
-    <div className="pb-10">
+    <div className="pb-8">
       <section className="relative overflow-hidden bg-[#031634] text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(86,214,255,0.35),_transparent_32%),radial-gradient(circle_at_85%_15%,_rgba(14,79,175,0.55),_transparent_30%),linear-gradient(135deg,_#021126_0%,_#083c87_42%,_#021126_100%)]" />
         <div
@@ -60,7 +60,7 @@ export default async function Home() {
           }}
         />
 
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-18 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:py-24">
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-6 py-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:py-16">
           <div>
             <div className="inline-flex items-center gap-3 rounded-full border border-cyan-300/30 bg-white/8 px-4 py-2 text-sm text-cyan-100">
               <span className="h-2.5 w-2.5 rounded-full bg-cyan-300" />
@@ -128,7 +128,7 @@ export default async function Home() {
                 className="relative min-h-[420px] bg-cover bg-center"
                 style={{
                   backgroundImage:
-                    "linear-gradient(180deg, rgba(1,17,38,0.18), rgba(2,14,34,0.78)), url('https://huba.vn/wp-content/uploads/2026/07/soket-3.webp')",
+                    `linear-gradient(180deg, rgba(1,17,38,0.08), rgba(2,14,34,0.66)), url('${settings.heroImage || "/bihuba-hero-generated.svg"}')`,
                 }}
               >
                 <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-cyan-300/10 to-transparent" />
@@ -174,7 +174,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-18">
+      <section className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
             <SectionHeading
@@ -197,7 +197,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8">
         <SectionHeading
           eyebrow="Nổi bật"
           title="Tin tức và hoạt động nổi bật"
@@ -210,7 +210,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-[2rem] bg-[#061a39] p-7 text-white shadow-[0_24px_80px_rgba(2,12,27,0.2)]">
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
@@ -265,7 +265,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8">
         <SectionHeading
           eyebrow="Hội viên"
           title="Danh sách hội viên tiêu biểu"
@@ -278,7 +278,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section className="mx-auto max-w-7xl px-6 py-8">
         <SectionHeading
           eyebrow="Tài liệu"
           title="Download, thông báo và biểu mẫu"

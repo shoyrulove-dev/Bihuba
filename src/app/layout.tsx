@@ -50,7 +50,7 @@ export default async function RootLayout({
         }
       >
         {!isAdminRoute ? <SiteHeader settings={settings} /> : null}
-        <main>{children}</main>
+        <main className="page-turn-shell">{children}</main>
         {!isAdminRoute ? (
           <FloatingContactButtons actions={settings.floatingActions} />
         ) : null}

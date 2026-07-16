@@ -7,7 +7,7 @@ export const brandingFields: FieldConfig[] = [
     name: "logoUrl",
     label: "Logo website",
     type: "image",
-    helpText: "Gợi ý: PNG vuông 1200 x 1200 nền trong.",
+    helpText: "Logo vuông: 1200 x 1200 PNG nền trong. Logo ngang: 1800 x 600 PNG nền trong.",
   },
   { name: "slogan", label: "Slogan" },
 ];
@@ -15,6 +15,12 @@ export const brandingFields: FieldConfig[] = [
 export const homepageFields: FieldConfig[] = [
   { name: "heroTitle", label: "Tiêu đề hero" },
   { name: "heroSubtitle", label: "Mô tả hero", type: "textarea" },
+  {
+    name: "heroImage",
+    label: "Ảnh hero",
+    type: "image",
+    helpText: "Gợi ý: 1920 x 1080 hoặc 1600 x 900, dung lượng nên dưới 1.5MB.",
+  },
   { name: "heroCtaLabel", label: "Nhãn CTA" },
   { name: "heroCtaHref", label: "Link CTA" },
   { name: "introTitle", label: "Tiêu đề giới thiệu" },

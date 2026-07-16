@@ -23,6 +23,7 @@ export async function SettingsSectionManager({
         singleton
         allowDelete={false}
         hideSingletonEditButton
+        closeHref="/admin/settings"
         fields={fields}
       />
     </AdminShell>

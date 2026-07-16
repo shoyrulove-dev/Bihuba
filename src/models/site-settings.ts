@@ -8,6 +8,7 @@ const SiteSettingsSchema = new Schema(
     slogan: { type: String, default: "" },
     heroTitle: { type: String, default: "" },
     heroSubtitle: { type: String, default: "" },
+    heroImage: { type: String, default: "/bihuba-hero-generated.svg" },
     heroCtaLabel: { type: String, default: "" },
     heroCtaHref: { type: String, default: "" },
     introTitle: { type: String, default: "" },

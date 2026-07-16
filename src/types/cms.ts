@@ -42,6 +42,7 @@ export interface SiteSettingsShape {
   slogan: string;
   heroTitle: string;
   heroSubtitle: string;
+  heroImage?: string;
   heroCtaLabel: string;
   heroCtaHref: string;
   introTitle: string;

@@ -99,7 +99,7 @@ export function AdminShell({
 
   return (
     <div className="admin-root min-h-screen overflow-x-hidden bg-slate-950 text-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[112px_1fr]">
+      <div className="mx-auto grid max-w-7xl gap-6 px-5 py-6 lg:grid-cols-[96px_1fr]">
         <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-4">
           <div className="flex h-full flex-col items-center justify-between gap-4">
             <nav className="flex w-full flex-col items-center gap-2">
@@ -140,8 +140,8 @@ export function AdminShell({
           </div>
         </aside>
 
-        <main className="space-y-8">
-          <div className="flex flex-wrap items-start justify-between gap-6 border-b border-white/10 pb-4">
+        <main className="space-y-6">
+          <div className="flex flex-wrap items-start justify-between gap-5 border-b border-white/10 pb-4">
             <div>
               <h1 className="text-3xl font-semibold text-white">{title}</h1>
               <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300">{description}</p>
