@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { FloatingActions, SupporterItem } from "@/types/cms";
 
 const RichTextEditor = dynamic(
   () => import("@/components/admin/rich-text-editor").then((mod) => mod.RichTextEditor),
@@ -28,7 +29,9 @@ type FieldType =
   | "file"
   | "stats"
   | "nav"
-  | "contact";
+  | "contact"
+  | "social"
+  | "supporters";
 
 type FieldConfig = {
   name: string;
@@ -96,6 +99,10 @@ function buildInitialValue(field: FieldConfig) {
       return [];
     case "contact":
       return { address: "", phone: "", email: "", website: "" };
+    case "social":
+      return { zaloUrl: "", facebookUrl: "", callNumber: "", callLabel: "" };
+    case "supporters":
+      return [];
     default:
       return "";
   }
@@ -117,6 +124,13 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
     if (rawValue && typeof rawValue === "object") return rawValue;
     return { address: "", phone: "", email: "", website: "" };
   }
+  if (field.type === "social") {
+    if (rawValue && typeof rawValue === "object") return rawValue;
+    return { zaloUrl: "", facebookUrl: "", callNumber: "", callLabel: "" };
+  }
+  if (field.type === "supporters") {
+    return Array.isArray(rawValue) ? rawValue : [];
+  }
   return String(rawValue ?? "");
 }
 
@@ -131,6 +145,13 @@ function summarizeValue(field: FieldConfig, rawValue: unknown) {
   if (field.type === "contact") {
     const contact = rawValue as ContactItem | undefined;
     return contact?.address || "Chưa có thông tin";
+  }
+  if (field.type === "social") {
+    const social = rawValue as FloatingActions | undefined;
+    return social?.callNumber || social?.zaloUrl || social?.facebookUrl || "Chưa cấu hình";
+  }
+  if (field.type === "supporters") {
+    return `${Array.isArray(rawValue) ? rawValue.length : 0} doanh nghiệp`;
   }
 
   const text = String(rawValue ?? "")
@@ -304,6 +325,148 @@ function ContactField({
         placeholder="Website"
         className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
       />
+    </div>
+  );
+}
+
+function SocialField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: FloatingActions) => void;
+}) {
+  const social = ((value && typeof value === "object" ? value : {}) as FloatingActions) ?? {
+    zaloUrl: "",
+    facebookUrl: "",
+    callNumber: "",
+    callLabel: "",
+  };
+
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      <input
+        type="url"
+        value={social.zaloUrl ?? ""}
+        onChange={(event) => onChange({ ...social, zaloUrl: event.target.value })}
+        placeholder="Link Zalo"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="url"
+        value={social.facebookUrl ?? ""}
+        onChange={(event) => onChange({ ...social, facebookUrl: event.target.value })}
+        placeholder="Link Facebook"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="text"
+        value={social.callNumber ?? ""}
+        onChange={(event) => onChange({ ...social, callNumber: event.target.value })}
+        placeholder="Số điện thoại gọi nhanh"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="text"
+        value={social.callLabel ?? ""}
+        onChange={(event) => onChange({ ...social, callLabel: event.target.value })}
+        placeholder="Nhãn nút gọi"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+    </div>
+  );
+}
+
+function SupportersField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: SupporterItem[]) => void;
+}) {
+  const items = (Array.isArray(value) ? value : []) as SupporterItem[];
+
+  return (
+    <div className="space-y-3">
+      {items.map((item, index) => (
+        <div
+          key={`${item.name}-${index}`}
+          className="grid gap-3 rounded-2xl border border-slate-200 p-4 md:grid-cols-2"
+        >
+          <input
+            type="text"
+            value={item.name ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], name: event.target.value };
+              onChange(next);
+            }}
+            placeholder="Tên doanh nghiệp"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <input
+            type="url"
+            value={item.website ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], website: event.target.value };
+              onChange(next);
+            }}
+            placeholder="Link website"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <input
+            type="url"
+            value={item.logoUrl ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], logoUrl: event.target.value };
+              onChange(next);
+            }}
+            placeholder="Link logo"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
+          />
+          <div className="flex flex-wrap items-center gap-3 md:col-span-2">
+            <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
+              Tải logo từ máy
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={async (event) => {
+                  const file = event.target.files?.[0];
+                  event.currentTarget.value = "";
+                  if (!file) return;
+                  const body = new FormData();
+                  body.append("file", file);
+                  body.append("folder", "supporters");
+                  body.append("fileName", file.name);
+                  const response = await fetch("/api/admin/upload", { method: "POST", body });
+                  const result = await response.json();
+                  if (!response.ok) return;
+                  const next = [...items];
+                  next[index] = { ...next[index], logoUrl: String(result.url) };
+                  onChange(next);
+                }}
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+              className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-600"
+            >
+              Xóa
+            </button>
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { name: "", logoUrl: "", website: "" }])}
+        className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
+      >
+        Thêm doanh nghiệp đồng hành
+      </button>
     </div>
   );
 }
@@ -688,6 +851,16 @@ export function CollectionManager({
                     />
                   ) : field.type === "contact" ? (
                     <ContactField
+                      value={form[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ) : field.type === "social" ? (
+                    <SocialField
+                      value={form[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ) : field.type === "supporters" ? (
+                    <SupportersField
                       value={form[field.name]}
                       onChange={(value) => updateField(field.name, value)}
                     />

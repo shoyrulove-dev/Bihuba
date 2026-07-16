@@ -33,6 +33,29 @@ export const settings = {
     phone: "0900 000 000",
     website: "https://bihuba.vercel.app",
   },
+  floatingActions: {
+    zaloUrl: "https://zalo.me/0900000000",
+    facebookUrl: "https://facebook.com/",
+    callNumber: "0900000000",
+    callLabel: "Gọi ngay",
+  },
+  supporterCompanies: [
+    {
+      name: "Sai Gon Connect",
+      logoUrl: "",
+      website: "https://example.com",
+    },
+    {
+      name: "Nam Sai Gon Tech",
+      logoUrl: "",
+      website: "https://example.org",
+    },
+    {
+      name: "Bình Hưng Trading",
+      logoUrl: "",
+      website: "https://example.vn",
+    },
+  ],
 };
 
 export const posts = [

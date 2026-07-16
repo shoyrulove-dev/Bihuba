@@ -14,6 +14,19 @@ export interface ContactInfo {
   website?: string;
 }
 
+export interface FloatingActions {
+  zaloUrl: string;
+  facebookUrl: string;
+  callNumber: string;
+  callLabel?: string;
+}
+
+export interface SupporterItem {
+  name: string;
+  logoUrl: string;
+  website?: string;
+}
+
 export interface SiteSettingsShape {
   siteName: string;
   shortName: string;
@@ -28,6 +41,8 @@ export interface SiteSettingsShape {
   memberStats: Array<{ label: string; value: string }>;
   nav: NavItem[];
   contact: ContactInfo;
+  floatingActions: FloatingActions;
+  supporterCompanies: SupporterItem[];
 }
 
 export interface PostShape {

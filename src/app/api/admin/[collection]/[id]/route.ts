@@ -22,7 +22,7 @@ export async function PUT(request: NextRequest, context: Context) {
   const connection = await connectToDatabase();
   if (!connection) {
     return NextResponse.json(
-      { message: "MongoDB chưa kết nối được. Kiểm tra lại Atlas network access." },
+      { message: "MongoDB chưa kết nối được. Kiểm tra lại Atlas Network Access." },
       { status: 503 }
     );
   }
@@ -54,7 +54,7 @@ export async function DELETE(_: NextRequest, context: Context) {
   const connection = await connectToDatabase();
   if (!connection) {
     return NextResponse.json(
-      { message: "MongoDB chưa kết nối được. Kiểm tra lại Atlas network access." },
+      { message: "MongoDB chưa kết nối được. Kiểm tra lại Atlas Network Access." },
       { status: 503 }
     );
   }

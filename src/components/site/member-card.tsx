@@ -9,20 +9,19 @@ export function MemberCard({ member }: { member: MemberShape }) {
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
             {member.groupType}
           </p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-950">{member.name}</h3>
+          <h3 className="mt-2 line-clamp-2 text-lg font-semibold text-slate-950">{member.name}</h3>
         </div>
         <div className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-medium text-cyan-800">
           {member.memberType}
         </div>
       </div>
-      <p className="mt-4 text-sm leading-7 text-slate-600">{member.description}</p>
-      <div className="mt-6 space-y-2 text-sm text-slate-500">
+      <div className="mt-5 space-y-1 text-sm text-slate-500">
         <p>{member.industry}</p>
-        <p>{member.address}</p>
+        <p className="line-clamp-1">{member.address}</p>
       </div>
       <Link
         href={`/hoi-vien/${member.slug}`}
-        className="mt-6 inline-flex rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
+        className="mt-5 inline-flex rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
       >
         Xem hồ sơ
       </Link>

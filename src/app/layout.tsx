@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
+import { FloatingContactButtons } from "@/components/site/floating-contact-buttons";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { getSiteSettings } from "@/lib/content";
@@ -39,6 +40,9 @@ export default async function RootLayout({
       <body className="min-h-full bg-slate-50 text-slate-950">
         {!isAdminRoute ? <SiteHeader settings={settings} /> : null}
         <main>{children}</main>
+        {!isAdminRoute ? (
+          <FloatingContactButtons actions={settings.floatingActions} />
+        ) : null}
         {!isAdminRoute ? <SiteFooter settings={settings} /> : null}
       </body>
     </html>

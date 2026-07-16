@@ -15,6 +15,8 @@ const SiteSettingsSchema = new Schema(
     memberStats: { type: Array, default: [] },
     nav: { type: Array, default: [] },
     contact: { type: Object, default: {} },
+    floatingActions: { type: Object, default: {} },
+    supporterCompanies: { type: Array, default: [] },
   },
   { timestamps: true }
 );
