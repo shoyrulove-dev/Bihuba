@@ -66,16 +66,6 @@ function UserIcon() {
   );
 }
 
-function ProfileIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" />
-      <path d="M5 20a7 7 0 0 1 14 0" />
-      <path d="M18 6l1.5 1.5L22 5" />
-    </svg>
-  );
-}
-
 function LogoutIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -137,41 +127,25 @@ export function AdminShell({
                 );
               })}
             </nav>
-            <div className="flex flex-col items-center gap-2">
-              <Link
-                href="/admin/profile"
-                className={`flex h-12 w-12 items-center justify-center rounded-2xl transition ${
-                  pathname?.startsWith("/admin/profile")
-                    ? "bg-cyan-400 text-slate-950 shadow-[0_14px_40px_rgba(34,211,238,0.35)]"
-                    : "text-slate-300 hover:bg-white/10 hover:text-white"
-                }`}
-                aria-label="Hồ sơ"
-                title="Hồ sơ"
+            <form action="/api/auth/logout" method="post">
+              <button
+                type="submit"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl text-slate-300 transition hover:bg-white/10 hover:text-white"
+                aria-label="Đăng xuất"
+                title="Đăng xuất"
               >
-                <ProfileIcon />
-              </Link>
-              <form action="/api/auth/logout" method="post">
-                <button
-                  type="submit"
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl text-slate-300 transition hover:bg-white/10 hover:text-white"
-                  aria-label="Đăng xuất"
-                  title="Đăng xuất"
-                >
-                  <LogoutIcon />
-                </button>
-              </form>
-            </div>
+                <LogoutIcon />
+              </button>
+            </form>
           </div>
         </aside>
 
         <main className="space-y-8">
           <div className="flex flex-wrap items-start justify-between gap-6 border-b border-white/10 pb-4">
-              <div>
-                <h1 className="text-3xl font-semibold text-white">{title}</h1>
-                <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300">
-                  {description}
-                </p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-semibold text-white">{title}</h1>
+              <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300">{description}</p>
+            </div>
           </div>
           {children}
         </main>

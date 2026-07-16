@@ -55,6 +55,7 @@ type CollectionManagerProps = {
   initialItems: Record<string, unknown>[];
   singleton?: boolean;
   allowDelete?: boolean;
+  hideSingletonEditButton?: boolean;
 };
 
 type StatItem = { label: string; value: string };
@@ -784,6 +785,7 @@ export function CollectionManager({
   initialItems,
   singleton = false,
   allowDelete = true,
+  hideSingletonEditButton = false,
 }: CollectionManagerProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -1012,6 +1014,7 @@ export function CollectionManager({
             ) : null}
           </div>
           {singleton ? (
+            hideSingletonEditButton ? null : (
             <button
               type="button"
               onClick={() => router.replace(`${pathname}?mode=edit`, { scroll: false })}
@@ -1021,6 +1024,7 @@ export function CollectionManager({
             >
               <EditIcon />
             </button>
+            )
           ) : (
             <button
               type="button"

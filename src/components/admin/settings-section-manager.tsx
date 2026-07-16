@@ -22,6 +22,7 @@ export async function SettingsSectionManager({
         initialItems={[settings as unknown as Record<string, unknown>]}
         singleton
         allowDelete={false}
+        hideSingletonEditButton
         fields={fields}
       />
     </AdminShell>

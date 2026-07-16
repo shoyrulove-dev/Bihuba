@@ -26,7 +26,7 @@ export default function AdminSettingsPage() {
           {sections.map((section) => (
             <Link
               key={section.href}
-              href={section.href}
+              href={`${section.href}?mode=edit`}
               className="flex items-center justify-between rounded-[1.4rem] border border-white/10 bg-slate-950/35 px-4 py-3 transition hover:border-cyan-300/30"
             >
               <span className="truncate text-sm font-semibold text-white">{section.title}</span>
