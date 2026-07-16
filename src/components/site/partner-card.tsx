@@ -4,6 +4,14 @@ import { PartnerShape } from "@/types/cms";
 export function PartnerCard({ partner }: { partner: PartnerShape }) {
   return (
     <article className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
+      {partner.logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={partner.logo}
+          alt={partner.name}
+          className="h-16 w-16 rounded-2xl border border-slate-200 object-contain p-2"
+        />
+      ) : null}
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
         {partner.partnerType}
       </p>

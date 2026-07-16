@@ -42,6 +42,8 @@ type FieldConfig = {
   options?: Array<{ label: string; value: string }>;
   placeholder?: string;
   helpText?: string;
+  section?: string;
+  fullWidth?: boolean;
 };
 
 type CollectionManagerProps = {
@@ -58,6 +60,11 @@ type StatItem = { label: string; value: string };
 type NavItem = { label: string; href: string };
 type ContactItem = { address: string; phone: string; email: string; website?: string };
 type FormState = Record<string, unknown>;
+
+type FieldSection = {
+  title: string;
+  fields: FieldConfig[];
+};
 
 function EditIcon() {
   return (
@@ -811,6 +818,21 @@ export function CollectionManager({
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+  const fieldSections = useMemo<FieldSection[]>(() => {
+    const sections = new Map<string, FieldConfig[]>();
+    fields.forEach((field) => {
+      const key = field.section || "Nội dung";
+      if (!sections.has(key)) {
+        sections.set(key, []);
+      }
+      sections.get(key)?.push(field);
+    });
+
+    return Array.from(sections.entries()).map(([title, groupedFields]) => ({
+      title,
+      fields: groupedFields,
+    }));
+  }, [fields]);
 
   useEffect(() => {
     if (singleton) {
@@ -1005,8 +1027,24 @@ export function CollectionManager({
                 className="w-full rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3 text-white placeholder:text-slate-400"
               />
             </div>
-          ) : null}
-          {pagedItems.map((item) => {
+          ) : (
+            <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                Bộ cấu hình đang dùng
+              </p>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-base font-semibold text-white">
+                    {String((items[0] as Record<string, unknown> | undefined)?.siteName ?? title)}
+                  </p>
+                  <p className="text-sm text-slate-300">
+                    Một nơi duy nhất để cập nhật nhận diện, trang chủ, liên hệ, nút nổi và giao diện.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          {!singleton && pagedItems.map((item) => {
             const record = item as Record<string, unknown>;
             const headline = String(record.title ?? record.name ?? record.siteName ?? "Nội dung");
             const subhead = String(record.slug ?? record.category ?? record.partnerType ?? record.shortName ?? "");
@@ -1119,131 +1157,150 @@ export function CollectionManager({
             </div>
 
             <form className="space-y-5 px-6 py-6" onSubmit={handleSubmit}>
-              {fields.map((field) => (
-                <label key={field.name} className="block">
-                  <span className="mb-2 block text-sm font-medium">{field.label}</span>
-                  {field.type === "textarea" ? (
-                    <textarea
-                      value={String(form[field.name] ?? "")}
-                      onChange={(event) => updateField(field.name, event.target.value)}
-                      rows={5}
-                      placeholder={field.placeholder}
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                    />
-                  ) : field.type === "richtext" ? (
-                    <RichTextEditor
-                      value={String(form[field.name] ?? "")}
-                      placeholder={field.placeholder}
-                      onChange={(value) => updateField(field.name, value)}
-                      onUploadImage={uploadAsset}
-                    />
-                  ) : field.type === "select" ? (
-                    <select
-                      value={String(form[field.name] ?? "")}
-                      onChange={(event) => updateField(field.name, event.target.value)}
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                    >
-                      <option value="">Chọn giá trị</option>
-                      {field.options?.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  ) : field.type === "checkbox" ? (
-                    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(form[field.name])}
-                        onChange={(event) => updateField(field.name, event.target.checked)}
-                        className="h-5 w-5"
-                      />
-                      <span className="text-sm text-slate-700">Đánh dấu nội dung nổi bật</span>
-                    </div>
-                  ) : field.type === "image" || field.type === "file" ? (
-                    <div className="space-y-3">
-                      <input
-                        type="url"
-                        value={String(form[field.name] ?? "")}
-                        onChange={(event) => updateField(field.name, event.target.value)}
-                        placeholder={field.placeholder || "https://"}
-                        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                      />
-                      <div className="flex flex-wrap items-center gap-3">
-                        <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
-                          Tải từ máy
-                          <input
-                            type="file"
-                            accept={field.type === "image" ? "image/*" : "*"}
-                            className="hidden"
-                            onChange={async (event) => {
-                              const file = event.target.files?.[0];
-                              event.currentTarget.value = "";
-                              if (!file) return;
-                              const url = await uploadAsset(file);
-                              updateField(field.name, url);
-                            }}
-                          />
+              <div className="grid gap-5 xl:grid-cols-2">
+                {fieldSections.map((section) => (
+                  <section
+                    key={section.title}
+                    className={`rounded-[1.8rem] border border-slate-200 bg-slate-50 p-5 ${
+                      section.fields.some((field) => field.fullWidth) ? "xl:col-span-2" : ""
+                    }`}
+                  >
+                    <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
+                      {section.title}
+                    </h3>
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      {section.fields.map((field) => (
+                        <label
+                          key={field.name}
+                          className={`block ${field.fullWidth ? "md:col-span-2" : ""}`}
+                        >
+                          <span className="mb-2 block text-sm font-medium">{field.label}</span>
+                          {field.type === "textarea" ? (
+                            <textarea
+                              value={String(form[field.name] ?? "")}
+                              onChange={(event) => updateField(field.name, event.target.value)}
+                              rows={5}
+                              placeholder={field.placeholder}
+                              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                            />
+                          ) : field.type === "richtext" ? (
+                            <RichTextEditor
+                              value={String(form[field.name] ?? "")}
+                              placeholder={field.placeholder}
+                              onChange={(value) => updateField(field.name, value)}
+                              onUploadImage={uploadAsset}
+                            />
+                          ) : field.type === "select" ? (
+                            <select
+                              value={String(form[field.name] ?? "")}
+                              onChange={(event) => updateField(field.name, event.target.value)}
+                              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                            >
+                              <option value="">Chọn giá trị</option>
+                              {field.options?.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          ) : field.type === "checkbox" ? (
+                            <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+                              <input
+                                type="checkbox"
+                                checked={Boolean(form[field.name])}
+                                onChange={(event) => updateField(field.name, event.target.checked)}
+                                className="h-5 w-5"
+                              />
+                              <span className="text-sm text-slate-700">Đánh dấu nội dung nổi bật</span>
+                            </div>
+                          ) : field.type === "image" || field.type === "file" ? (
+                            <div className="space-y-3">
+                              <input
+                                type="url"
+                                value={String(form[field.name] ?? "")}
+                                onChange={(event) => updateField(field.name, event.target.value)}
+                                placeholder={field.placeholder || "https://"}
+                                className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                              />
+                              <div className="flex flex-wrap items-center gap-3">
+                                <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
+                                  Tải từ máy
+                                  <input
+                                    type="file"
+                                    accept={field.type === "image" ? "image/*" : "*"}
+                                    className="hidden"
+                                    onChange={async (event) => {
+                                      const file = event.target.files?.[0];
+                                      event.currentTarget.value = "";
+                                      if (!file) return;
+                                      const url = await uploadAsset(file);
+                                      updateField(field.name, url);
+                                    }}
+                                  />
+                                </label>
+                                {field.type === "image" && form[field.name] ? (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img
+                                    src={String(form[field.name])}
+                                    alt={field.label}
+                                    className="h-16 w-16 rounded-2xl border border-slate-200 object-cover"
+                                  />
+                                ) : null}
+                              </div>
+                            </div>
+                          ) : field.type === "stats" ? (
+                            <StatListField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "nav" ? (
+                            <NavListField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "contact" ? (
+                            <ContactField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "social" ? (
+                            <SocialField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "supporters" ? (
+                            <SupportersField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "products" ? (
+                            <ProductsField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "theme" ? (
+                            <ThemeField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : (
+                            <input
+                              type={field.type === "date" ? "date" : field.type === "url" ? "url" : "text"}
+                              value={String(form[field.name] ?? "")}
+                              onChange={(event) => updateField(field.name, event.target.value)}
+                              placeholder={field.placeholder}
+                              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                            />
+                          )}
+                          {field.helpText ? (
+                            <span className="mt-2 block text-xs text-slate-500">{field.helpText}</span>
+                          ) : null}
                         </label>
-                        {field.type === "image" && form[field.name] ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={String(form[field.name])}
-                            alt={field.label}
-                            className="h-16 w-16 rounded-2xl border border-slate-200 object-cover"
-                          />
-                        ) : null}
-                      </div>
+                      ))}
                     </div>
-                  ) : field.type === "stats" ? (
-                    <StatListField
-                      value={form[field.name]}
-                      onChange={(value) => updateField(field.name, value)}
-                    />
-                  ) : field.type === "nav" ? (
-                    <NavListField
-                      value={form[field.name]}
-                      onChange={(value) => updateField(field.name, value)}
-                    />
-                  ) : field.type === "contact" ? (
-                    <ContactField
-                      value={form[field.name]}
-                      onChange={(value) => updateField(field.name, value)}
-                    />
-                  ) : field.type === "social" ? (
-                    <SocialField
-                      value={form[field.name]}
-                      onChange={(value) => updateField(field.name, value)}
-                    />
-                  ) : field.type === "supporters" ? (
-                    <SupportersField
-                      value={form[field.name]}
-                      onChange={(value) => updateField(field.name, value)}
-                    />
-                  ) : field.type === "products" ? (
-                    <ProductsField
-                      value={form[field.name]}
-                      onChange={(value) => updateField(field.name, value)}
-                    />
-                  ) : field.type === "theme" ? (
-                    <ThemeField
-                      value={form[field.name]}
-                      onChange={(value) => updateField(field.name, value)}
-                    />
-                  ) : (
-                    <input
-                      type={field.type === "date" ? "date" : field.type === "url" ? "url" : "text"}
-                      value={String(form[field.name] ?? "")}
-                      onChange={(event) => updateField(field.name, event.target.value)}
-                      placeholder={field.placeholder}
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                    />
-                  )}
-                  {field.helpText ? (
-                    <span className="mt-2 block text-xs text-slate-500">{field.helpText}</span>
-                  ) : null}
-                </label>
-              ))}
+                  </section>
+                ))}
+              </div>
 
               <div className="sticky bottom-0 flex flex-wrap items-center gap-3 border-t border-slate-200 bg-white pt-5">
                 <button

@@ -21,15 +21,25 @@ export default async function PartnerDetailPage({
       <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">
         {partner.name}
       </h1>
+      {partner.logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={partner.logo}
+          alt={partner.name}
+          className="mt-6 h-24 w-24 rounded-3xl border border-slate-200 object-contain p-3"
+        />
+      ) : null}
       <p className="mt-6 text-lg leading-8 text-slate-600">{partner.description}</p>
-      <a
-        href={partner.website}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-8 inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
-      >
-        Mở website đối tác
-      </a>
+      {partner.website ? (
+        <a
+          href={partner.website}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-8 inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
+        >
+          Mở website đối tác
+        </a>
+      ) : null}
     </div>
   );
 }
