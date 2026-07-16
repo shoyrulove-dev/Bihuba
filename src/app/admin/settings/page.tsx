@@ -13,7 +13,7 @@ export default async function AdminSettingsPage() {
       <CollectionManager
         collection="settings"
         title="Cấu hình website"
-        description="Lần lưu đầu tiên sẽ tạo bản ghi settings duy nhất. Các field JSON cho phép quản lý menu, thống kê và liên hệ ngay trong admin."
+        description="Cập nhật tên website, khu vực nổi bật, menu điều hướng, số liệu hiển thị và thông tin liên hệ."
         initialItems={[settings as unknown as Record<string, unknown>]}
         singleton
         allowDelete={false}
@@ -36,21 +36,20 @@ export default async function AdminSettingsPage() {
           {
             name: "memberStats",
             label: "Thống kê trang chủ",
-            type: "json",
-            helpText: 'Dùng mảng JSON dạng [{"label":"Hội viên","value":"120+"}].',
+            type: "stats",
+            helpText: "Mỗi dòng gồm nhãn hiển thị và con số tương ứng.",
           },
           {
             name: "nav",
             label: "Menu điều hướng",
-            type: "json",
-            helpText: 'Dùng mảng JSON dạng [{"label":"Trang chủ","href":"/"}].',
+            type: "nav",
+            helpText: "Cập nhật tên mục menu và đường dẫn hiển thị ở đầu trang.",
           },
           {
             name: "contact",
             label: "Thông tin liên hệ",
-            type: "json",
-            helpText:
-              'Dùng object JSON dạng {"address":"...","phone":"...","email":"...","website":"..."}.',
+            type: "contact",
+            helpText: "Thông tin hiển thị ở footer và trang liên hệ.",
           },
         ]}
       />

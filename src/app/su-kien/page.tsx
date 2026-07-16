@@ -10,7 +10,7 @@ export default async function EventsPage() {
       <SectionHeading
         eyebrow="Sự kiện"
         title="Chuỗi sự kiện và hoạt động kết nối"
-        body="Module này thay thế các chuyên mục sự kiện của HUBA như cà phê doanh nhân, hội nghị, tọa đàm và hoạt động giao lưu."
+        body="Chuyên mục này tổng hợp cà phê doanh nhân, hội nghị, tọa đàm và các hoạt động giao lưu của cộng đồng doanh nghiệp."
       />
       <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
         {posts.map((post) => (

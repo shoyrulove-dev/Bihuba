@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "BIHUBA",
-  description: "Cổng thông tin BIHUBA với quản trị nội dung bằng Next.js và MongoDB.",
+  description: "Cổng thông tin của Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh.",
 };
 
 export default async function RootLayout({

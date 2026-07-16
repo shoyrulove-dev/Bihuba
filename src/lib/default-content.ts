@@ -45,28 +45,28 @@ export const defaultSettings: SiteSettingsShape = {
 
 export const defaultPosts: PostShape[] = [
   {
-    title: "Lịch công tác HUBA từ ngày 13.7.2026 đến ngày 19.7.2026",
+    title: "Lịch công tác BIHUBA từ ngày 13.7.2026 đến ngày 19.7.2026",
     slug: "lich-cong-tac-huba-tu-ngay-13-7-2026-den-ngay-19-7-2026",
     type: "schedule",
     category: "Lịch tuần",
     excerpt:
-      "Bản demo tổng hợp lịch công tác và điều hành theo cấu trúc HUBA, phù hợp để BIHUBA cập nhật lịch họp, lịch tiếp khách và kế hoạch tuần.",
+      "Lịch công tác tổng hợp cho văn phòng hội, phù hợp để cập nhật lịch họp, lịch tiếp khách và kế hoạch tuần.",
     content:
-      "Nội dung demo được đưa vào để mô phỏng chuyên mục lịch tuần. Khi vận hành thật, BIHUBA có thể thay bằng lịch điều hành, lịch tiếp đối tác và các công việc trong tuần từ khu quản trị.",
+      "Nội dung này dùng cho chuyên mục lịch tuần. BIHUBA có thể cập nhật lịch điều hành, lịch tiếp đối tác và các công việc trọng tâm trong tuần từ khu quản trị.",
     featuredImage:
       "https://huba.vn/wp-content/uploads/2026/07/Lich-cong-tac-HUBA-tu-ngay-13.7.2026-den-ngay-19.7.2026.webp",
     publishedAt: "2026-07-14",
     isFeatured: true,
   },
   {
-    title: "AI trong doanh nghiệp: 10 xu hướng sẽ thay đổi mô hình kinh doanh trong 5 năm tới",
-    slug: "ai-trong-doanh-nghiep-10-xu-huong-se-thay-doi-mo-hinh-kinh-doanh-trong-5-nam-toi",
+    title: "10 xu hướng chuyển đổi số sẽ thay đổi mô hình kinh doanh trong 5 năm tới",
+    slug: "10-xu-huong-chuyen-doi-so-se-thay-doi-mo-hinh-kinh-doanh-trong-5-nam-toi",
     type: "news",
     category: "Tin tức",
     excerpt:
-      "Bài demo theo hướng bài viết chuyên đề của HUBA, giúp trang chủ hiển thị khối tin mới và tạo cảm giác website đã có nội dung vận hành thật.",
+      "Bài viết chuyên đề dành cho cộng đồng doanh nghiệp, giúp khu vực tin tức luôn có chiều sâu và tính cập nhật.",
     content:
-      "AI đang chuyển từ công cụ hỗ trợ thành nền tảng vận hành trong doanh nghiệp. BIHUBA có thể dùng nhóm bài viết chuyên đề như thế này để thu hút hội viên, chia sẻ tri thức và tạo điểm đến nội dung cho cộng đồng.",
+      "Chuyển đổi số đang tác động trực tiếp đến vận hành, bán hàng và quản trị doanh nghiệp. BIHUBA có thể duy trì nhóm bài chuyên đề như thế này để chia sẻ kiến thức và kết nối hội viên.",
     featuredImage:
       "https://huba.vn/wp-content/uploads/2026/07/featured-image-1.png",
     publishedAt: "2026-07-14",
@@ -78,7 +78,7 @@ export const defaultPosts: PostShape[] = [
     type: "event",
     category: "Sự kiện",
     excerpt:
-      "Mô phỏng một sự kiện kết nối và trưng bày sản phẩm theo chất liệu HUBA, rất phù hợp để BIHUBA trình diễn hình ảnh hoạt động trên trang chủ.",
+      "Sự kiện kết nối và trưng bày sản phẩm phù hợp để giới thiệu hình ảnh hoạt động của hội trên trang chủ.",
     content:
       "Chuyên mục này có thể dùng để đăng tin về các buổi gặp gỡ doanh nghiệp, giới thiệu sản phẩm, tọa đàm chuyên đề và các phiên kết nối giao thương tại địa phương.",
     featuredImage:
@@ -92,7 +92,7 @@ export const defaultPosts: PostShape[] = [
     type: "news",
     category: "Tin tức",
     excerpt:
-      "Một bài demo về quản trị tài chính doanh nghiệp, giúp khu vực tin tức của BIHUBA có độ phong phú ngay từ đầu.",
+      "Bài viết về quản trị tài chính doanh nghiệp giúp khu vực tin tức thêm phong phú và gần với nhu cầu hội viên.",
     content:
       "Doanh thu tăng không đồng nghĩa với dòng tiền tăng. Nội dung dạng bài theo chủ đề quản trị, tài chính, pháp lý và chuyển đổi số sẽ rất phù hợp với đối tượng hội viên doanh nghiệp.",
     featuredImage:
@@ -106,7 +106,7 @@ export const defaultPosts: PostShape[] = [
     type: "trade",
     category: "Kết nối giao thương",
     excerpt:
-      "Khối nội dung demo cho module kết nối giao thương, sử dụng hình ảnh sự kiện doanh nghiệp để trang chủ sinh động hơn.",
+      "Nội dung dành cho khu vực kết nối giao thương, dùng để giới thiệu nhu cầu hợp tác và cơ hội mở rộng mạng lưới doanh nghiệp.",
     content:
       "BIHUBA có thể phát triển chuyên mục này thành nơi đăng nhu cầu hợp tác, giới thiệu sản phẩm, tìm kiếm nhà cung cấp và thông tin kết nối theo từng lĩnh vực.",
     featuredImage:
@@ -120,7 +120,7 @@ export const defaultPosts: PostShape[] = [
     type: "sponsor",
     category: "Đồng hành",
     excerpt:
-      "Thêm một bài demo có hình ảnh sân khấu, nhân vật và hội thảo để tăng độ đầy cho trang chủ và danh mục bài viết.",
+      "Bài viết về diễn đàn và hội thảo chuyên đề giúp trang chủ và danh mục bài viết có nhịp nội dung phong phú hơn.",
     content:
       "Nội dung loại này phù hợp cho đối tác đồng hành, nhà tài trợ, đơn vị có gian hàng hoặc tham gia các chương trình của hội doanh nghiệp.",
     featuredImage:
@@ -151,7 +151,7 @@ export const defaultMembers: MemberShape[] = [
     memberType: "business",
     groupType: "Hội viên doanh nghiệp",
     description:
-      "Doanh nghiệp demo cho nhóm thương mại - dịch vụ, phù hợp để trình diễn giao diện danh sách hội viên và trang chi tiết.",
+      "Doanh nghiệp thuộc nhóm thương mại - dịch vụ, phù hợp để hiển thị trong danh sách hội viên và trang chi tiết.",
     logo: "",
     address: "Khu dân cư Bình Hưng",
     phone: "0902 222 222",
@@ -165,7 +165,7 @@ export const defaultMembers: MemberShape[] = [
     memberType: "business",
     groupType: "Hội viên doanh nghiệp",
     description:
-      "Doanh nghiệp demo lĩnh vực kỹ thuật và hạ tầng, phục vụ trình diễn nhiều nhóm hội viên khác nhau trên website.",
+      "Doanh nghiệp lĩnh vực kỹ thuật và hạ tầng, phục vụ hiển thị các nhóm hội viên đa dạng trên website.",
     logo: "",
     address: "Khu vực Nam Sài Gòn",
     phone: "0903 333 333",
@@ -180,7 +180,7 @@ export const defaultPartners: PartnerShape[] = [
     name: "Đối tác chiến lược Sai Gon Connect",
     slug: "doi-tac-chien-luoc-sai-gon-connect",
     description:
-      "Đối tác demo cho khối kết nối, truyền thông và tổ chức sự kiện của BIHUBA.",
+      "Đối tác cho khối kết nối, truyền thông và tổ chức sự kiện của BIHUBA.",
     logo: "",
     website: "https://example.com",
     partnerType: "Đối tác chiến lược",
@@ -189,7 +189,7 @@ export const defaultPartners: PartnerShape[] = [
     name: "Trung tâm Hỗ trợ Chuyển đổi số",
     slug: "trung-tam-ho-tro-chuyen-doi-so",
     description:
-      "Đối tác demo lĩnh vực chuyển đổi số, tư vấn vận hành và đào tạo hội viên doanh nghiệp.",
+      "Đối tác lĩnh vực chuyển đổi số, tư vấn vận hành và đào tạo hội viên doanh nghiệp.",
     logo: "",
     website: "https://example.org",
     partnerType: "Đối tác chuyển đổi số",
@@ -209,7 +209,7 @@ export const defaultDownloads: DownloadShape[] = [
   {
     title: "Thông báo lịch sinh hoạt và kết nối doanh nghiệp quý III",
     slug: "thong-bao-lich-sinh-hoat-va-ket-noi-doanh-nghiep-quy-iii",
-    summary: "Tài liệu demo cho khu vực thông báo, sự kiện và điều phối hoạt động hội viên.",
+    summary: "Tài liệu cho khu vực thông báo, sự kiện và điều phối hoạt động hội viên.",
     fileUrl: "https://example.com/files/thong-bao-ket-noi-doanh-nghiep.pdf",
     category: "thông-báo",
     publishedAt: "2026-07-12",
@@ -217,7 +217,7 @@ export const defaultDownloads: DownloadShape[] = [
   {
     title: "Báo cáo tổng hợp hoạt động 6 tháng đầu năm",
     slug: "bao-cao-tong-hop-hoat-dong-6-thang-dau-nam",
-    summary: "Tài liệu demo để trình diễn module báo cáo và lưu trữ văn bản điều hành.",
+    summary: "Tài liệu phục vụ module báo cáo và lưu trữ văn bản điều hành.",
     fileUrl: "https://example.com/files/bao-cao-6-thang.pdf",
     category: "báo-cáo",
     publishedAt: "2026-07-08",
@@ -225,7 +225,7 @@ export const defaultDownloads: DownloadShape[] = [
   {
     title: "Mẫu phiếu đăng ký hội viên BIHUBA",
     slug: "mau-phieu-dang-ky-hoi-vien-bihuba",
-    summary: "Tệp demo phục vụ module download tài liệu, đơn đăng ký và biểu mẫu nội bộ.",
+    summary: "Tệp phục vụ khu vực tải tài liệu, đơn đăng ký và biểu mẫu nội bộ.",
     fileUrl: "https://example.com/files/phieu-dang-ky-hoi-vien.pdf",
     category: "biểu-mẫu",
     publishedAt: "2026-07-06",

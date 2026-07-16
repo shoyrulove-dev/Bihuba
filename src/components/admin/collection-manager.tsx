@@ -1,9 +1,20 @@
 "use client";
 
-import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { RichTextEditor } from "@/components/admin/rich-text-editor";
+
+const RichTextEditor = dynamic(
+  () => import("@/components/admin/rich-text-editor").then((mod) => mod.RichTextEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="rounded-[1.5rem] border border-slate-200 px-5 py-4 text-sm text-slate-500">
+        Đang tải trình soạn thảo...
+      </div>
+    ),
+  }
+);
 
 type FieldType =
   | "text"
@@ -15,7 +26,9 @@ type FieldType =
   | "richtext"
   | "image"
   | "file"
-  | "json";
+  | "stats"
+  | "nav"
+  | "contact";
 
 type FieldConfig = {
   name: string;
@@ -36,7 +49,10 @@ type CollectionManagerProps = {
   allowDelete?: boolean;
 };
 
-type FormState = Record<string, string | boolean>;
+type StatItem = { label: string; value: string };
+type NavItem = { label: string; href: string };
+type ContactItem = { address: string; phone: string; email: string; website?: string };
+type FormState = Record<string, unknown>;
 
 function EditIcon() {
   return (
@@ -63,24 +79,60 @@ function AddIcon() {
   );
 }
 
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+function buildInitialValue(field: FieldConfig) {
+  switch (field.type) {
+    case "checkbox":
+      return false;
+    case "stats":
+    case "nav":
+      return [];
+    case "contact":
+      return { address: "", phone: "", email: "", website: "" };
+    default:
+      return "";
+  }
+}
+
 function buildInitialState(fields: FieldConfig[]): FormState {
   return fields.reduce<FormState>((accumulator, field) => {
-    accumulator[field.name] = field.type === "checkbox" ? false : "";
+    accumulator[field.name] = buildInitialValue(field);
     return accumulator;
   }, {});
 }
 
-function normalizeValue(field: FieldConfig, rawValue: unknown): string | boolean {
+function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
   if (field.type === "checkbox") return Boolean(rawValue);
-  if (field.type === "json") {
-    if (typeof rawValue === "string") return rawValue;
-    return JSON.stringify(rawValue ?? "", null, 2);
+  if (field.type === "stats" || field.type === "nav") {
+    return Array.isArray(rawValue) ? rawValue : [];
+  }
+  if (field.type === "contact") {
+    if (rawValue && typeof rawValue === "object") return rawValue;
+    return { address: "", phone: "", email: "", website: "" };
   }
   return String(rawValue ?? "");
 }
 
 function summarizeValue(field: FieldConfig, rawValue: unknown) {
   if (field.type === "checkbox") return rawValue ? "Có" : "Không";
+  if (field.type === "stats") {
+    return `${Array.isArray(rawValue) ? rawValue.length : 0} mục thống kê`;
+  }
+  if (field.type === "nav") {
+    return `${Array.isArray(rawValue) ? rawValue.length : 0} mục menu`;
+  }
+  if (field.type === "contact") {
+    const contact = rawValue as ContactItem | undefined;
+    return contact?.address || "Chưa có thông tin";
+  }
+
   const text = String(rawValue ?? "")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
@@ -88,6 +140,172 @@ function summarizeValue(field: FieldConfig, rawValue: unknown) {
 
   if (!text) return "—";
   return text.length > 120 ? `${text.slice(0, 120)}...` : text;
+}
+
+function buildFormFromRecord(fields: FieldConfig[], baseState: FormState, record: Record<string, unknown>) {
+  const nextState = { ...baseState };
+  fields.forEach((field) => {
+    nextState[field.name] = normalizeValue(field, record[field.name]);
+  });
+  return nextState;
+}
+
+function StatListField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: StatItem[]) => void;
+}) {
+  const items = (Array.isArray(value) ? value : []) as StatItem[];
+
+  return (
+    <div className="space-y-3">
+      {items.map((item, index) => (
+        <div key={`${item.label}-${index}`} className="grid gap-3 rounded-2xl border border-slate-200 p-4 md:grid-cols-[1fr_160px_auto]">
+          <input
+            type="text"
+            value={item.label ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], label: event.target.value };
+              onChange(next);
+            }}
+            placeholder="Nhãn hiển thị"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <input
+            type="text"
+            value={item.value ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], value: event.target.value };
+              onChange(next);
+            }}
+            placeholder="120+"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <button
+            type="button"
+            onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+            className="rounded-full border border-red-200 px-4 py-3 text-sm font-semibold text-red-600"
+          >
+            Xóa
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { label: "", value: "" }])}
+        className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
+      >
+        Thêm mục thống kê
+      </button>
+    </div>
+  );
+}
+
+function NavListField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: NavItem[]) => void;
+}) {
+  const items = (Array.isArray(value) ? value : []) as NavItem[];
+
+  return (
+    <div className="space-y-3">
+      {items.map((item, index) => (
+        <div key={`${item.label}-${index}`} className="grid gap-3 rounded-2xl border border-slate-200 p-4 md:grid-cols-[1fr_1fr_auto]">
+          <input
+            type="text"
+            value={item.label ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], label: event.target.value };
+              onChange(next);
+            }}
+            placeholder="Tên menu"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <input
+            type="text"
+            value={item.href ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], href: event.target.value };
+              onChange(next);
+            }}
+            placeholder="/tin-tuc"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <button
+            type="button"
+            onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+            className="rounded-full border border-red-200 px-4 py-3 text-sm font-semibold text-red-600"
+          >
+            Xóa
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...items, { label: "", href: "" }])}
+        className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
+      >
+        Thêm mục menu
+      </button>
+    </div>
+  );
+}
+
+function ContactField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: ContactItem) => void;
+}) {
+  const contact = ((value && typeof value === "object" ? value : {}) as ContactItem) ?? {
+    address: "",
+    phone: "",
+    email: "",
+    website: "",
+  };
+
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      <input
+        type="text"
+        value={contact.address ?? ""}
+        onChange={(event) => onChange({ ...contact, address: event.target.value })}
+        placeholder="Địa chỉ"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
+      />
+      <input
+        type="text"
+        value={contact.phone ?? ""}
+        onChange={(event) => onChange({ ...contact, phone: event.target.value })}
+        placeholder="Số điện thoại"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="email"
+        value={contact.email ?? ""}
+        onChange={(event) => onChange({ ...contact, email: event.target.value })}
+        placeholder="Email"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="url"
+        value={contact.website ?? ""}
+        onChange={(event) => onChange({ ...contact, website: event.target.value })}
+        placeholder="Website"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
+      />
+    </div>
+  );
 }
 
 export function CollectionManager({
@@ -106,12 +324,7 @@ export function CollectionManager({
   const [items, setItems] = useState(initialItems);
   const [form, setForm] = useState<FormState>(() => {
     if (singleton && initialItems[0]) {
-      const seedState = { ...baseState };
-      const record = initialItems[0] as Record<string, unknown>;
-      fields.forEach((field) => {
-        seedState[field.name] = normalizeValue(field, record[field.name]);
-      });
-      return seedState;
+      return buildFormFromRecord(fields, baseState, initialItems[0] as Record<string, unknown>);
     }
 
     return baseState;
@@ -122,28 +335,46 @@ export function CollectionManager({
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const mode = searchParams.get("mode");
+  const editId = searchParams.get("edit");
+  const isPanelOpen = singleton ? mode === "edit" : mode === "new" || Boolean(editId);
 
   useEffect(() => {
-    const editId = searchParams.get("edit");
-    if (!editId) return;
+    if (singleton) {
+      if (!isPanelOpen) return;
+      const record = (items[0] as Record<string, unknown> | undefined) ?? {};
+      const frame = window.requestAnimationFrame(() => {
+        setForm(buildFormFromRecord(fields, baseState, record));
+        setEditingId(record._id ? String(record._id) : null);
+        setStatus("");
+      });
+
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    if (!editId) {
+      if (!isPanelOpen) {
+        const frame = window.requestAnimationFrame(() => {
+          setForm(baseState);
+          setEditingId(null);
+          setStatus("");
+        });
+        return () => window.cancelAnimationFrame(frame);
+      }
+      return;
+    }
 
     const match = items.find((item) => String((item as Record<string, unknown>)._id) === editId);
     if (!match) return;
 
-    const nextState = { ...baseState };
-    const record = match as Record<string, unknown>;
-    fields.forEach((field) => {
-      nextState[field.name] = normalizeValue(field, record[field.name]);
-    });
-
     const frame = window.requestAnimationFrame(() => {
-      setForm(nextState);
+      setForm(buildFormFromRecord(fields, baseState, match as Record<string, unknown>));
       setEditingId(editId);
-      setStatus("Đang chỉnh sửa bản ghi đã chọn.");
+      setStatus("Đang chỉnh sửa mục đã chọn.");
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [baseState, fields, items, searchParams]);
+  }, [baseState, editId, fields, isPanelOpen, items, singleton]);
 
   async function refresh() {
     const response = await fetch(`/api/admin/${collection}`, { cache: "no-store" });
@@ -151,28 +382,27 @@ export function CollectionManager({
     setItems(payload.items ?? []);
   }
 
-  function resetForm() {
+  function openNewPanel() {
     setForm(baseState);
-    setEditingId(singleton && items[0]?._id ? String(items[0]._id) : null);
+    setEditingId(null);
     setStatus("");
-    if (!singleton) {
-      router.replace(pathname, { scroll: false });
-    }
+    router.replace(`${pathname}?mode=new`, { scroll: false });
   }
 
-  function startEdit(item: Record<string, unknown>) {
-    const nextState = { ...baseState };
-    fields.forEach((field) => {
-      nextState[field.name] = normalizeValue(field, item[field.name]);
-    });
-    setForm(nextState);
+  function openEditPanel(item: Record<string, unknown>) {
     const nextId = String(item._id);
+    setForm(buildFormFromRecord(fields, baseState, item));
     setEditingId(nextId);
-    setStatus("Đang chỉnh sửa bản ghi đã chọn.");
-    router.replace(`${pathname}?edit=${nextId}`, { scroll: false });
+    setStatus("Đang chỉnh sửa mục đã chọn.");
+    router.replace(`${pathname}?mode=edit&edit=${nextId}`, { scroll: false });
   }
 
-  function updateField(name: string, value: string | boolean) {
+  function closePanel() {
+    setStatus("");
+    router.replace(pathname, { scroll: false });
+  }
+
+  function updateField(name: string, value: unknown) {
     setForm((current) => ({
       ...current,
       [name]: value,
@@ -210,26 +440,10 @@ export function CollectionManager({
     setIsSaving(true);
     setStatus("");
 
-    let payload: Record<string, unknown>;
-
-    try {
-      payload = fields.reduce<Record<string, unknown>>((accumulator, field) => {
-        const raw = form[field.name];
-
-        if (field.type === "json") {
-          accumulator[field.name] =
-            typeof raw === "string" && raw.trim() ? JSON.parse(raw) : null;
-        } else {
-          accumulator[field.name] = raw;
-        }
-
-        return accumulator;
-      }, {});
-    } catch {
-      setIsSaving(false);
-      setStatus("JSON chưa đúng định dạng. Vui lòng kiểm tra lại.");
-      return;
-    }
+    const payload = fields.reduce<Record<string, unknown>>((accumulator, field) => {
+      accumulator[field.name] = form[field.name];
+      return accumulator;
+    }, {});
 
     const response = await fetch(
       editingId ? `/api/admin/${collection}/${editingId}` : `/api/admin/${collection}`,
@@ -248,14 +462,15 @@ export function CollectionManager({
 
     if (response.ok) {
       await refresh();
-      if (!singleton) {
-        resetForm();
+      if (singleton) {
+        return;
       }
+      closePanel();
     }
   }
 
   async function handleDelete(id: string) {
-    const confirmed = window.confirm("Xóa bản ghi này?");
+    const confirmed = window.confirm("Xóa mục này?");
     if (!confirmed) return;
 
     const response = await fetch(`/api/admin/${collection}/${id}`, {
@@ -268,41 +483,50 @@ export function CollectionManager({
     if (response.ok) {
       await refresh();
       if (editingId === id) {
-        resetForm();
+        closePanel();
       }
     }
   }
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+    <div className="space-y-6">
       <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 className="text-2xl font-semibold">{title}</h2>
             <p className="mt-2 text-sm leading-7 text-slate-300">{description}</p>
           </div>
-          {!singleton ? (
+          {singleton ? (
             <button
               type="button"
-              onClick={resetForm}
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm"
+              onClick={() => router.replace(`${pathname}?mode=edit`, { scroll: false })}
+              className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950"
+            >
+              <EditIcon />
+              Chỉnh sửa
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={openNewPanel}
+              className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950"
             >
               <AddIcon />
               Thêm mới
             </button>
-          ) : null}
+          )}
         </div>
 
-        <div className="mt-6 grid gap-4">
+        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {items.map((item) => {
             const record = item as Record<string, unknown>;
-            const headline = String(record.title ?? record.name ?? record.siteName ?? "Bản ghi");
-            const subhead = String(record.slug ?? record.category ?? record.partnerType ?? "");
+            const headline = String(record.title ?? record.name ?? record.siteName ?? "Nội dung");
+            const subhead = String(record.slug ?? record.category ?? record.partnerType ?? record.shortName ?? "");
 
             return (
               <article
-                key={String(record._id)}
-                className="relative rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4"
+                key={String(record._id ?? headline)}
+                className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-5"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
@@ -313,21 +537,21 @@ export function CollectionManager({
                       </p>
                     ) : null}
                   </div>
-                  <div className="relative z-10 flex items-center gap-2">
-                    <Link
-                      href={`${pathname}?edit=${String(record._id)}`}
-                      onClick={() => startEdit(record)}
-                      className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-cyan-400 text-slate-950 transition hover:scale-105"
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openEditPanel(record)}
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400 text-slate-950 transition hover:scale-105"
                       title="Sửa"
                       aria-label="Sửa"
                     >
                       <EditIcon />
-                    </Link>
-                    {allowDelete && !singleton ? (
+                    </button>
+                    {allowDelete && !singleton && record._id ? (
                       <button
                         type="button"
                         onClick={() => handleDelete(String(record._id))}
-                        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-red-400/40 text-red-300 transition hover:scale-105 hover:bg-red-500/10"
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-red-400/40 text-red-300 transition hover:scale-105 hover:bg-red-500/10"
                         title="Xóa"
                         aria-label="Xóa"
                       >
@@ -351,128 +575,158 @@ export function CollectionManager({
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-white/10 bg-white p-6 text-slate-950">
-        <h2 className="text-2xl font-semibold">
-          {editingId ? "Cập nhật nội dung" : "Tạo mới nội dung"}
-        </h2>
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-          {fields.map((field) => (
-            <label key={field.name} className="block">
-              <span className="mb-2 block text-sm font-medium">{field.label}</span>
-              {field.type === "textarea" ? (
-                <textarea
-                  value={String(form[field.name] ?? "")}
-                  onChange={(event) => updateField(field.name, event.target.value)}
-                  rows={5}
-                  placeholder={field.placeholder}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                />
-              ) : field.type === "richtext" ? (
-                <RichTextEditor
-                  value={String(form[field.name] ?? "")}
-                  placeholder={field.placeholder}
-                  onChange={(value) => updateField(field.name, value)}
-                  onUploadImage={uploadAsset}
-                />
-              ) : field.type === "select" ? (
-                <select
-                  value={String(form[field.name] ?? "")}
-                  onChange={(event) => updateField(field.name, event.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                >
-                  <option value="">Chọn giá trị</option>
-                  {field.options?.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              ) : field.type === "checkbox" ? (
-                <input
-                  type="checkbox"
-                  checked={Boolean(form[field.name])}
-                  onChange={(event) => updateField(field.name, event.target.checked)}
-                  className="h-5 w-5"
-                />
-              ) : field.type === "image" || field.type === "file" ? (
-                <div className="space-y-3">
-                  <input
-                    type="url"
-                    value={String(form[field.name] ?? "")}
-                    onChange={(event) => updateField(field.name, event.target.value)}
-                    placeholder={field.placeholder || "https://"}
-                    className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                  />
-                  <div className="flex flex-wrap items-center gap-3">
-                    <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
-                      Upload từ máy
-                      <input
-                        type="file"
-                        accept={field.type === "image" ? "image/*" : "*"}
-                        className="hidden"
-                        onChange={async (event) => {
-                          const file = event.target.files?.[0];
-                          event.currentTarget.value = "";
-                          if (!file) return;
-                          const url = await uploadAsset(file);
-                          updateField(field.name, url);
-                        }}
-                      />
-                    </label>
-                    {field.type === "image" && form[field.name] ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={String(form[field.name])}
-                        alt={field.label}
-                        className="h-16 w-16 rounded-2xl border border-slate-200 object-cover"
-                      />
-                    ) : null}
-                  </div>
+      {isPanelOpen ? (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm">
+          <div className="ml-auto h-full w-full max-w-4xl overflow-y-auto border-l border-white/10 bg-white text-slate-950 shadow-[0_0_70px_rgba(2,6,23,0.45)]">
+            <div className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 px-6 py-5 backdrop-blur">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
+                    {title}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold">
+                    {editingId ? "Cập nhật nội dung" : "Tạo nội dung mới"}
+                  </h2>
                 </div>
-              ) : field.type === "json" ? (
-                <textarea
-                  value={String(form[field.name] ?? "")}
-                  onChange={(event) => updateField(field.name, event.target.value)}
-                  rows={8}
-                  placeholder={field.placeholder || "[] hoặc {}"}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 font-mono text-sm"
-                />
-              ) : (
-                <input
-                  type={field.type === "date" ? "date" : field.type === "url" ? "url" : "text"}
-                  value={String(form[field.name] ?? "")}
-                  onChange={(event) => updateField(field.name, event.target.value)}
-                  placeholder={field.placeholder}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-                />
-              )}
-              {field.helpText ? (
-                <span className="mt-2 block text-xs text-slate-500">{field.helpText}</span>
-              ) : null}
-            </label>
-          ))}
+                <button
+                  type="button"
+                  onClick={closePanel}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 text-slate-600"
+                  aria-label="Đóng"
+                >
+                  <CloseIcon />
+                </button>
+              </div>
+            </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="submit"
-              disabled={isSaving || isUploading}
-              className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
-            >
-              {isSaving ? "Đang lưu..." : editingId ? "Cập nhật" : "Tạo mới"}
-            </button>
-            {!singleton ? (
-              <button
-                type="button"
-                onClick={resetForm}
-                className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700"
-              >
-                Làm trống form
-              </button>
-            ) : null}
-            {status ? <p className="text-sm text-slate-600">{status}</p> : null}
+            <form className="space-y-5 px-6 py-6" onSubmit={handleSubmit}>
+              {fields.map((field) => (
+                <label key={field.name} className="block">
+                  <span className="mb-2 block text-sm font-medium">{field.label}</span>
+                  {field.type === "textarea" ? (
+                    <textarea
+                      value={String(form[field.name] ?? "")}
+                      onChange={(event) => updateField(field.name, event.target.value)}
+                      rows={5}
+                      placeholder={field.placeholder}
+                      className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                    />
+                  ) : field.type === "richtext" ? (
+                    <RichTextEditor
+                      value={String(form[field.name] ?? "")}
+                      placeholder={field.placeholder}
+                      onChange={(value) => updateField(field.name, value)}
+                      onUploadImage={uploadAsset}
+                    />
+                  ) : field.type === "select" ? (
+                    <select
+                      value={String(form[field.name] ?? "")}
+                      onChange={(event) => updateField(field.name, event.target.value)}
+                      className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                    >
+                      <option value="">Chọn giá trị</option>
+                      {field.options?.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : field.type === "checkbox" ? (
+                    <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(form[field.name])}
+                        onChange={(event) => updateField(field.name, event.target.checked)}
+                        className="h-5 w-5"
+                      />
+                      <span className="text-sm text-slate-700">Đánh dấu nội dung nổi bật</span>
+                    </div>
+                  ) : field.type === "image" || field.type === "file" ? (
+                    <div className="space-y-3">
+                      <input
+                        type="url"
+                        value={String(form[field.name] ?? "")}
+                        onChange={(event) => updateField(field.name, event.target.value)}
+                        placeholder={field.placeholder || "https://"}
+                        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                      />
+                      <div className="flex flex-wrap items-center gap-3">
+                        <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
+                          Tải từ máy
+                          <input
+                            type="file"
+                            accept={field.type === "image" ? "image/*" : "*"}
+                            className="hidden"
+                            onChange={async (event) => {
+                              const file = event.target.files?.[0];
+                              event.currentTarget.value = "";
+                              if (!file) return;
+                              const url = await uploadAsset(file);
+                              updateField(field.name, url);
+                            }}
+                          />
+                        </label>
+                        {field.type === "image" && form[field.name] ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={String(form[field.name])}
+                            alt={field.label}
+                            className="h-16 w-16 rounded-2xl border border-slate-200 object-cover"
+                          />
+                        ) : null}
+                      </div>
+                    </div>
+                  ) : field.type === "stats" ? (
+                    <StatListField
+                      value={form[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ) : field.type === "nav" ? (
+                    <NavListField
+                      value={form[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ) : field.type === "contact" ? (
+                    <ContactField
+                      value={form[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ) : (
+                    <input
+                      type={field.type === "date" ? "date" : field.type === "url" ? "url" : "text"}
+                      value={String(form[field.name] ?? "")}
+                      onChange={(event) => updateField(field.name, event.target.value)}
+                      placeholder={field.placeholder}
+                      className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+                    />
+                  )}
+                  {field.helpText ? (
+                    <span className="mt-2 block text-xs text-slate-500">{field.helpText}</span>
+                  ) : null}
+                </label>
+              ))}
+
+              <div className="sticky bottom-0 flex flex-wrap items-center gap-3 border-t border-slate-200 bg-white pt-5">
+                <button
+                  type="submit"
+                  disabled={isSaving || isUploading}
+                  className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white disabled:opacity-60"
+                >
+                  {isSaving ? "Đang lưu..." : editingId ? "Lưu thay đổi" : "Tạo mới"}
+                </button>
+                <button
+                  type="button"
+                  onClick={closePanel}
+                  className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700"
+                >
+                  Đóng
+                </button>
+                {status ? <p className="text-sm text-slate-600">{status}</p> : null}
+              </div>
+            </form>
           </div>
-        </form>
-      </section>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -13,7 +13,7 @@ export default async function AdminMembersPage() {
       <CollectionManager
         collection="members"
         title="Danh sách hội viên"
-        description="Đây là module tương ứng với khu hội viên trên site mẫu HUBA."
+        description="Quản lý hồ sơ hội viên, phân nhóm hiển thị và thông tin liên hệ."
         initialItems={members as unknown as Record<string, unknown>[]}
         fields={[
           { name: "name", label: "Tên hội viên" },

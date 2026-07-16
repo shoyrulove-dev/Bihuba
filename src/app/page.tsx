@@ -135,7 +135,7 @@ export default async function Home() {
                 <div className="relative flex h-full flex-col justify-end p-6">
                   <div className="rounded-[1.5rem] border border-cyan-300/25 bg-[#031634]/82 p-5 shadow-[0_18px_50px_rgba(2,6,23,0.4)]">
                     <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
-                      Hình ảnh hoạt động demo
+                      Hình ảnh hoạt động
                     </p>
                     <h2 className="mt-3 text-2xl font-bold leading-tight text-white">
                       {heroPost?.title ?? "Sự kiện kết nối doanh nghiệp BIHUBA"}
@@ -200,8 +200,8 @@ export default async function Home() {
       <section className="mx-auto max-w-7xl px-6 py-10">
         <SectionHeading
           eyebrow="Nổi bật"
-          title="Tin tức và hoạt động demo từ cấu trúc HUBA"
-          body="Trang chủ đã được nạp sẵn bài demo để có độ dày nội dung. Sau này BIHUBA có thể thay bằng bài viết, hình ảnh và lịch hoạt động chính thức ngay trong khu quản trị."
+          title="Tin tức và hoạt động nổi bật"
+          body="Trang chủ hiển thị sẵn các nhóm nội dung chính để văn phòng hội có thể cập nhật bài viết, hình ảnh và lịch hoạt động thường xuyên."
         />
         <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
           {featuredPosts.map((post) => (

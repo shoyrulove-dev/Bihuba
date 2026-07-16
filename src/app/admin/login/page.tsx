@@ -18,7 +18,7 @@ export default async function AdminLoginPage({
       <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[1fr_420px]">
         <section className="rounded-[2.5rem] border border-white/10 bg-linear-to-br from-cyan-500/20 to-blue-800/20 p-10">
           <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">
-            BIHUBA CMS
+            BIHUBA
           </p>
           <h1 className="mt-6 text-5xl font-semibold tracking-tight">
             Khu quản trị riêng cho BIHUBA

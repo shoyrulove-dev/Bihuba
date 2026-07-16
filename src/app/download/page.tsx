@@ -10,7 +10,7 @@ export default async function DownloadsPage() {
       <SectionHeading
         eyebrow="Tài liệu"
         title="Download và thông báo"
-        body="Chuyên mục này thay thế nhóm download/download-category bên HUBA, phục vụ báo cáo, thông báo và tài liệu hội viên."
+        body="Khu vực này phục vụ báo cáo, thông báo, biểu mẫu và các tài liệu cần gửi tới hội viên."
       />
       <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
         {downloads.map((item) => (

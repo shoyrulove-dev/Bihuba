@@ -13,7 +13,7 @@ export default async function AdminPartnersPage() {
       <CollectionManager
         collection="partners"
         title="Đối tác"
-        description="Quản trị tương ứng với module đối tác trên site HUBA."
+        description="Quản lý đối tác, đơn vị đồng hành và thông tin giới thiệu."
         initialItems={partners as unknown as Record<string, unknown>[]}
         fields={[
           { name: "name", label: "Tên đối tác" },
