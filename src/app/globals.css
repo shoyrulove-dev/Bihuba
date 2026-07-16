@@ -35,3 +35,33 @@ a {
   font-size: 1.05rem;
   line-height: 2;
 }
+
+.ProseMirror {
+  min-height: 280px;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: rgb(148 163 184);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror iframe,
+.prose iframe {
+  width: 100%;
+  min-height: 360px;
+  border: 0;
+  border-radius: 1.5rem;
+}
+
+.ProseMirror img,
+.prose img {
+  max-width: 100%;
+  height: auto;
+}

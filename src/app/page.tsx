@@ -69,7 +69,7 @@ export default async function Home() {
 
             <div className="mt-8 flex items-center gap-5">
               <Image
-                src="/bihuba-mark.svg"
+                src={settings.logoUrl || "/bihuba-mark.svg"}
                 alt="Bihuba mark"
                 width={112}
                 height={112}
@@ -86,7 +86,7 @@ export default async function Home() {
             </div>
 
             <h1 className="mt-8 max-w-4xl text-4xl font-black uppercase leading-tight md:text-6xl">
-              Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh
+              {settings.heroTitle || "Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh"}
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-50/90">
               {settings.heroSubtitle}

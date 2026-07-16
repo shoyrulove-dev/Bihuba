@@ -9,7 +9,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
         <div>
           <div className="flex items-center gap-4">
             <Image
-              src="/bihuba-mark.svg"
+              src={settings.logoUrl || "/bihuba-mark.svg"}
               alt="BIHUBA"
               width={56}
               height={56}

@@ -32,8 +32,18 @@ export default async function AdminPostsPage() {
           },
           { name: "category", label: "Danh mục" },
           { name: "excerpt", label: "Tóm tắt", type: "textarea" },
-          { name: "content", label: "Nội dung", type: "textarea" },
-          { name: "featuredImage", label: "Ảnh đại diện", type: "url" },
+          {
+            name: "content",
+            label: "Nội dung",
+            type: "richtext",
+            helpText: "Editor hỗ trợ heading, link, highlight, ảnh upload và video YouTube.",
+          },
+          {
+            name: "featuredImage",
+            label: "Ảnh đại diện",
+            type: "image",
+            helpText: "Có thể dán URL hoặc upload ảnh trực tiếp qua ImageKit.",
+          },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
           { name: "isFeatured", label: "Nổi bật", type: "checkbox" },
         ]}

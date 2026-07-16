@@ -8,7 +8,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-6 py-4">
         <Link href="/" className="flex items-center gap-4">
           <Image
-            src="/bihuba-mark.svg"
+            src={settings.logoUrl || "/bihuba-mark.svg"}
             alt="BIHUBA"
             width={56}
             height={56}

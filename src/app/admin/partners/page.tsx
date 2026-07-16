@@ -21,7 +21,12 @@ export default async function AdminPartnersPage() {
           { name: "partnerType", label: "Loại đối tác" },
           { name: "website", label: "Website", type: "url" },
           { name: "description", label: "Mô tả", type: "textarea" },
-          { name: "logo", label: "Logo", type: "url" },
+          {
+            name: "logo",
+            label: "Logo",
+            type: "image",
+            helpText: "Upload logo đối tác lên ImageKit hoặc dán URL có sẵn.",
+          },
         ]}
       />
     </AdminShell>

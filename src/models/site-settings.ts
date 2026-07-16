@@ -4,6 +4,7 @@ const SiteSettingsSchema = new Schema(
   {
     siteName: { type: String, required: true },
     shortName: { type: String, required: true },
+    logoUrl: { type: String, default: "/bihuba-mark.svg" },
     slogan: { type: String, default: "" },
     heroTitle: { type: String, default: "" },
     heroSubtitle: { type: String, default: "" },

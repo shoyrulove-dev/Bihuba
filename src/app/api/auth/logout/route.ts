@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   response.cookies.set(ADMIN_SESSION_COOKIE, "", {
     httpOnly: true,
     sameSite: "lax",
-    secure: true,
+    secure: request.nextUrl.protocol === "https:",
     path: "/",
     maxAge: 0,
   });
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   response.cookies.set(ADMIN_SESSION_COOKIE, "", {
     httpOnly: true,
     sameSite: "lax",
-    secure: true,
+    secure: request.nextUrl.protocol === "https:",
     path: "/",
     maxAge: 0,
   });

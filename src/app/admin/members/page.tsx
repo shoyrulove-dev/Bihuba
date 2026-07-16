@@ -30,7 +30,12 @@ export default async function AdminMembersPage() {
           },
           { name: "groupType", label: "Nhóm hiển thị" },
           { name: "description", label: "Mô tả", type: "textarea" },
-          { name: "logo", label: "Logo", type: "url" },
+          {
+            name: "logo",
+            label: "Logo",
+            type: "image",
+            helpText: "Upload logo hội viên lên ImageKit hoặc dán URL có sẵn.",
+          },
           { name: "address", label: "Địa chỉ" },
           { name: "phone", label: "Điện thoại" },
           { name: "email", label: "Email" },

@@ -1,7 +1,7 @@
+import { NextRequest, NextResponse } from "next/server";
+import { collectionMap, CollectionKey } from "@/lib/admin";
 import { connectToDatabase } from "@/lib/db";
 import { slugify } from "@/lib/slug";
-import { collectionMap, CollectionKey } from "@/lib/admin";
-import { NextRequest, NextResponse } from "next/server";
 
 type Context = {
   params: Promise<{
@@ -25,6 +25,7 @@ export async function GET(_: NextRequest, context: Context) {
       { status: 503 }
     );
   }
+
   const items = await Model.find().sort({ createdAt: -1 }).lean();
   return NextResponse.json({ items: JSON.parse(JSON.stringify(items)) });
 }
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest, context: Context) {
       { status: 503 }
     );
   }
+
   const payload = await request.json();
 
   if ("title" in payload && !payload.slug) {
@@ -58,8 +60,8 @@ export async function POST(request: NextRequest, context: Context) {
   if ("siteName" in payload) {
     const existing = await Model.findOne();
     if (existing) {
-      await Model.findByIdAndUpdate(existing._id, payload);
-      return NextResponse.json({ message: "Đã cập nhật site settings." });
+      await Model.findByIdAndUpdate(existing._id, payload, { runValidators: true });
+      return NextResponse.json({ message: "Đã cập nhật cấu hình website." });
     }
   }
 

@@ -1,6 +1,7 @@
-import { connectToDatabase } from "@/lib/db";
-import { collectionMap, CollectionKey } from "@/lib/admin";
 import { NextRequest, NextResponse } from "next/server";
+import { collectionMap, CollectionKey } from "@/lib/admin";
+import { connectToDatabase } from "@/lib/db";
+import { slugify } from "@/lib/slug";
 
 type Context = {
   params: Promise<{
@@ -25,8 +26,18 @@ export async function PUT(request: NextRequest, context: Context) {
       { status: 503 }
     );
   }
+
   const payload = await request.json();
-  await Model.findByIdAndUpdate(id, payload);
+
+  if ("title" in payload && !payload.slug) {
+    payload.slug = slugify(payload.title);
+  }
+
+  if ("name" in payload && !payload.slug) {
+    payload.slug = slugify(payload.name);
+  }
+
+  await Model.findByIdAndUpdate(id, payload, { runValidators: true });
 
   return NextResponse.json({ message: "Đã cập nhật thành công." });
 }
@@ -47,6 +58,7 @@ export async function DELETE(_: NextRequest, context: Context) {
       { status: 503 }
     );
   }
+
   await Model.findByIdAndDelete(id);
 
   return NextResponse.json({ message: "Đã xóa thành công." });

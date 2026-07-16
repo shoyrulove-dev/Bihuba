@@ -17,6 +17,7 @@ export interface ContactInfo {
 export interface SiteSettingsShape {
   siteName: string;
   shortName: string;
+  logoUrl?: string;
   slogan: string;
   heroTitle: string;
   heroSubtitle: string;

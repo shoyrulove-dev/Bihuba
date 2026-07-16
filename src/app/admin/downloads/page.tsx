@@ -21,7 +21,12 @@ export default async function AdminDownloadsPage() {
           { name: "category", label: "Danh mục" },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
           { name: "summary", label: "Tóm tắt", type: "textarea" },
-          { name: "fileUrl", label: "Link file", type: "url" },
+          {
+            name: "fileUrl",
+            label: "Link file",
+            type: "file",
+            helpText: "Upload PDF, DOC, XLS hoặc dán đường dẫn tài liệu.",
+          },
         ]}
       />
     </AdminShell>

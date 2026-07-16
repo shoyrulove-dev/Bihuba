@@ -9,6 +9,7 @@ import {
 export const defaultSettings: SiteSettingsShape = {
   siteName: "Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh",
   shortName: "BIHUBA",
+  logoUrl: "/bihuba-mark.svg",
   slogan: "Đoàn kết - Đổi mới - Hội nhập - Phát triển",
   heroTitle: "Cộng đồng doanh nghiệp Bình Hưng kết nối nguồn lực và mở rộng cơ hội phát triển",
   heroSubtitle:
