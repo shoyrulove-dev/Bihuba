@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 type FieldType =
@@ -97,6 +99,9 @@ export function CollectionManager({
   singleton = false,
   allowDelete = true,
 }: CollectionManagerProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const baseState = useMemo(() => buildInitialState(fields), [fields]);
   const [items, setItems] = useState(initialItems);
   const [form, setForm] = useState<FormState>(() => {
@@ -118,6 +123,28 @@ export function CollectionManager({
   const [status, setStatus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
+  useEffect(() => {
+    const editId = searchParams.get("edit");
+    if (!editId) return;
+
+    const match = items.find((item) => String((item as Record<string, unknown>)._id) === editId);
+    if (!match) return;
+
+    const nextState = { ...baseState };
+    const record = match as Record<string, unknown>;
+    fields.forEach((field) => {
+      nextState[field.name] = normalizeValue(field, record[field.name]);
+    });
+
+    const frame = window.requestAnimationFrame(() => {
+      setForm(nextState);
+      setEditingId(editId);
+      setStatus("Đang chỉnh sửa bản ghi đã chọn.");
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [baseState, fields, items, searchParams]);
+
   async function refresh() {
     const response = await fetch(`/api/admin/${collection}`, { cache: "no-store" });
     const payload = await response.json();
@@ -128,6 +155,9 @@ export function CollectionManager({
     setForm(baseState);
     setEditingId(singleton && items[0]?._id ? String(items[0]._id) : null);
     setStatus("");
+    if (!singleton) {
+      router.replace(pathname, { scroll: false });
+    }
   }
 
   function startEdit(item: Record<string, unknown>) {
@@ -136,8 +166,10 @@ export function CollectionManager({
       nextState[field.name] = normalizeValue(field, item[field.name]);
     });
     setForm(nextState);
-    setEditingId(String(item._id));
+    const nextId = String(item._id);
+    setEditingId(nextId);
     setStatus("Đang chỉnh sửa bản ghi đã chọn.");
+    router.replace(`${pathname}?edit=${nextId}`, { scroll: false });
   }
 
   function updateField(name: string, value: string | boolean) {
@@ -149,7 +181,7 @@ export function CollectionManager({
 
   async function uploadAsset(file: File) {
     setIsUploading(true);
-    setStatus("Đang upload media...");
+    setStatus("Đang tải media...");
 
     const payload = new FormData();
     payload.append("file", file);
@@ -165,11 +197,11 @@ export function CollectionManager({
     setIsUploading(false);
 
     if (!response.ok) {
-      setStatus(result.message || "Upload thất bại.");
-      throw new Error(result.message || "Upload thất bại.");
+      setStatus(result.message || "Tải lên thất bại.");
+      throw new Error(result.message || "Tải lên thất bại.");
     }
 
-    setStatus("Upload thành công.");
+    setStatus("Tải lên thành công.");
     return String(result.url);
   }
 
@@ -270,7 +302,7 @@ export function CollectionManager({
             return (
               <article
                 key={String(record._id)}
-                className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4"
+                className="relative rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-4"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
@@ -281,21 +313,21 @@ export function CollectionManager({
                       </p>
                     ) : null}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
+                  <div className="relative z-10 flex items-center gap-2">
+                    <Link
+                      href={`${pathname}?edit=${String(record._id)}`}
                       onClick={() => startEdit(record)}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400 text-slate-950"
+                      className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-cyan-400 text-slate-950 transition hover:scale-105"
                       title="Sửa"
                       aria-label="Sửa"
                     >
                       <EditIcon />
-                    </button>
+                    </Link>
                     {allowDelete && !singleton ? (
                       <button
                         type="button"
                         onClick={() => handleDelete(String(record._id))}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-red-400/40 text-red-300"
+                        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-red-400/40 text-red-300 transition hover:scale-105 hover:bg-red-500/10"
                         title="Xóa"
                         aria-label="Xóa"
                       >

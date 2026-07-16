@@ -10,7 +10,7 @@ export const settings = {
   heroCtaHref: "/tin-tuc",
   introTitle: "Về BIHUBA",
   introBody:
-    "BIHUBA định hướng trở thành điểm kết nối doanh nghiệp tại khu vực Bình Hưng, thúc đẩy hợp tác, đổi mới và chia sẻ cơ hội tăng trưởng. Toàn bộ nội dung trên website có thể được vận hành và cập nhật từ admin panel riêng.",
+    "BIHUBA định hướng trở thành điểm kết nối doanh nghiệp tại khu vực Bình Hưng, thúc đẩy hợp tác, đổi mới và chia sẻ cơ hội tăng trưởng. Toàn bộ nội dung trên website có thể được vận hành và cập nhật từ khu quản trị riêng.",
   memberStats: [
     { label: "Hội viên doanh nghiệp", value: "120+" },
     { label: "Chương trình kết nối", value: "36+" },
@@ -44,7 +44,7 @@ export const posts = [
     excerpt:
       "Bản demo tổng hợp lịch công tác và điều hành theo cấu trúc HUBA, phù hợp để BIHUBA cập nhật lịch họp, lịch tiếp khách và kế hoạch tuần.",
     content:
-      "Nội dung demo được đưa vào để mô phỏng chuyên mục lịch tuần. Khi vận hành thật, BIHUBA có thể thay bằng lịch điều hành, lịch tiếp đối tác và các công việc trong tuần từ admin panel.",
+      "Nội dung demo được đưa vào để mô phỏng chuyên mục lịch tuần. Khi vận hành thật, BIHUBA có thể thay bằng lịch điều hành, lịch tiếp đối tác và các công việc trong tuần từ khu quản trị.",
     featuredImage:
       "https://huba.vn/wp-content/uploads/2026/07/Lich-cong-tac-HUBA-tu-ngay-13.7.2026-den-ngay-19.7.2026.webp",
     publishedAt: "2026-07-14",
@@ -56,7 +56,7 @@ export const posts = [
     type: "news",
     category: "Tin tức",
     excerpt:
-      "Bài demo theo hướng bài viết chuyên đề của HUBA, giúp homepage hiển thị khối tin mới và tạo cảm giác website đã có nội dung vận hành thật.",
+      "Bài demo theo hướng bài viết chuyên đề của HUBA, giúp trang chủ hiển thị khối tin mới và tạo cảm giác website đã có nội dung vận hành thật.",
     content:
       "AI đang chuyển từ công cụ hỗ trợ thành nền tảng vận hành trong doanh nghiệp. BIHUBA có thể dùng nhóm bài viết chuyên đề như thế này để thu hút hội viên, chia sẻ tri thức và tạo điểm đến nội dung cho cộng đồng.",
     featuredImage:
@@ -70,7 +70,7 @@ export const posts = [
     type: "event",
     category: "Sự kiện",
     excerpt:
-      "Mô phỏng một sự kiện kết nối và trưng bày sản phẩm theo chất liệu HUBA, rất hợp để BIHUBA trình diễn hình ảnh hoạt động trên homepage.",
+      "Mô phỏng một sự kiện kết nối và trưng bày sản phẩm theo chất liệu HUBA, rất phù hợp để BIHUBA trình diễn hình ảnh hoạt động trên trang chủ.",
     content:
       "Chuyên mục này có thể dùng để đăng tin về các buổi gặp gỡ doanh nghiệp, giới thiệu sản phẩm, tọa đàm chuyên đề và các phiên kết nối giao thương tại địa phương.",
     featuredImage:
@@ -98,7 +98,7 @@ export const posts = [
     type: "trade",
     category: "Kết nối giao thương",
     excerpt:
-      "Khối nội dung demo cho module kết nối giao thương, sử dụng hình ảnh sự kiện doanh nghiệp để homepage sinh động hơn.",
+      "Khối nội dung demo cho module kết nối giao thương, sử dụng hình ảnh sự kiện doanh nghiệp để trang chủ sinh động hơn.",
     content:
       "BIHUBA có thể phát triển chuyên mục này thành nơi đăng nhu cầu hợp tác, giới thiệu sản phẩm, tìm kiếm nhà cung cấp và thông tin kết nối theo từng lĩnh vực.",
     featuredImage:
@@ -112,7 +112,7 @@ export const posts = [
     type: "sponsor",
     category: "Đồng hành",
     excerpt:
-      "Thêm một bài demo có hình ảnh sân khấu, nhân vật và hội thảo để tăng độ đầy cho layout trang chủ và danh mục bài viết.",
+      "Thêm một bài demo có hình ảnh sân khấu, nhân vật và hội thảo để tăng độ đầy cho trang chủ và danh mục bài viết.",
     content:
       "Nội dung loại này phù hợp cho đối tác đồng hành, nhà tài trợ, đơn vị có gian hàng hoặc tham gia các chương trình của hội doanh nghiệp.",
     featuredImage:

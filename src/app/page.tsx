@@ -18,7 +18,7 @@ const impactItems = [
   },
   {
     value: "Đồng hành",
-    label: "Hỗ trợ truyền thông, sự kiện, xúc tiến thương mại và năng lực vận hành.",
+    label: "Hỗ trợ truyền thông, sự kiện, xúc tiến thương mại và nâng cao năng lực vận hành.",
   },
   {
     value: "Phát triển",
@@ -142,7 +142,7 @@ export default async function Home() {
                     </h2>
                     <p className="mt-3 text-sm leading-7 text-blue-100/85">
                       {heroPost?.excerpt ??
-                        "Không gian trang chủ được dựng theo hướng hiệp hội doanh nghiệp, có banner sự kiện, logo trung tâm và các khối nội dung nổi bật."}
+                        "Không gian trang chủ được thiết kế theo tinh thần hội doanh nghiệp, có banner hoạt động, logo trung tâm và các khối nội dung nổi bật."}
                     </p>
                     <div className="mt-5 flex flex-wrap gap-3">
                       {["Đoàn kết", "Đổi mới", "Hội nhập", "Phát triển"].map((item) => (
@@ -201,7 +201,7 @@ export default async function Home() {
         <SectionHeading
           eyebrow="Nổi bật"
           title="Tin tức và hoạt động demo từ cấu trúc HUBA"
-          body="Trang chủ đã được nạp sẵn bài demo để có độ dày nội dung. Sau này BIHUBA có thể thay bằng bài viết, hình ảnh và lịch hoạt động chính thức ngay trong admin."
+          body="Trang chủ đã được nạp sẵn bài demo để có độ dày nội dung. Sau này BIHUBA có thể thay bằng bài viết, hình ảnh và lịch hoạt động chính thức ngay trong khu quản trị."
         />
         <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
           {featuredPosts.map((post) => (
@@ -220,9 +220,9 @@ export default async function Home() {
               Giao diện phù hợp cho tổ chức hội, câu lạc bộ và cộng đồng doanh nghiệp địa phương
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/88">
-              Mục tiêu của bản này là để BIHUBA có thể lên sóng với hình ảnh rõ ràng, có
-              đủ block tin tức, sự kiện, hội viên và tài liệu. Toàn bộ nội dung hiện tại vẫn
-              được quản lý từ admin panel nên rất dễ thay đổi sau bàn giao.
+              Mục tiêu của phiên bản này là để BIHUBA có thể lên sóng với hình ảnh rõ ràng,
+              đầy đủ khối tin tức, sự kiện, hội viên và tài liệu. Toàn bộ nội dung hiện tại
+              vẫn được quản lý từ khu quản trị nên rất dễ thay đổi sau bàn giao.
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {latestPosts.map((post) => (

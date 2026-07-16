@@ -68,7 +68,7 @@ export function RichTextEditor({
   if (!editor) {
     return (
       <div className="rounded-[1.5rem] border border-slate-200 px-5 py-4 text-sm text-slate-500">
-        Đang khởi tạo editor...
+        Đang khởi tạo trình soạn thảo...
       </div>
     );
   }
