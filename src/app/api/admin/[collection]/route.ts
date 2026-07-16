@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { collectionMap, CollectionKey } from "@/lib/admin";
+import { ensureAdminUser, getNextUserId, hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { slugify } from "@/lib/slug";
 
@@ -26,8 +27,19 @@ export async function GET(_: NextRequest, context: Context) {
     );
   }
 
+  if (key === "users") {
+    await ensureAdminUser();
+  }
+
   const items = await Model.find().sort({ createdAt: -1 }).lean();
-  return NextResponse.json({ items: JSON.parse(JSON.stringify(items)) });
+  const serialized = JSON.parse(JSON.stringify(items)).map((item: Record<string, unknown>) => {
+    if (key !== "users") return item;
+    const { passwordHash, ...safeItem } = item;
+    void passwordHash;
+    return safeItem;
+  });
+
+  return NextResponse.json({ items: serialized });
 }
 
 export async function POST(request: NextRequest, context: Context) {
@@ -63,6 +75,17 @@ export async function POST(request: NextRequest, context: Context) {
       await Model.findByIdAndUpdate(existing._id, payload, { runValidators: true });
       return NextResponse.json({ message: "Đã cập nhật cấu hình website." });
     }
+  }
+
+  if (key === "users") {
+    if (!payload.password) {
+      return NextResponse.json({ message: "Mật khẩu không được để trống." }, { status: 400 });
+    }
+    payload.userId = await getNextUserId();
+    payload.username = String(payload.username ?? "").trim().toLowerCase();
+    payload.passwordHash = hashPassword(String(payload.password ?? ""));
+    payload.isProtected = false;
+    delete payload.password;
   }
 
   await Model.create(payload);

@@ -114,3 +114,13 @@ export interface DownloadShape {
   category: string;
   publishedAt: string;
 }
+
+export interface UserShape {
+  _id?: string;
+  userId: number;
+  name: string;
+  username: string;
+  role: "admin" | "manager";
+  password?: string;
+  isProtected?: boolean;
+}

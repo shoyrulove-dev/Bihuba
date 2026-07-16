@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ADMIN_SESSION_COOKIE, getAdminCredentials } from "@/lib/auth";
+import { ADMIN_SESSION_COOKIE, parseSessionToken } from "@/lib/auth";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -18,8 +18,7 @@ export function proxy(request: NextRequest) {
   }
 
   const session = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const { sessionSecret } = getAdminCredentials();
-  const isAuthorized = session === sessionSecret;
+  const isAuthorized = Boolean(parseSessionToken(session));
 
   if (pathname.startsWith("/api/admin")) {
     if (!isAuthorized) {

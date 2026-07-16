@@ -18,7 +18,10 @@ import {
   PostShape,
   PostType,
   SiteSettingsShape,
+  UserShape,
 } from "@/types/cms";
+import { ensureAdminUser } from "@/lib/auth";
+import { UserModel } from "@/models/user";
 
 function serialize<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
@@ -118,6 +121,22 @@ export async function getDownloads(): Promise<DownloadShape[]> {
 
   const downloads = await DownloadModel.find().sort({ publishedAt: -1 }).lean();
   return downloads.length ? serialize(downloads) : defaultDownloads;
+}
+
+export async function getUsers(): Promise<UserShape[]> {
+  const connection = await connectToDatabase();
+
+  if (!process.env.MONGODB_URI || !connection) {
+    return [];
+  }
+
+  await ensureAdminUser();
+  const users = await UserModel.find().sort({ userId: 1 }).lean();
+  return serialize(users).map((user) => {
+    const { passwordHash, ...safeUser } = user as Record<string, unknown>;
+    void passwordHash;
+    return safeUser as unknown as UserShape;
+  });
 }
 
 export async function getDownloadBySlug(

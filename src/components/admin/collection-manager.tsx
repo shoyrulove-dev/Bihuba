@@ -19,6 +19,7 @@ const RichTextEditor = dynamic(
 
 type FieldType =
   | "text"
+  | "password"
   | "textarea"
   | "select"
   | "date"
@@ -87,6 +88,22 @@ function AddIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
       <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+function ChevronLeftIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M15 6l-6 6 6 6" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M9 6l6 6-6 6" />
     </svg>
   );
 }
@@ -990,25 +1007,29 @@ export function CollectionManager({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 className="text-2xl font-semibold">{title}</h2>
-            <p className="mt-2 text-sm leading-7 text-slate-300">{description}</p>
+            {description ? (
+              <p className="mt-2 text-sm leading-7 text-slate-300">{description}</p>
+            ) : null}
           </div>
           {singleton ? (
             <button
               type="button"
               onClick={() => router.replace(`${pathname}?mode=edit`, { scroll: false })}
-              className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-cyan-400 text-slate-950"
+              title="Chỉnh sửa"
+              aria-label="Chỉnh sửa"
             >
               <EditIcon />
-              Chỉnh sửa
             </button>
           ) : (
             <button
               type="button"
               onClick={openNewPanel}
-              className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-cyan-400 text-slate-950"
+              title="Thêm mới"
+              aria-label="Thêm mới"
             >
               <AddIcon />
-              Thêm mới
             </button>
           )}
         </div>
@@ -1028,20 +1049,8 @@ export function CollectionManager({
               />
             </div>
           ) : (
-            <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 px-5 py-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
-                Bộ cấu hình đang dùng
-              </p>
-              <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="text-base font-semibold text-white">
-                    {String((items[0] as Record<string, unknown> | undefined)?.siteName ?? title)}
-                  </p>
-                  <p className="text-sm text-slate-300">
-                    Một nơi duy nhất để cập nhật nhận diện, trang chủ, liên hệ, nút nổi và giao diện.
-                  </p>
-                </div>
-              </div>
+            <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 px-5 py-4 text-sm text-slate-300">
+              {String((items[0] as Record<string, unknown> | undefined)?.siteName ?? title)}
             </div>
           )}
           {!singleton && pagedItems.map((item) => {
@@ -1051,13 +1060,19 @@ export function CollectionManager({
             const previewImage = String(
               record.logo ?? record.featuredImage ?? record.coverImage ?? record.introImage ?? ""
             );
+            const canDelete =
+              allowDelete &&
+              !singleton &&
+              record._id &&
+              !record.isProtected &&
+              Number(record.userId ?? 0) !== 1;
 
             return (
               <article
                 key={String(record._id ?? headline)}
-                className="flex flex-wrap items-center gap-3 rounded-[1.4rem] border border-white/10 bg-slate-950/35 px-4 py-3"
+                className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-slate-950/35 px-4 py-3"
               >
-                <div className="flex min-w-0 flex-1 items-center gap-3">
+                <div className="grid min-w-0 grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-3">
                   {previewImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -1073,33 +1088,33 @@ export function CollectionManager({
                   <div className="min-w-0 flex-1">
                     <h3 className="truncate text-sm font-semibold text-white">{headline}</h3>
                     {subhead ? (
-                      <p className="truncate text-xs uppercase tracking-[0.18em] text-cyan-300">
+                      <p className="truncate text-xs text-slate-400">
                         {subhead}
                       </p>
                     ) : null}
                   </div>
-                </div>
-                <div className="ml-auto flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => openEditPanel(record)}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400 text-slate-950 transition hover:scale-105"
-                    title="Sửa"
-                    aria-label="Sửa"
-                  >
-                    <EditIcon />
-                  </button>
-                  {allowDelete && !singleton && record._id ? (
+                  <div className="ml-auto flex shrink-0 items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => handleDelete(String(record._id))}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-red-400/40 text-red-300 transition hover:scale-105 hover:bg-red-500/10"
-                      title="Xóa"
-                      aria-label="Xóa"
+                      onClick={() => openEditPanel(record)}
+                      className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400 text-slate-950 transition hover:scale-105"
+                      title="Sửa"
+                      aria-label="Sửa"
                     >
-                      <DeleteIcon />
+                      <EditIcon />
                     </button>
-                  ) : null}
+                    {canDelete ? (
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(String(record._id))}
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-red-400/40 text-red-300 transition hover:scale-105 hover:bg-red-500/10"
+                        title="Xóa"
+                        aria-label="Xóa"
+                      >
+                        <DeleteIcon />
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
               </article>
             );
@@ -1115,17 +1130,21 @@ export function CollectionManager({
                 type="button"
                 disabled={currentPage <= 1}
                 onClick={() => setPage((current) => Math.max(1, current - 1))}
-                className="rounded-full border border-white/15 px-4 py-2 text-sm text-white disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white disabled:opacity-40"
+                title="Trang trước"
+                aria-label="Trang trước"
               >
-                Trước
+                <ChevronLeftIcon />
               </button>
               <button
                 type="button"
                 disabled={currentPage >= totalPages}
                 onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-                className="rounded-full border border-white/15 px-4 py-2 text-sm text-white disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white disabled:opacity-40"
+                title="Trang sau"
+                aria-label="Trang sau"
               >
-                Sau
+                <ChevronRightIcon />
               </button>
             </div>
           </div>
@@ -1285,7 +1304,15 @@ export function CollectionManager({
                             />
                           ) : (
                             <input
-                              type={field.type === "date" ? "date" : field.type === "url" ? "url" : "text"}
+                              type={
+                                field.type === "date"
+                                  ? "date"
+                                  : field.type === "url"
+                                    ? "url"
+                                    : field.type === "password"
+                                      ? "password"
+                                      : "text"
+                              }
                               value={String(form[field.name] ?? "")}
                               onChange={(event) => updateField(field.name, event.target.value)}
                               placeholder={field.placeholder}

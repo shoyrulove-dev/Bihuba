@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { collectionMap, CollectionKey } from "@/lib/admin";
+import { ensureAdminUser, hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { slugify } from "@/lib/slug";
 
@@ -37,6 +38,24 @@ export async function PUT(request: NextRequest, context: Context) {
     payload.slug = slugify(payload.name);
   }
 
+  if (key === "users") {
+    await ensureAdminUser();
+    const existingUser = await Model.findById(id).lean();
+    if (!existingUser) {
+      return NextResponse.json({ message: "Không tìm thấy user." }, { status: 404 });
+    }
+
+    payload.username = String(payload.username ?? existingUser.username).trim().toLowerCase();
+
+    if (payload.password) {
+      payload.passwordHash = hashPassword(String(payload.password));
+      delete payload.password;
+    } else {
+      delete payload.password;
+      delete payload.passwordHash;
+    }
+  }
+
   await Model.findByIdAndUpdate(id, payload, { runValidators: true });
 
   return NextResponse.json({ message: "Đã cập nhật thành công." });
@@ -57,6 +76,18 @@ export async function DELETE(_: NextRequest, context: Context) {
       { message: "MongoDB chưa kết nối được. Kiểm tra lại Atlas Network Access." },
       { status: 503 }
     );
+  }
+
+  if (key === "users") {
+    await ensureAdminUser();
+    const user = await Model.findById(id).lean();
+    if (!user) {
+      return NextResponse.json({ message: "Không tìm thấy user." }, { status: 404 });
+    }
+
+    if (user.isProtected || Number(user.userId) === 1) {
+      return NextResponse.json({ message: "Không thể xóa tài khoản admin gốc." }, { status: 400 });
+    }
   }
 
   await Model.findByIdAndDelete(id);
