@@ -293,13 +293,39 @@ function NavListField({
             placeholder="/tin-tuc"
             className="w-full rounded-2xl border border-slate-200 px-4 py-3"
           />
-          <button
-            type="button"
-            onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
-            className="rounded-full border border-red-200 px-4 py-3 text-sm font-semibold text-red-600"
-          >
-            Xóa
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (index === 0) return;
+                const next = [...items];
+                [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                onChange(next);
+              }}
+              className="rounded-full border border-slate-300 px-3 py-3 text-sm font-semibold text-slate-700"
+            >
+              Lên
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (index === items.length - 1) return;
+                const next = [...items];
+                [next[index + 1], next[index]] = [next[index], next[index + 1]];
+                onChange(next);
+              }}
+              className="rounded-full border border-slate-300 px-3 py-3 text-sm font-semibold text-slate-700"
+            >
+              Xuống
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+              className="rounded-full border border-red-200 px-4 py-3 text-sm font-semibold text-red-600"
+            >
+              Xóa
+            </button>
+          </div>
         </div>
       ))}
       <button
@@ -1020,6 +1046,9 @@ export function CollectionManager({
             const record = item as Record<string, unknown>;
             const headline = String(record.title ?? record.name ?? record.siteName ?? "Nội dung");
             const subhead = String(record.slug ?? record.category ?? record.partnerType ?? record.shortName ?? "");
+            const previewImage = String(
+              record.logo ?? record.featuredImage ?? record.coverImage ?? record.introImage ?? ""
+            );
 
             return (
               <article
@@ -1027,13 +1056,23 @@ export function CollectionManager({
                 className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 p-5"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <h3 className="truncate text-base font-semibold text-white">{headline}</h3>
-                    {subhead ? (
-                      <p className="mt-1 text-xs uppercase tracking-[0.22em] text-cyan-300">
-                        {subhead}
-                      </p>
+                  <div className="flex min-w-0 items-start gap-3">
+                    {previewImage ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={previewImage}
+                        alt={headline}
+                        className="h-14 w-14 shrink-0 rounded-2xl object-cover"
+                      />
                     ) : null}
+                    <div className="min-w-0">
+                      <h3 className="truncate text-base font-semibold text-white">{headline}</h3>
+                      {subhead ? (
+                        <p className="mt-1 text-xs uppercase tracking-[0.22em] text-cyan-300">
+                          {subhead}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
