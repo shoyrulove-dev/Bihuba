@@ -3,6 +3,11 @@
 :root {
   --background: #f8fafc;
   --foreground: #020617;
+  --theme-primary: #0e4faf;
+  --theme-accent: #56d6ff;
+  --theme-surface: #f8fafc;
+  --theme-heading-scale: 1;
+  --theme-body-scale: 1;
 }
 
 @theme inline {
@@ -21,9 +26,29 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: var(--theme-surface, var(--background));
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: calc(1em * var(--theme-heading-scale));
+}
+
+p,
+li,
+span,
+input,
+textarea,
+select,
+button,
+a {
+  font-size: calc(1em * var(--theme-body-scale));
 }
 
 body:has(.admin-root) > header,

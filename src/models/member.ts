@@ -17,6 +17,10 @@ const MemberSchema = new Schema(
     email: { type: String, default: "" },
     website: { type: String, default: "" },
     industry: { type: String, default: "" },
+    coverImage: { type: String, default: "" },
+    introImage: { type: String, default: "" },
+    companyTagline: { type: String, default: "" },
+    products: { type: Array, default: [] },
   },
   { timestamps: true }
 );

@@ -37,7 +37,18 @@ export default async function RootLayout({
       lang="vi"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-slate-50 text-slate-950">
+      <body
+        className="min-h-full bg-slate-50 text-slate-950"
+        style={
+          {
+            "--theme-primary": settings.theme?.primaryColor || "#0E4FAF",
+            "--theme-accent": settings.theme?.accentColor || "#56D6FF",
+            "--theme-surface": settings.theme?.surfaceColor || "#F8FAFC",
+            "--theme-heading-scale": settings.theme?.headingScale || "1",
+            "--theme-body-scale": settings.theme?.bodyScale || "1",
+          } as React.CSSProperties
+        }
+      >
         {!isAdminRoute ? <SiteHeader settings={settings} /> : null}
         <main>{children}</main>
         {!isAdminRoute ? (

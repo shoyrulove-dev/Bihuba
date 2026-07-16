@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { FloatingActions, SupporterItem } from "@/types/cms";
+import { FloatingActions, ProductItem, SupporterItem, ThemeSettings } from "@/types/cms";
 
 const RichTextEditor = dynamic(
   () => import("@/components/admin/rich-text-editor").then((mod) => mod.RichTextEditor),
@@ -31,7 +31,9 @@ type FieldType =
   | "nav"
   | "contact"
   | "social"
-  | "supporters";
+  | "supporters"
+  | "products"
+  | "theme";
 
 type FieldConfig = {
   name: string;
@@ -103,6 +105,16 @@ function buildInitialValue(field: FieldConfig) {
       return { zaloUrl: "", facebookUrl: "", callNumber: "", callLabel: "" };
     case "supporters":
       return [];
+    case "products":
+      return [];
+    case "theme":
+      return {
+        primaryColor: "#0E4FAF",
+        accentColor: "#56D6FF",
+        surfaceColor: "#F8FAFC",
+        headingScale: "1",
+        bodyScale: "1",
+      };
     default:
       return "";
   }
@@ -131,6 +143,19 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
   if (field.type === "supporters") {
     return Array.isArray(rawValue) ? rawValue : [];
   }
+  if (field.type === "products") {
+    return Array.isArray(rawValue) ? rawValue : [];
+  }
+  if (field.type === "theme") {
+    if (rawValue && typeof rawValue === "object") return rawValue;
+    return {
+      primaryColor: "#0E4FAF",
+      accentColor: "#56D6FF",
+      surfaceColor: "#F8FAFC",
+      headingScale: "1",
+      bodyScale: "1",
+    };
+  }
   return String(rawValue ?? "");
 }
 
@@ -152,6 +177,13 @@ function summarizeValue(field: FieldConfig, rawValue: unknown) {
   }
   if (field.type === "supporters") {
     return `${Array.isArray(rawValue) ? rawValue.length : 0} doanh nghiệp`;
+  }
+  if (field.type === "products") {
+    return `${Array.isArray(rawValue) ? rawValue.length : 0} sản phẩm / dịch vụ`;
+  }
+  if (field.type === "theme") {
+    const theme = rawValue as ThemeSettings | undefined;
+    return theme?.primaryColor || "Chưa cấu hình";
   }
 
   const text = String(rawValue ?? "")
@@ -427,6 +459,30 @@ function SupportersField({
             className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
           />
           <div className="flex flex-wrap items-center gap-3 md:col-span-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (index === 0) return;
+                const next = [...items];
+                [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                onChange(next);
+              }}
+              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+            >
+              Lên
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (index === items.length - 1) return;
+                const next = [...items];
+                [next[index + 1], next[index]] = [next[index], next[index + 1]];
+                onChange(next);
+              }}
+              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+            >
+              Xuống
+            </button>
             <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
               Tải logo từ máy
               <input
@@ -471,6 +527,241 @@ function SupportersField({
   );
 }
 
+function ProductsField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: ProductItem[]) => void;
+}) {
+  const items = (Array.isArray(value) ? value : []) as ProductItem[];
+
+  return (
+    <div className="space-y-3">
+      {items.map((item, index) => (
+        <div key={`${item.title}-${index}`} className="grid gap-3 rounded-2xl border border-slate-200 p-4">
+          <div className="grid gap-3 md:grid-cols-2">
+            <input
+              type="text"
+              value={item.title ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], title: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Tên sản phẩm hoặc dịch vụ"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <select
+              value={item.type ?? "service"}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = {
+                  ...next[index],
+                  type: event.target.value as ProductItem["type"],
+                };
+                onChange(next);
+              }}
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            >
+              <option value="product">Sản phẩm</option>
+              <option value="service">Dịch vụ</option>
+            </select>
+          </div>
+          <textarea
+            value={item.summary ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], summary: event.target.value };
+              onChange(next);
+            }}
+            rows={3}
+            placeholder="Mô tả ngắn"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <div className="grid gap-3 md:grid-cols-2">
+            <input
+              type="text"
+              value={item.price ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], price: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Giá / thông tin giá"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <input
+              type="url"
+              value={item.link ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], link: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Link chi tiết"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+          </div>
+          <input
+            type="url"
+            value={item.imageUrl ?? ""}
+            onChange={(event) => {
+              const next = [...items];
+              next[index] = { ...next[index], imageUrl: event.target.value };
+              onChange(next);
+            }}
+            placeholder="Link ảnh minh họa"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
+              Tải ảnh từ máy
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={async (event) => {
+                  const file = event.target.files?.[0];
+                  event.currentTarget.value = "";
+                  if (!file) return;
+                  const body = new FormData();
+                  body.append("file", file);
+                  body.append("folder", "products");
+                  body.append("fileName", file.name);
+                  const response = await fetch("/api/admin/upload", { method: "POST", body });
+                  const result = await response.json();
+                  if (!response.ok) return;
+                  const next = [...items];
+                  next[index] = { ...next[index], imageUrl: String(result.url) };
+                  onChange(next);
+                }}
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+              className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-600"
+            >
+              Xóa
+            </button>
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() =>
+          onChange([
+            ...items,
+            { title: "", imageUrl: "", summary: "", price: "", link: "", type: "service" },
+          ])
+        }
+        className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
+      >
+        Thêm sản phẩm / dịch vụ
+      </button>
+    </div>
+  );
+}
+
+function ThemeField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: ThemeSettings) => void;
+}) {
+  const theme = ((value && typeof value === "object" ? value : {}) as ThemeSettings) ?? {
+    primaryColor: "#0E4FAF",
+    accentColor: "#56D6FF",
+    surfaceColor: "#F8FAFC",
+    headingScale: "1",
+    bodyScale: "1",
+  };
+
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      <label className="block">
+        <span className="mb-2 block text-sm text-slate-600">Màu chính</span>
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+          <input
+            type="color"
+            value={theme.primaryColor}
+            onChange={(event) => onChange({ ...theme, primaryColor: event.target.value })}
+            className="h-10 w-10 rounded border-0 bg-transparent"
+          />
+          <input
+            type="text"
+            value={theme.primaryColor}
+            onChange={(event) => onChange({ ...theme, primaryColor: event.target.value })}
+            className="w-full"
+          />
+        </div>
+      </label>
+      <label className="block">
+        <span className="mb-2 block text-sm text-slate-600">Màu nhấn</span>
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+          <input
+            type="color"
+            value={theme.accentColor}
+            onChange={(event) => onChange({ ...theme, accentColor: event.target.value })}
+            className="h-10 w-10 rounded border-0 bg-transparent"
+          />
+          <input
+            type="text"
+            value={theme.accentColor}
+            onChange={(event) => onChange({ ...theme, accentColor: event.target.value })}
+            className="w-full"
+          />
+        </div>
+      </label>
+      <label className="block">
+        <span className="mb-2 block text-sm text-slate-600">Màu nền sáng</span>
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-3">
+          <input
+            type="color"
+            value={theme.surfaceColor}
+            onChange={(event) => onChange({ ...theme, surfaceColor: event.target.value })}
+            className="h-10 w-10 rounded border-0 bg-transparent"
+          />
+          <input
+            type="text"
+            value={theme.surfaceColor}
+            onChange={(event) => onChange({ ...theme, surfaceColor: event.target.value })}
+            className="w-full"
+          />
+        </div>
+      </label>
+      <label className="block">
+        <span className="mb-2 block text-sm text-slate-600">Cỡ tiêu đề</span>
+        <select
+          value={theme.headingScale}
+          onChange={(event) => onChange({ ...theme, headingScale: event.target.value })}
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        >
+          <option value="0.95">Gọn hơn</option>
+          <option value="1">Cân đối</option>
+          <option value="1.08">Lớn hơn</option>
+          <option value="1.15">Nổi bật</option>
+        </select>
+      </label>
+      <label className="block">
+        <span className="mb-2 block text-sm text-slate-600">Cỡ nội dung</span>
+        <select
+          value={theme.bodyScale}
+          onChange={(event) => onChange({ ...theme, bodyScale: event.target.value })}
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        >
+          <option value="0.95">Gọn hơn</option>
+          <option value="1">Cân đối</option>
+          <option value="1.06">Dễ đọc hơn</option>
+          <option value="1.12">Lớn hơn</option>
+        </select>
+      </label>
+    </div>
+  );
+}
+
 export function CollectionManager({
   collection,
   title,
@@ -498,9 +789,38 @@ export function CollectionManager({
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const mode = searchParams.get("mode");
   const editId = searchParams.get("edit");
   const isPanelOpen = singleton ? mode === "edit" : mode === "new" || Boolean(editId);
+  const pageSize = 9;
+
+  const filteredItems = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
+    if (!keyword) return items;
+    return items.filter((item) => {
+      const record = item as Record<string, unknown>;
+      return [
+        record.title,
+        record.name,
+        record.siteName,
+        record.slug,
+        record.category,
+        record.partnerType,
+        record.groupType,
+      ]
+        .map((value) => String(value ?? "").toLowerCase())
+        .some((value) => value.includes(keyword));
+    });
+  }, [items, search]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pagedItems = filteredItems.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   useEffect(() => {
     if (singleton) {
@@ -543,6 +863,7 @@ export function CollectionManager({
     const response = await fetch(`/api/admin/${collection}`, { cache: "no-store" });
     const payload = await response.json();
     setItems(payload.items ?? []);
+    setPage(1);
   }
 
   function openNewPanel() {
@@ -681,7 +1002,21 @@ export function CollectionManager({
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {items.map((item) => {
+          {!singleton ? (
+            <div className="md:col-span-2 xl:col-span-3">
+              <input
+                type="text"
+                value={search}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
+                placeholder="Tìm theo tên, slug, danh mục..."
+                className="w-full rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3 text-white placeholder:text-slate-400"
+              />
+            </div>
+          ) : null}
+          {pagedItems.map((item) => {
             const record = item as Record<string, unknown>;
             const headline = String(record.title ?? record.name ?? record.siteName ?? "Nội dung");
             const subhead = String(record.slug ?? record.category ?? record.partnerType ?? record.shortName ?? "");
@@ -736,6 +1071,31 @@ export function CollectionManager({
             );
           })}
         </div>
+        {!singleton && totalPages > 1 ? (
+          <div className="mt-6 flex items-center justify-between gap-4">
+            <p className="text-sm text-slate-300">
+              Trang {page} / {totalPages}
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                disabled={currentPage <= 1}
+                onClick={() => setPage((current) => Math.max(1, current - 1))}
+                className="rounded-full border border-white/15 px-4 py-2 text-sm text-white disabled:opacity-40"
+              >
+                Trước
+              </button>
+              <button
+                type="button"
+                disabled={currentPage >= totalPages}
+                onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                className="rounded-full border border-white/15 px-4 py-2 text-sm text-white disabled:opacity-40"
+              >
+                Sau
+              </button>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       {isPanelOpen ? (
@@ -861,6 +1221,16 @@ export function CollectionManager({
                     />
                   ) : field.type === "supporters" ? (
                     <SupportersField
+                      value={form[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ) : field.type === "products" ? (
+                    <ProductsField
+                      value={form[field.name]}
+                      onChange={(value) => updateField(field.name, value)}
+                    />
+                  ) : field.type === "theme" ? (
+                    <ThemeField
                       value={form[field.name]}
                       onChange={(value) => updateField(field.name, value)}
                     />

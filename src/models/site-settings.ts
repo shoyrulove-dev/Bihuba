@@ -17,6 +17,7 @@ const SiteSettingsSchema = new Schema(
     contact: { type: Object, default: {} },
     floatingActions: { type: Object, default: {} },
     supporterCompanies: { type: Array, default: [] },
+    theme: { type: Object, default: {} },
   },
   { timestamps: true }
 );

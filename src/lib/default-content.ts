@@ -64,6 +64,13 @@ export const defaultSettings: SiteSettingsShape = {
       website: "https://example.vn",
     },
   ],
+  theme: {
+    primaryColor: "#0E4FAF",
+    accentColor: "#56D6FF",
+    surfaceColor: "#F8FAFC",
+    headingScale: "1",
+    bodyScale: "1",
+  },
 };
 
 export const defaultPosts: PostShape[] = [
@@ -167,6 +174,19 @@ export const defaultMembers: MemberShape[] = [
     email: "info@bihuba.vn",
     website: "https://bihuba.vercel.app",
     industry: "Hiệp hội - Tổ chức xã hội",
+    coverImage: "https://huba.vn/wp-content/uploads/2026/07/soket-3.webp",
+    introImage: "",
+    companyTagline: "Kết nối cộng đồng doanh nghiệp và mở rộng cơ hội hợp tác.",
+    products: [
+      {
+        title: "Gói kết nối hội viên",
+        imageUrl: "",
+        summary: "Dịch vụ hỗ trợ kết nối giao thương, giới thiệu doanh nghiệp và xúc tiến cơ hội hợp tác.",
+        price: "Liên hệ",
+        link: "",
+        type: "service",
+      },
+    ],
   },
   {
     name: "Công ty TNHH Thương mại Bình Hưng",
@@ -181,6 +201,19 @@ export const defaultMembers: MemberShape[] = [
     email: "contact@thuongmaibinhhung.vn",
     website: "https://example.vn",
     industry: "Thương mại - Dịch vụ",
+    coverImage: "",
+    introImage: "",
+    companyTagline: "Nhà cung cấp hàng hóa và dịch vụ thương mại cho khu vực Bình Hưng.",
+    products: [
+      {
+        title: "Phân phối hàng tiêu dùng",
+        imageUrl: "",
+        summary: "Cung cấp danh mục hàng tiêu dùng, sản phẩm gia dụng và hàng tiện ích.",
+        price: "Theo báo giá",
+        link: "",
+        type: "product",
+      },
+    ],
   },
   {
     name: "Công ty Cổ phần Kỹ thuật Nam Sài Gòn",
@@ -195,6 +228,19 @@ export const defaultMembers: MemberShape[] = [
     email: "hello@namsaigontech.vn",
     website: "https://example.org",
     industry: "Kỹ thuật - Hạ tầng",
+    coverImage: "",
+    introImage: "",
+    companyTagline: "Tư vấn, thi công và bảo trì các hạng mục kỹ thuật cho doanh nghiệp.",
+    products: [
+      {
+        title: "Dịch vụ bảo trì kỹ thuật",
+        imageUrl: "",
+        summary: "Bảo trì hệ thống, kiểm tra định kỳ và hỗ trợ vận hành công trình kỹ thuật.",
+        price: "Liên hệ",
+        link: "",
+        type: "service",
+      },
+    ],
   },
 ];
 

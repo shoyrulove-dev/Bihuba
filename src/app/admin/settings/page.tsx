@@ -68,7 +68,7 @@ export default async function AdminSettingsPage() {
             name: "logoUrl",
             label: "Logo website",
             type: "image",
-            helpText: "Logo hiển thị ở header, footer và hero.",
+            helpText: "Logo hiển thị ở header, footer và hero. Gợi ý: PNG vuông 1200 x 1200 nền trong suốt.",
           },
           { name: "slogan", label: "Slogan" },
           { name: "heroTitle", label: "Tiêu đề hero" },
@@ -106,6 +106,12 @@ export default async function AdminSettingsPage() {
             label: "Doanh nghiệp đồng hành",
             type: "supporters",
             helpText: "Danh sách logo chạy ngang phía dưới footer.",
+          },
+          {
+            name: "theme",
+            label: "Màu sắc và cỡ chữ giao diện",
+            type: "theme",
+            helpText: "Điều chỉnh màu chính, màu nhấn, nền sáng và tỷ lệ cỡ chữ toàn website.",
           },
         ]}
       />

@@ -27,6 +27,14 @@ export interface SupporterItem {
   website?: string;
 }
 
+export interface ThemeSettings {
+  primaryColor: string;
+  accentColor: string;
+  surfaceColor: string;
+  headingScale: string;
+  bodyScale: string;
+}
+
 export interface SiteSettingsShape {
   siteName: string;
   shortName: string;
@@ -43,6 +51,16 @@ export interface SiteSettingsShape {
   contact: ContactInfo;
   floatingActions: FloatingActions;
   supporterCompanies: SupporterItem[];
+  theme: ThemeSettings;
+}
+
+export interface ProductItem {
+  title: string;
+  imageUrl: string;
+  summary: string;
+  price?: string;
+  link?: string;
+  type?: "product" | "service";
 }
 
 export interface PostShape {
@@ -71,6 +89,10 @@ export interface MemberShape {
   email: string;
   website: string;
   industry: string;
+  coverImage: string;
+  introImage: string;
+  companyTagline: string;
+  products: ProductItem[];
 }
 
 export interface PartnerShape {

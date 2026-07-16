@@ -42,7 +42,7 @@ export default async function AdminPostsPage() {
             name: "featuredImage",
             label: "Ảnh đại diện",
             type: "image",
-            helpText: "Có thể dán URL hoặc upload ảnh trực tiếp qua ImageKit.",
+            helpText: "Có thể dán URL hoặc upload ảnh trực tiếp qua ImageKit. Gợi ý: 1600 x 900 hoặc 1920 x 1080.",
           },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
           { name: "isFeatured", label: "Nổi bật", type: "checkbox" },
