@@ -31,7 +31,14 @@ export async function GET(_: NextRequest, context: Context) {
     await ensureAdminUser();
   }
 
-  const items = await Model.find().sort({ createdAt: -1 }).lean();
+  const sort =
+    key === "downloadCategories"
+      ? ([["order", 1], ["createdAt", 1]] as [string, 1 | -1][])
+      : key === "users"
+        ? ([["userId", 1]] as [string, 1 | -1][])
+        : ([["createdAt", -1]] as [string, 1 | -1][]);
+
+  const items = await Model.find().sort(sort).lean();
   const serialized = JSON.parse(JSON.stringify(items)).map((item: Record<string, unknown>) => {
     if (key !== "users") return item;
     const { passwordHash, ...safeItem } = item;
@@ -67,6 +74,10 @@ export async function POST(request: NextRequest, context: Context) {
 
   if ("name" in payload && !payload.slug) {
     payload.slug = slugify(payload.name);
+  }
+
+  if (key === "downloads" && payload.category && !payload.categorySlug) {
+    payload.categorySlug = slugify(String(payload.category));
   }
 
   if ("siteName" in payload) {

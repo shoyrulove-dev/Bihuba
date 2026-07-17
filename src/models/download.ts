@@ -7,6 +7,7 @@ const DownloadSchema = new Schema(
     summary: { type: String, default: "" },
     fileUrl: { type: String, default: "" },
     category: { type: String, default: "khac" },
+    categorySlug: { type: String, default: "khac" },
     publishedAt: { type: String, required: true },
   },
   { timestamps: true }

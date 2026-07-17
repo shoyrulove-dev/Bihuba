@@ -4,7 +4,6 @@ import { FeatureBannerCarousel } from "@/components/site/feature-banner-carousel
 import { MemberCard } from "@/components/site/member-card";
 import { PostCard } from "@/components/site/post-card";
 import { SectionHeading } from "@/components/site/section-heading";
-import { SocialLinksRow } from "@/components/site/social-links-row";
 import { SupporterShowcase } from "@/components/site/supporter-showcase";
 import { getDownloads, getMembers, getPosts, getSiteSettings } from "@/lib/content";
 
@@ -41,10 +40,10 @@ export default async function Home() {
   const featuredPosts = posts.filter((item) => item.isFeatured).slice(0, 3);
   const latestPosts = posts.slice(0, 4);
   const featuredMembers = members.slice(0, 3);
-  const featuredDownloads = downloads.slice(0, 4);
+  const featuredDownloads = downloads.slice(0, 3);
 
   return (
-    <div className="space-y-10 pb-12">
+    <div className="space-y-8 pb-10">
       <section className="relative overflow-hidden bg-[#031634] text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(86,214,255,0.35),_transparent_30%),radial-gradient(circle_at_85%_15%,_rgba(14,79,175,0.55),_transparent_30%),linear-gradient(135deg,_#021126_0%,_#083c87_42%,_#021126_100%)]" />
         <div
@@ -56,21 +55,19 @@ export default async function Home() {
           }}
         />
 
-        <div className="relative mx-auto grid max-w-7xl gap-8 px-6 py-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center">
+        <div className="relative mx-auto grid max-w-7xl gap-8 px-6 py-10 lg:grid-cols-[1.06fr_0.94fr] lg:items-center">
           <div>
             <div className="inline-flex items-center gap-3 rounded-full border border-cyan-300/30 bg-white/8 px-4 py-2 text-sm text-cyan-100">
               <span className="h-2.5 w-2.5 rounded-full bg-cyan-300" />
               Cộng đồng doanh nghiệp Bình Hưng - Thành phố Hồ Chí Minh
             </div>
 
-            <h1 className="mt-8 max-w-4xl text-4xl font-black uppercase leading-tight md:text-6xl">
+            <h1 className="mt-6 max-w-4xl text-4xl font-black uppercase leading-tight md:text-6xl">
               {settings.heroTitle}
             </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-50/90">
-              {settings.heroSubtitle}
-            </p>
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-blue-50/90">{settings.heroSubtitle}</p>
 
-            <div className="mt-7 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-wrap gap-4">
               <Link
                 href={settings.heroCtaHref}
                 className="rounded-full bg-cyan-300 px-6 py-3.5 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
@@ -85,20 +82,16 @@ export default async function Home() {
               </Link>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {actionLinks.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-[1.4rem] border border-white/15 bg-white/8 px-5 py-4 text-sm font-semibold text-white transition hover:bg-white/14"
+                  className="rounded-[1.25rem] border border-white/15 bg-white/8 px-5 py-4 text-sm font-semibold text-white transition hover:bg-white/14"
                 >
                   {item.label}
                 </Link>
               ))}
-            </div>
-
-            <div className="mt-8">
-              <SocialLinksRow links={settings.socialLinks} />
             </div>
           </div>
 
@@ -106,7 +99,7 @@ export default async function Home() {
             <div
               className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-cover bg-center"
               style={{
-                backgroundImage: `linear-gradient(180deg, rgba(1,17,38,0.05), rgba(2,14,34,0.62)), url('${settings.heroImage || "/bihuba-hero-generated.svg"}')`,
+                backgroundImage: `linear-gradient(180deg, rgba(1,17,38,0.08), rgba(2,14,34,0.62)), url('${settings.heroImage || "/bihuba-hero-generated.svg"}')`,
               }}
             >
               <div className="p-6 sm:p-8">
@@ -114,12 +107,8 @@ export default async function Home() {
                   <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
                     Hình ảnh hoạt động
                   </p>
-                  <h2 className="mt-3 text-2xl font-bold leading-tight text-white">
-                    {settings.siteName}
-                  </h2>
-                  <p className="mt-3 text-sm leading-7 text-blue-100/88">
-                    {settings.slogan}
-                  </p>
+                  <h2 className="mt-3 text-2xl font-bold leading-tight text-white">{settings.siteName}</h2>
+                  <p className="mt-3 text-sm leading-7 text-blue-100/88">{settings.slogan}</p>
                 </div>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -140,7 +129,7 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-8 lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
+        <div className="grid gap-6 lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
           <div>
             <SectionHeading eyebrow="Giới thiệu" title={settings.introTitle} body={settings.introBody} />
           </div>
@@ -148,10 +137,10 @@ export default async function Home() {
             {impactItems.map((item) => (
               <article
                 key={item.title}
-                className="rounded-[1.8rem] border border-sky-100 bg-white p-6 shadow-[0_18px_45px_rgba(14,79,175,0.08)]"
+                className="rounded-[1.6rem] border border-sky-100 bg-white p-5 shadow-[0_18px_45px_rgba(14,79,175,0.08)]"
               >
                 <p className="text-2xl font-black uppercase text-[#0E4FAF]">{item.title}</p>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{item.body}</p>
+                <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>
               </article>
             ))}
           </div>
@@ -163,27 +152,24 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-8 lg:grid-cols-[1.04fr_0.96fr]">
-          <div className="rounded-[2rem] bg-[#061a39] p-7 text-white shadow-[0_24px_80px_rgba(2,12,27,0.2)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
-              Nhịp vận hành
-            </p>
-            <h2 className="mt-4 text-3xl font-black uppercase leading-tight">
-              Nội dung cập nhật, gọn và dễ điều phối cho một website cộng đồng doanh nghiệp
+        <div className="grid gap-6 lg:grid-cols-[1.04fr_0.96fr]">
+          <div className="rounded-[1.8rem] bg-[#061a39] p-6 text-white shadow-[0_24px_80px_rgba(2,12,27,0.2)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">Nhịp vận hành</p>
+            <h2 className="mt-3 text-3xl font-black uppercase leading-tight">
+              Nội dung cập nhật, gọn và dễ điều phối cho website cộng đồng doanh nghiệp
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/88">
-              Bài viết, sự kiện, hội viên, tài liệu và chương trình đồng hành đều có thể quản lý trực tiếp từ admin. Bố cục mới được rút khoảng trắng và ưu tiên các khối nhìn nhanh, dễ tra cứu.
+              Bài viết, sự kiện, hội viên, tài liệu và chương trình đồng hành đều có thể quản lý trực tiếp từ admin.
+              Bố cục mới rút bớt khoảng trắng và ưu tiên các khối nhìn nhanh, dễ tra cứu.
             </p>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {latestPosts.map((post) => (
                 <Link
                   key={post.slug}
                   href={`/bai-viet/${post.slug}`}
-                  className="rounded-[1.3rem] border border-white/10 bg-white/6 p-4 transition hover:bg-white/10"
+                  className="rounded-[1.25rem] border border-white/10 bg-white/6 p-4 transition hover:bg-white/10"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
-                    {post.category}
-                  </p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">{post.category}</p>
                   <p className="mt-2 text-sm font-semibold leading-6 text-white">{post.title}</p>
                 </Link>
               ))}
@@ -200,7 +186,7 @@ export default async function Home() {
           title="Bài viết và hoạt động mới"
           body="Nhóm bài nổi bật luôn được ưu tiên hiển thị rõ để người xem nắm nhanh thông tin mới nhất."
         />
-        <div className="mt-8 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
           {featuredPosts.map((post) => (
             <PostCard key={post.slug} post={post} />
           ))}
@@ -208,14 +194,14 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-2">
           <div>
             <SectionHeading
               eyebrow="Hội viên"
               title="Doanh nghiệp tiêu biểu"
               body="Danh bạ hội viên giữ vai trò như hồ sơ thương mại và điểm chạm kết nối giữa các doanh nghiệp."
             />
-            <div className="mt-8 grid gap-6 xl:grid-cols-2">
+            <div className="mt-6 grid gap-6 xl:grid-cols-2">
               {featuredMembers.map((member) => (
                 <MemberCard key={member.slug} member={member} />
               ))}
@@ -228,7 +214,7 @@ export default async function Home() {
               title="Tài liệu cần theo dõi"
               body="Các tài liệu mới được gợi ý ngay trên trang chủ để thuận tiện truy cập nhanh."
             />
-            <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <div className="mt-6 grid gap-4">
               {featuredDownloads.map((item) => (
                 <DownloadCard key={item.slug} item={item} />
               ))}

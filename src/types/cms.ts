@@ -134,7 +134,16 @@ export interface DownloadShape {
   summary: string;
   fileUrl: string;
   category: string;
+  categorySlug?: string;
   publishedAt: string;
+}
+
+export interface DownloadCategoryShape {
+  _id?: string;
+  name: string;
+  slug: string;
+  description?: string;
+  order?: number;
 }
 
 export interface UserShape {

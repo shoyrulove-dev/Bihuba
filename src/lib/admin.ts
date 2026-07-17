@@ -1,3 +1,4 @@
+import { DownloadCategoryModel } from "@/models/download-category";
 import { DownloadModel } from "@/models/download";
 import { MemberModel } from "@/models/member";
 import { PartnerModel } from "@/models/partner";
@@ -9,6 +10,7 @@ export const collectionMap = {
   posts: PostModel,
   members: MemberModel,
   partners: PartnerModel,
+  downloadCategories: DownloadCategoryModel,
   downloads: DownloadModel,
   settings: SiteSettingsModel,
   users: UserModel,

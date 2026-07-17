@@ -1,27 +1,47 @@
 import { AdminShell } from "@/components/admin/admin-shell";
 import { CollectionManager } from "@/components/admin/collection-manager";
-import { getDownloads } from "@/lib/content";
+import { getDownloadCategories, getDownloads } from "@/lib/content";
 
 export default async function AdminDownloadsPage() {
-  const downloads = await getDownloads();
+  const [categories, downloads] = await Promise.all([getDownloadCategories(), getDownloads()]);
 
   return (
     <AdminShell
       title="Quản lý tài liệu"
-      description="Quản lý tài liệu, biểu mẫu, báo cáo và thông báo để hiển thị theo dạng cây và danh sách ngoài website."
+      description="Quản lý danh mục và file tài liệu theo cấu trúc folder rõ ràng, dễ nhìn."
     >
       <CollectionManager
+        collection="downloadCategories"
+        title="Danh mục tài liệu"
+        description="Tạo và sắp xếp các nhóm như Thông báo, Biểu mẫu, Tài liệu hội viên."
+        initialItems={categories as unknown as Record<string, unknown>[]}
+        fields={[
+          { name: "name", label: "Tên danh mục" },
+          { name: "slug", label: "Slug" },
+          { name: "order", label: "Thứ tự" },
+          { name: "description", label: "Mô tả", type: "textarea" },
+        ]}
+      />
+
+      <CollectionManager
         collection="downloads"
-        title="Tài liệu"
-        description="Danh sách tài liệu đang hiển thị ngoài website."
+        title="File tài liệu"
+        description="Mỗi file hiển thị gọn một dòng và gắn vào danh mục tương ứng."
         initialItems={downloads as unknown as Record<string, unknown>[]}
         fields={[
           { name: "title", label: "Tiêu đề" },
           { name: "slug", label: "Slug" },
           {
             name: "category",
-            label: "Danh mục",
-            helpText: "Có thể đặt theo nhóm như Thông báo, Biểu mẫu, Báo cáo, Tài liệu hội viên...",
+            label: "Tên danh mục",
+            type: "select",
+            options: categories.map((item) => ({ label: item.name, value: item.name })),
+          },
+          {
+            name: "categorySlug",
+            label: "Slug danh mục",
+            type: "select",
+            options: categories.map((item) => ({ label: item.slug, value: item.slug })),
           },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
           { name: "summary", label: "Tóm tắt", type: "textarea" },

@@ -1,10 +1,32 @@
 import {
+  DownloadCategoryShape,
   DownloadShape,
   MemberShape,
   PartnerShape,
   PostShape,
   SiteSettingsShape,
 } from "@/types/cms";
+
+export const defaultDownloadCategories: DownloadCategoryShape[] = [
+  {
+    name: "Thông báo",
+    slug: "thong-bao",
+    description: "Thông báo điều hành và cập nhật mới.",
+    order: 1,
+  },
+  {
+    name: "Biểu mẫu",
+    slug: "bieu-mau",
+    description: "Biểu mẫu và hồ sơ cần tải xuống.",
+    order: 2,
+  },
+  {
+    name: "Tài liệu hội viên",
+    slug: "tai-lieu-hoi-vien",
+    description: "Tài liệu chuyên đề, hướng dẫn và tài nguyên dành cho hội viên.",
+    order: 3,
+  },
+];
 
 export const defaultSettings: SiteSettingsShape = {
   siteName: "Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh",

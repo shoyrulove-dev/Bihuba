@@ -38,6 +38,10 @@ export async function PUT(request: NextRequest, context: Context) {
     payload.slug = slugify(payload.name);
   }
 
+  if (key === "downloads" && payload.category && !payload.categorySlug) {
+    payload.categorySlug = slugify(String(payload.category));
+  }
+
   if (key === "users") {
     await ensureAdminUser();
     const existingUser = await Model.findById(id).lean();

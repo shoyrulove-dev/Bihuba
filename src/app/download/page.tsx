@@ -1,19 +1,19 @@
 import { DownloadBrowser } from "@/components/site/download-browser";
 import { SectionHeading } from "@/components/site/section-heading";
-import { getDownloads } from "@/lib/content";
+import { getDownloadCategories, getDownloads } from "@/lib/content";
 
 export default async function DownloadsPage() {
-  const downloads = await getDownloads();
+  const [categories, downloads] = await Promise.all([getDownloadCategories(), getDownloads()]);
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12">
+    <div className="mx-auto max-w-7xl px-6 py-10">
       <SectionHeading
         eyebrow="Tài liệu"
         title="Kho tài liệu, biểu mẫu và thông báo"
-        body="Khu vực tài liệu được chia theo cây danh mục và danh sách chi tiết để thuận tiện quản lý khi số lượng file tăng lên."
+        body="Danh mục tài liệu được tách riêng để thuận tiện quản lý file, hiển thị gọn dạng menu và danh sách một dòng."
       />
-      <div className="mt-10">
-        <DownloadBrowser items={downloads} />
+      <div className="mt-8">
+        <DownloadBrowser categories={categories} items={downloads} />
       </div>
     </div>
   );

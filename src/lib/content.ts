@@ -1,11 +1,13 @@
 import { connectToDatabase } from "@/lib/db";
 import {
+  defaultDownloadCategories,
   defaultDownloads,
   defaultMembers,
   defaultPartners,
   defaultPosts,
   defaultSettings,
 } from "@/lib/default-content";
+import { DownloadCategoryModel } from "@/models/download-category";
 import { DownloadModel } from "@/models/download";
 import { MemberModel } from "@/models/member";
 import { PartnerModel } from "@/models/partner";
@@ -13,6 +15,7 @@ import { PostModel } from "@/models/post";
 import { SiteSettingsModel } from "@/models/site-settings";
 import {
   DownloadShape,
+  DownloadCategoryShape,
   MemberShape,
   PartnerShape,
   PostShape,
@@ -22,6 +25,7 @@ import {
 } from "@/types/cms";
 import { ensureAdminUser } from "@/lib/auth";
 import { UserModel } from "@/models/user";
+import { slugify } from "@/lib/slug";
 
 function serialize<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
@@ -151,7 +155,25 @@ export async function getDownloads(): Promise<DownloadShape[]> {
   }
 
   const downloads = await DownloadModel.find().sort({ publishedAt: -1 }).lean();
-  return downloads.length ? serialize(downloads) : defaultDownloads;
+  if (!downloads.length) {
+    return defaultDownloads;
+  }
+
+  return serialize(downloads).map((item) => ({
+    ...item,
+    categorySlug: item.categorySlug || slugify(item.category || "khac"),
+  }));
+}
+
+export async function getDownloadCategories(): Promise<DownloadCategoryShape[]> {
+  const connection = await connectToDatabase();
+
+  if (!process.env.MONGODB_URI || !connection) {
+    return defaultDownloadCategories;
+  }
+
+  const categories = await DownloadCategoryModel.find().sort({ order: 1, createdAt: 1 }).lean();
+  return categories.length ? serialize(categories) : defaultDownloadCategories;
 }
 
 export async function getUsers(): Promise<UserShape[]> {

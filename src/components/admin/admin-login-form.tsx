@@ -32,7 +32,7 @@ export function AdminLoginForm({
       <input type="hidden" name="next" value={nextPath} />
 
       <label className="block">
-        <span className="mb-2 block text-sm font-medium">T?i kho?n</span>
+        <span className="mb-2 block text-sm font-medium">Tài khoản</span>
         <input
           name="username"
           type="text"
@@ -43,21 +43,21 @@ export function AdminLoginForm({
       </label>
 
       <label className="block">
-        <span className="mb-2 block text-sm font-medium">M?t kh?u</span>
+        <span className="mb-2 block text-sm font-medium">Mật khẩu</span>
         <div className="relative">
           <input
             name="password"
             type={showPassword ? "text" : "password"}
             className="w-full rounded-2xl border border-slate-200 px-4 py-3 pr-12"
-            placeholder="????????"
+            placeholder="••••••••"
             autoComplete="current-password"
           />
           <button
             type="button"
             onClick={() => setShowPassword((current) => !current)}
             className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-500 transition hover:text-slate-800"
-            aria-label={showPassword ? "?n m?t kh?u" : "Hi?n m?t kh?u"}
-            title={showPassword ? "?n m?t kh?u" : "Hi?n m?t kh?u"}
+            aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+            title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
           >
             <EyeIcon open={showPassword} />
           </button>
@@ -66,19 +66,14 @@ export function AdminLoginForm({
 
       <div className="flex items-center justify-end text-sm text-slate-600">
         <label className="inline-flex items-center gap-2">
-          <input
-            name="remember"
-            type="checkbox"
-            value="30d"
-            className="h-4 w-4"
-          />
-          <span>Ghi nh? 30 ng?y</span>
+          <input name="remember" type="checkbox" value="30d" className="h-4 w-4" />
+          <span>Ghi nhớ 30 ngày</span>
         </label>
       </div>
 
       {hasError ? (
         <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">
-          Sai t?i kho?n ho?c m?t kh?u.
+          Sai tài khoản hoặc mật khẩu.
         </p>
       ) : null}
 
@@ -86,7 +81,7 @@ export function AdminLoginForm({
         type="submit"
         className="w-full rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
       >
-        V?o
+        Vào
       </button>
     </form>
   );
