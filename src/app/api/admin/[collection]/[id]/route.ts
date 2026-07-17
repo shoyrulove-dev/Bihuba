@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { collectionMap, CollectionKey } from "@/lib/admin";
-import { ensureAdminUser, hashPassword } from "@/lib/auth";
+import { ensureAdminUser, getCurrentAdminUser, hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { slugify } from "@/lib/slug";
 import { DownloadModel } from "@/models/download";
@@ -13,6 +13,11 @@ type Context = {
 };
 
 export async function PUT(request: NextRequest, context: Context) {
+  const session = await getCurrentAdminUser();
+  if (!session) {
+    return NextResponse.json({ message: "Chưa đăng nhập." }, { status: 401 });
+  }
+
   const { collection, id } = await context.params;
   const key = collection as CollectionKey;
   const Model = collectionMap[key];
@@ -67,6 +72,11 @@ export async function PUT(request: NextRequest, context: Context) {
 }
 
 export async function DELETE(_: NextRequest, context: Context) {
+  const session = await getCurrentAdminUser();
+  if (!session) {
+    return NextResponse.json({ message: "Chưa đăng nhập." }, { status: 401 });
+  }
+
   const { collection, id } = await context.params;
   const key = collection as CollectionKey;
   const Model = collectionMap[key];
