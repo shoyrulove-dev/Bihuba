@@ -18,19 +18,19 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
           <Image
             src={headerBanner}
             alt={settings.siteName}
-            width={720}
-            height={92}
-            className="h-auto max-h-[56px] w-[360px] max-w-full object-contain md:w-[440px] lg:w-[520px]"
+            width={920}
+            height={84}
+            className="h-auto max-h-[52px] w-[440px] max-w-full object-contain md:w-[560px] lg:w-[700px]"
             priority
           />
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 flex-nowrap items-center justify-end gap-3 xl:gap-4 lg:flex">
+        <nav className="hidden min-w-0 flex-1 flex-nowrap items-center justify-end gap-2 xl:gap-3 lg:flex">
           {settings.nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="whitespace-nowrap text-sm font-medium text-slate-100 transition hover:text-cyan-300 xl:text-[15px]"
+              className="whitespace-nowrap text-sm font-medium text-slate-100 transition hover:text-cyan-300 lg:text-[14px] xl:text-[15px]"
             >
               {item.label}
             </Link>
