@@ -1,33 +1,24 @@
 import { createHmac, pbkdf2Sync, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import {
+  ADMIN_SESSION_COOKIE,
+  type AdminRole,
+  getAdminCredentials,
+  SESSION_MAX_AGE_DEFAULT,
+  SESSION_MAX_AGE_REMEMBER,
+  type SessionPayload,
+  type SessionUser,
+} from "@/lib/auth-shared";
 import { connectToDatabase } from "@/lib/db";
 import { UserModel } from "@/models/user";
 
-export const ADMIN_SESSION_COOKIE = "bihuba_admin_session";
-export const SESSION_MAX_AGE_DEFAULT = 60 * 60 * 8;
-export const SESSION_MAX_AGE_REMEMBER = 60 * 60 * 24 * 30;
-
-export type AdminRole = "admin" | "manager";
-
-export type SessionUser = {
-  userId: number;
-  username: string;
-  role: AdminRole;
-  name: string;
+export {
+  ADMIN_SESSION_COOKIE,
+  getAdminCredentials,
+  SESSION_MAX_AGE_DEFAULT,
+  SESSION_MAX_AGE_REMEMBER,
 };
-
-type SessionPayload = SessionUser & {
-  exp: number;
-};
-
-export function getAdminCredentials() {
-  return {
-    username: process.env.ADMIN_USERNAME ?? "admin",
-    password: process.env.ADMIN_PASSWORD ?? "Bihuba@2026",
-    sessionSecret:
-      process.env.ADMIN_SESSION_SECRET ?? "bihuba-session-secret-2026",
-  };
-}
+export type { AdminRole, SessionUser };
 
 export function hashPassword(password: string) {
   return pbkdf2Sync(password, "bihuba-auth-salt", 120000, 64, "sha512").toString("hex");
