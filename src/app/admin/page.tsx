@@ -1,4 +1,5 @@
 import { AdminShell } from "@/components/admin/admin-shell";
+import { requireAdminPage } from "@/lib/admin-auth";
 import {
   getDownloads,
   getMembers,
@@ -8,6 +9,8 @@ import {
 } from "@/lib/content";
 
 export default async function AdminDashboardPage() {
+  await requireAdminPage("/admin");
+
   const [settings, posts, members, partners, downloads] = await Promise.all([
     getSiteSettings(),
     getPosts(),

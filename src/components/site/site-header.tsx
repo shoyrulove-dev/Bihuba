@@ -4,13 +4,13 @@ import { SiteSettingsShape } from "@/types/cms";
 
 export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#031634]/95 backdrop-blur">
-      <div className="grid w-full grid-cols-[minmax(360px,520px)_minmax(0,1fr)] items-center gap-12 px-10 py-3">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061934]/96 shadow-[0_18px_55px_rgba(2,12,27,0.18)] backdrop-blur">
+      <div className="grid w-full grid-cols-[minmax(320px,500px)_minmax(0,1fr)] items-center gap-6 px-10 py-3 xl:gap-10">
         <Link
           href="/"
-          className="group flex min-h-[86px] w-full items-center gap-4 overflow-hidden rounded-2xl border border-cyan-200/12 bg-gradient-to-r from-white/[0.09] via-white/[0.055] to-transparent px-5 py-3 shadow-[0_14px_34px_rgba(2,12,27,0.2)]"
+          className="group flex min-h-[76px] w-full items-center gap-4 overflow-hidden rounded-[1.35rem] border border-cyan-200/15 bg-gradient-to-r from-white/[0.10] via-cyan-300/[0.06] to-transparent px-4 py-2 shadow-[0_14px_34px_rgba(2,12,27,0.2)]"
         >
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-white p-1.5 ring-1 ring-cyan-100/30">
+          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-cyan-200/25 bg-[#09254d] p-1.5 shadow-[0_0_28px_rgba(86,214,255,0.18)]">
             <Image
               src={settings.logoUrl || "/bihuba-mark.svg"}
               alt={settings.shortName || "BIHUBA"}
@@ -21,7 +21,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
             />
           </span>
           <span className="min-w-0">
-            <span className="block text-[28px] font-black leading-none tracking-[0.02em] text-white">
+            <span className="block text-[26px] font-black leading-none tracking-[0.03em] text-white drop-shadow-[0_2px_10px_rgba(86,214,255,0.22)]">
               {settings.shortName || "BIHUBA"}
             </span>
             <span className="mt-1 block truncate text-sm font-bold leading-5 tracking-normal text-cyan-100">
@@ -34,17 +34,18 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
         </Link>
 
         <nav className="hidden min-w-0 items-center justify-self-end overflow-hidden lg:flex">
-          <div className="flex min-w-0 flex-nowrap items-center justify-end gap-1.5 pr-24">
+          <div className="flex min-w-0 flex-nowrap items-center justify-end gap-2">
             {settings.nav.map((item) => {
               const isContact = item.href === "/lien-he";
+
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`whitespace-nowrap rounded-full px-2.5 py-1.5 text-[13px] font-bold tracking-normal transition ${
+                  className={`whitespace-nowrap rounded-full px-3 py-2 text-[13px] font-bold tracking-normal transition xl:px-3.5 xl:text-sm ${
                     isContact
-                      ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200"
-                      : "border border-white/10 bg-white/6 text-slate-100 hover:border-cyan-300/35 hover:bg-white/12 hover:text-cyan-100"
+                      ? "bg-cyan-300 text-slate-950 shadow-[0_10px_26px_rgba(86,214,255,0.22)] hover:bg-cyan-200"
+                      : "border border-white/10 bg-white/7 text-slate-100 hover:border-cyan-300/35 hover:bg-white/12 hover:text-cyan-100"
                   }`}
                 >
                   {item.label}

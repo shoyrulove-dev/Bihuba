@@ -1,8 +1,11 @@
 import { AdminShell } from "@/components/admin/admin-shell";
 import { CollectionManager } from "@/components/admin/collection-manager";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { getPartners } from "@/lib/content";
 
 export default async function AdminPartnersPage() {
+  await requireAdminPage("/admin/partners");
+
   const partners = await getPartners();
 
   return (

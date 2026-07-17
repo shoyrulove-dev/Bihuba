@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getCurrentAdminUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -12,6 +13,11 @@ function buildFolder(baseFolder: string, requestedFolder: string) {
 }
 
 export async function POST(request: NextRequest) {
+  const session = await getCurrentAdminUser();
+  if (!session) {
+    return NextResponse.json({ message: "Chưa đăng nhập." }, { status: 401 });
+  }
+
   const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
   const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
   const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;

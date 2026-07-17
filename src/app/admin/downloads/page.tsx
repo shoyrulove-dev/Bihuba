@@ -1,8 +1,11 @@
 import { AdminShell } from "@/components/admin/admin-shell";
 import { CollectionManager } from "@/components/admin/collection-manager";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { getDownloadCategories, getDownloads } from "@/lib/content";
 
 export default async function AdminDownloadsPage() {
+  await requireAdminPage("/admin/downloads");
+
   const [categories, downloads] = await Promise.all([getDownloadCategories(), getDownloads()]);
 
   return (

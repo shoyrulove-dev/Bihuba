@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import { FloatingContactButtons } from "@/components/site/floating-contact-buttons";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -27,10 +26,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headerStore = await headers();
-  const pathname = headerStore.get("x-pathname") || "";
-  const isAdminRoute = pathname.startsWith("/admin");
-  const settings = isAdminRoute ? null : await getSiteSettings();
+  const settings = await getSiteSettings();
 
   return (
     <html lang="vi" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
@@ -46,10 +42,10 @@ export default async function RootLayout({
           } as React.CSSProperties
         }
       >
-        {!isAdminRoute && settings ? <SiteHeader settings={settings} /> : null}
+        {settings ? <SiteHeader settings={settings} /> : null}
         <main>{children}</main>
-        {!isAdminRoute && settings ? <FloatingContactButtons actions={settings.floatingActions} /> : null}
-        {!isAdminRoute && settings ? <SiteFooter settings={settings} /> : null}
+        {settings ? <FloatingContactButtons actions={settings.floatingActions} /> : null}
+        {settings ? <SiteFooter settings={settings} /> : null}
       </body>
     </html>
   );

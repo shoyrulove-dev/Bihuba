@@ -52,7 +52,8 @@ a {
 }
 
 body:has(.admin-root) > header,
-body:has(.admin-root) > footer {
+body:has(.admin-root) > footer,
+body:has(.admin-root) .floating-contact-buttons {
   display: none;
 }
 

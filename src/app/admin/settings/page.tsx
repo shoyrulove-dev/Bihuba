@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AdminShell } from "@/components/admin/admin-shell";
+import { requireAdminPage } from "@/lib/admin-auth";
 
 function EditIcon() {
   return (
@@ -18,7 +19,9 @@ const sections = [
   { href: "/admin/settings/theme?mode=edit", title: "Giao diện" },
 ];
 
-export default function AdminSettingsPage() {
+export default async function AdminSettingsPage() {
+  await requireAdminPage("/admin/settings");
+
   return (
     <AdminShell title="Cấu hình website" description="Chọn nhóm nội dung cần cập nhật.">
       <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">

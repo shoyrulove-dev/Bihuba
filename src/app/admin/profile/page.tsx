@@ -1,14 +1,10 @@
-import { redirect } from "next/navigation";
 import { AdminShell } from "@/components/admin/admin-shell";
-import { getCurrentAdminUser } from "@/lib/auth";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { connectToDatabase } from "@/lib/db";
 import { UserModel } from "@/models/user";
 
 export default async function AdminProfilePage() {
-  const session = await getCurrentAdminUser();
-  if (!session) {
-    redirect("/admin/login");
-  }
+  const session = await requireAdminPage("/admin/profile");
 
   const connection = await connectToDatabase();
   const user = connection

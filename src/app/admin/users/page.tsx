@@ -1,8 +1,11 @@
 import { AdminShell } from "@/components/admin/admin-shell";
 import { CollectionManager } from "@/components/admin/collection-manager";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { getUsers } from "@/lib/content";
 
 export default async function AdminUsersPage() {
+  await requireAdminPage("/admin/users");
+
   const users = await getUsers();
 
   return (

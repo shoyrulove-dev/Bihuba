@@ -30,7 +30,7 @@ export function FloatingContactButtons({ actions }: { actions: FloatingActions }
   if (!hasAnyAction) return null;
 
   return (
-    <div className="fixed bottom-4 right-3 z-40 flex flex-col gap-2">
+    <div className="floating-contact-buttons fixed bottom-4 right-3 z-40 flex flex-col gap-2">
       {actions.zaloUrl ? (
         <Link
           href={actions.zaloUrl}
