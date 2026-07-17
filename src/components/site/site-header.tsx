@@ -5,42 +5,30 @@ import { SiteSettingsShape } from "@/types/cms";
 export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#031634]/92 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-5 px-6 py-4">
-        <Link href="/" className="flex min-w-0 items-center gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.35rem] border border-white/10 bg-white/8 p-2 shadow-[0_16px_40px_rgba(2,12,27,0.24)]">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
+        <Link href="/" className="min-w-0 shrink">
+          {settings.wordmarkUrl ? (
             <Image
-              src={settings.logoUrl || "/bihuba-mark.svg"}
-              alt={settings.shortName || "BIHUBA"}
-              width={96}
-              height={96}
-              className="h-full w-full object-contain"
+              src={settings.wordmarkUrl}
+              alt={settings.siteName}
+              width={420}
+              height={120}
+              className="h-auto w-[250px] max-w-full object-contain md:w-[340px] lg:w-[380px]"
               priority
             />
-          </div>
-          <div className="min-w-0">
-            {settings.wordmarkUrl ? (
-              <Image
-                src={settings.wordmarkUrl}
-                alt={settings.siteName}
-                width={280}
-                height={92}
-                className="h-auto w-[220px] max-w-full object-contain md:w-[280px]"
-                priority
-              />
-            ) : (
-              <>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-cyan-300">
-                  {settings.shortName}
-                </p>
-                <p className="mt-1 truncate text-sm font-black uppercase tracking-[0.08em] text-white md:text-base">
-                  HỘI DOANH NGHIỆP XÃ BÌNH HƯNG
-                </p>
-                <p className="truncate text-xs font-semibold uppercase tracking-[0.22em] text-blue-100/90 md:text-sm">
-                  THÀNH PHỐ HỒ CHÍ MINH
-                </p>
-              </>
-            )}
-          </div>
+          ) : (
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-cyan-300">
+                {settings.shortName}
+              </p>
+              <p className="mt-1 truncate text-sm font-black uppercase tracking-[0.08em] text-white md:text-base">
+                Hội Doanh nghiệp Xã Bình Hưng
+              </p>
+              <p className="truncate text-xs font-semibold uppercase tracking-[0.22em] text-blue-100/90 md:text-sm">
+                Thành phố Hồ Chí Minh
+              </p>
+            </div>
+          )}
         </Link>
 
         <nav className="hidden flex-wrap items-center justify-end gap-5 lg:flex">

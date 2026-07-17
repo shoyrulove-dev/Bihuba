@@ -31,6 +31,9 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
               </div>
               <h3 className="mt-5 text-2xl font-semibold text-white">{settings.siteName}</h3>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">{settings.introBody}</p>
+              <div className="mt-5">
+                <SocialLinksRow links={settings.socialLinks} />
+              </div>
             </div>
 
             <div>
@@ -61,10 +64,6 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
                 {settings.contact.website ? <p>{settings.contact.website}</p> : null}
               </div>
             </div>
-          </div>
-
-          <div className="mt-8 border-t border-white/10 pt-5">
-            <SocialLinksRow links={settings.socialLinks} />
           </div>
         </div>
       </footer>
