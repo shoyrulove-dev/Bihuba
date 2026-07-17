@@ -8,7 +8,7 @@ export default async function AdminMembersPage() {
   return (
     <AdminShell
       title="Quản lý hội viên"
-      description="Quản lý hồ sơ hội viên doanh nghiệp, cá nhân và hội, câu lạc bộ thành viên."
+      description="Quản lý hồ sơ hội viên doanh nghiệp, cá nhân, hội và câu lạc bộ thành viên."
     >
       <CollectionManager
         collection="members"
@@ -25,7 +25,7 @@ export default async function AdminMembersPage() {
             options: [
               { label: "Doanh nghiệp", value: "business" },
               { label: "Cá nhân", value: "individual" },
-              { label: "Hội / CLB", value: "club" },
+              { label: "Hội / Câu lạc bộ", value: "club" },
             ],
           },
           { name: "groupType", label: "Nhóm hiển thị" },
@@ -34,19 +34,19 @@ export default async function AdminMembersPage() {
             name: "logo",
             label: "Logo",
             type: "image",
-            helpText: "Dán link hoặc upload logo. Gợi ý: 1200 x 1200.",
+            helpText: "Dán link hoặc upload logo. Gợi ý: 1200 x 1200 px.",
           },
           {
             name: "coverImage",
             label: "Ảnh bìa doanh nghiệp",
             type: "image",
-            helpText: "Ảnh ngang phần đầu hồ sơ. Gợi ý: 1600 x 900.",
+            helpText: "Ảnh ngang phần đầu hồ sơ. Gợi ý: 1600 x 900 px.",
           },
           {
             name: "introImage",
             label: "Ảnh / logo giới thiệu",
             type: "image",
-            helpText: "Ảnh trong khung giới thiệu. Gợi ý: 1200 x 900.",
+            helpText: "Ảnh trong khung giới thiệu. Gợi ý: 1200 x 900 px.",
           },
           { name: "companyTagline", label: "Dòng giới thiệu ngắn" },
           { name: "address", label: "Địa chỉ" },

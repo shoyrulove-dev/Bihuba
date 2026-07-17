@@ -8,7 +8,7 @@ export default async function AdminDownloadsPage() {
   return (
     <AdminShell
       title="Quản lý tài liệu"
-      description="Quản lý tài liệu, biểu mẫu, báo cáo và thông báo."
+      description="Quản lý tài liệu, biểu mẫu, báo cáo và thông báo để hiển thị theo dạng cây và danh sách ngoài website."
     >
       <CollectionManager
         collection="downloads"
@@ -18,7 +18,11 @@ export default async function AdminDownloadsPage() {
         fields={[
           { name: "title", label: "Tiêu đề" },
           { name: "slug", label: "Slug" },
-          { name: "category", label: "Danh mục" },
+          {
+            name: "category",
+            label: "Danh mục",
+            helpText: "Có thể đặt theo nhóm như Thông báo, Biểu mẫu, Báo cáo, Tài liệu hội viên...",
+          },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
           { name: "summary", label: "Tóm tắt", type: "textarea" },
           {

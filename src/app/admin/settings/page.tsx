@@ -11,23 +11,23 @@ function EditIcon() {
 }
 
 const sections = [
-  { href: "/admin/settings/branding", title: "Nhận diện website" },
-  { href: "/admin/settings/homepage", title: "Nội dung trang chủ" },
-  { href: "/admin/settings/contact", title: "Menu và liên hệ" },
-  { href: "/admin/settings/supporters", title: "Doanh nghiệp đồng hành" },
-  { href: "/admin/settings/theme", title: "Giao diện" },
+  { href: "/admin/settings/branding?mode=edit", title: "Nhận diện website" },
+  { href: "/admin/settings/homepage?mode=edit", title: "Nội dung trang chủ" },
+  { href: "/admin/settings/contact?mode=edit", title: "Menu và liên hệ" },
+  { href: "/admin/settings/supporters?mode=edit", title: "Doanh nghiệp đồng hành" },
+  { href: "/admin/settings/theme?mode=edit", title: "Giao diện" },
 ];
 
 export default function AdminSettingsPage() {
   return (
-    <AdminShell title="Cấu hình website" description="Chọn mục cần chỉnh sửa.">
+    <AdminShell title="Cấu hình website" description="Chọn nhóm nội dung cần cập nhật.">
       <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
         <div className="space-y-3">
           {sections.map((section) => (
             <Link
               key={section.href}
-              href={`${section.href}?mode=edit`}
-              className="flex items-center justify-between rounded-[1.4rem] border border-white/10 bg-slate-950/35 px-4 py-3 transition hover:border-cyan-300/30"
+              href={section.href}
+              className="flex items-center justify-between rounded-[1.35rem] border border-white/10 bg-slate-950/35 px-4 py-3 transition hover:border-cyan-300/30 hover:bg-white/5"
             >
               <span className="truncate text-sm font-semibold text-white">{section.title}</span>
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cyan-400 text-slate-950">

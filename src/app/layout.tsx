@@ -33,10 +33,7 @@ export default async function RootLayout({
   const settings = isAdminRoute ? null : await getSiteSettings();
 
   return (
-    <html
-      lang="vi"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="vi" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body
         className="min-h-full bg-slate-50 text-slate-950"
         style={
@@ -51,9 +48,7 @@ export default async function RootLayout({
       >
         {!isAdminRoute && settings ? <SiteHeader settings={settings} /> : null}
         <main>{children}</main>
-        {!isAdminRoute && settings ? (
-          <FloatingContactButtons actions={settings.floatingActions} />
-        ) : null}
+        {!isAdminRoute && settings ? <FloatingContactButtons actions={settings.floatingActions} /> : null}
         {!isAdminRoute && settings ? <SiteFooter settings={settings} /> : null}
       </body>
     </html>

@@ -91,7 +91,7 @@ const nav = [
   { label: "Hội viên", href: "/admin/members", icon: GroupIcon },
   { label: "Đối tác", href: "/admin/partners", icon: PartnerIcon },
   { label: "Tài liệu", href: "/admin/downloads", icon: FileIcon },
-  { label: "Users", href: "/admin/users", icon: UserIcon },
+  { label: "Người dùng", href: "/admin/users", icon: UserIcon },
   { label: "Cấu hình", href: "/admin/settings", icon: SettingsIcon },
 ];
 
@@ -114,10 +114,7 @@ export function AdminShell({
             <nav className="flex w-full flex-col items-center gap-2">
               {nav.map((item) => {
                 const Icon = item.icon;
-                const isActive =
-                  item.href === "/admin"
-                    ? pathname === "/admin"
-                    : pathname?.startsWith(item.href);
+                const isActive = item.href === "/admin" ? pathname === "/admin" : pathname?.startsWith(item.href);
 
                 return (
                   <Link

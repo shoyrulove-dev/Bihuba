@@ -8,7 +8,7 @@ export default async function AdminPartnersPage() {
   return (
     <AdminShell
       title="Quản lý đối tác"
-      description="Quản lý danh sách đối tác và đơn vị đồng hành."
+      description="Quản lý danh sách đối tác và đơn vị đồng hành hiển thị ngoài website."
     >
       <CollectionManager
         collection="partners"
@@ -25,7 +25,7 @@ export default async function AdminPartnersPage() {
             name: "logo",
             label: "Logo",
             type: "image",
-            helpText: "Dán link hoặc upload logo.",
+            helpText: "Dán link hoặc upload logo. Gợi ý: 1200 x 1200 px hoặc 1800 x 600 px.",
           },
         ]}
       />

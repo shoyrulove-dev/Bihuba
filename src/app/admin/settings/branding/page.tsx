@@ -4,7 +4,8 @@ import { brandingFields } from "@/lib/admin-settings-fields";
 export default async function AdminSettingsBrandingPage() {
   return SettingsSectionManager({
     title: "Nhận diện website",
-    description: "Chỉnh tên website, tên ngắn, logo và slogan.",
+    description: "Chỉnh tên hiển thị, logo vuông, logo ngang và slogan.",
     fields: brandingFields,
+    panelMaxWidthClass: "max-w-[calc(100vw-4rem)]",
   });
 }

@@ -1,4 +1,4 @@
-import { DownloadCard } from "@/components/site/download-card";
+import { DownloadBrowser } from "@/components/site/download-browser";
 import { SectionHeading } from "@/components/site/section-heading";
 import { getDownloads } from "@/lib/content";
 
@@ -6,16 +6,14 @@ export default async function DownloadsPage() {
   const downloads = await getDownloads();
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-16">
+    <div className="mx-auto max-w-7xl px-6 py-12">
       <SectionHeading
         eyebrow="Tài liệu"
-        title="Download và thông báo"
-        body="Khu vực lưu trữ thông báo, biểu mẫu, báo cáo và các tài liệu cần gửi tới hội viên, đối tác và ban điều hành."
+        title="Kho tài liệu, biểu mẫu và thông báo"
+        body="Khu vực tài liệu được chia theo cây danh mục và danh sách chi tiết để thuận tiện quản lý khi số lượng file tăng lên."
       />
-      <div className="mt-10 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        {downloads.map((item) => (
-          <DownloadCard key={item.slug} item={item} />
-        ))}
+      <div className="mt-10">
+        <DownloadBrowser items={downloads} />
       </div>
     </div>
   );

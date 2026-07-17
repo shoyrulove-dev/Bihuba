@@ -21,10 +21,28 @@ export interface FloatingActions {
   callLabel?: string;
 }
 
+export interface SocialLinks {
+  zalo: string;
+  facebook: string;
+  tiktok: string;
+  youtube: string;
+}
+
+export interface FeatureBannerItem {
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  href?: string;
+  buttonLabel?: string;
+  eyebrow?: string;
+  eventDate?: string;
+}
+
 export interface SupporterItem {
   name: string;
   logoUrl: string;
   website?: string;
+  group?: string;
 }
 
 export interface ThemeSettings {
@@ -39,6 +57,7 @@ export interface SiteSettingsShape {
   siteName: string;
   shortName: string;
   logoUrl?: string;
+  wordmarkUrl?: string;
   slogan: string;
   heroTitle: string;
   heroSubtitle: string;
@@ -51,6 +70,8 @@ export interface SiteSettingsShape {
   nav: NavItem[];
   contact: ContactInfo;
   floatingActions: FloatingActions;
+  socialLinks: SocialLinks;
+  featureBanners: FeatureBannerItem[];
   supporterCompanies: SupporterItem[];
   theme: ThemeSettings;
 }

@@ -4,7 +4,8 @@ import { supporterFields } from "@/lib/admin-settings-fields";
 export default async function AdminSettingsSupportersPage() {
   return SettingsSectionManager({
     title: "Doanh nghiệp đồng hành",
-    description: "Chỉnh danh sách logo chạy dưới footer.",
+    description: "Quản lý nhóm hiển thị, logo và liên kết của các đơn vị đồng hành.",
     fields: supporterFields,
+    panelMaxWidthClass: "max-w-[calc(100vw-3rem)]",
   });
 }

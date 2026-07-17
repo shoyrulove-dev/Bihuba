@@ -10,6 +10,7 @@ export const defaultSettings: SiteSettingsShape = {
   siteName: "Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh",
   shortName: "BIHUBA",
   logoUrl: "/bihuba-mark.svg",
+  wordmarkUrl: "/bihuba-wordmark.svg",
   slogan: "Đoàn kết - Đổi mới - Hội nhập - Phát triển",
   heroTitle: "Cộng đồng doanh nghiệp Bình Hưng kết nối nguồn lực và mở rộng cơ hội phát triển",
   heroSubtitle:
@@ -48,6 +49,34 @@ export const defaultSettings: SiteSettingsShape = {
     callNumber: "0900000000",
     callLabel: "Gọi ngay",
   },
+  socialLinks: {
+    zalo: "https://zalo.me/0900000000",
+    facebook: "https://facebook.com/",
+    tiktok: "https://www.tiktok.com/",
+    youtube: "https://www.youtube.com/",
+  },
+  featureBanners: [
+    {
+      eyebrow: "Sắp diễn ra",
+      title: "Diễn đàn kết nối doanh nghiệp BIHUBA 2026",
+      subtitle:
+        "Không gian gặp gỡ hội viên, đối tác và khách mời để giới thiệu sản phẩm, dịch vụ và cơ hội hợp tác.",
+      imageUrl: "/bihuba-program-1.svg",
+      href: "/su-kien",
+      buttonLabel: "Xem chương trình",
+      eventDate: "Tháng 8 / 2026",
+    },
+    {
+      eyebrow: "Hoạt động nổi bật",
+      title: "Tuần lễ xúc tiến thương mại và sản phẩm hội viên",
+      subtitle:
+        "Chuỗi hoạt động trưng bày, kết nối giao thương và truyền thông cho các doanh nghiệp tại Bình Hưng.",
+      imageUrl: "/bihuba-program-2.svg",
+      href: "/ket-noi-giao-thuong",
+      buttonLabel: "Khám phá",
+      eventDate: "Quý III / 2026",
+    },
+  ],
   supporterCompanies: [
     {
       name: "Rex Hotel",

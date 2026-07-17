@@ -35,7 +35,38 @@ export async function getSiteSettings(): Promise<SiteSettingsShape> {
   }
 
   const settings = await SiteSettingsModel.findOne().lean();
-  return settings ? serialize(settings) : defaultSettings;
+  if (!settings) {
+    return defaultSettings;
+  }
+
+  const normalized = serialize(settings) as Partial<SiteSettingsShape>;
+
+  return {
+    ...defaultSettings,
+    ...normalized,
+    contact: {
+      ...defaultSettings.contact,
+      ...(normalized.contact || {}),
+    },
+    floatingActions: {
+      ...defaultSettings.floatingActions,
+      ...(normalized.floatingActions || {}),
+    },
+    socialLinks: {
+      ...defaultSettings.socialLinks,
+      ...(normalized.socialLinks || {}),
+    },
+    theme: {
+      ...defaultSettings.theme,
+      ...(normalized.theme || {}),
+    },
+    memberStats: normalized.memberStats?.length ? normalized.memberStats : defaultSettings.memberStats,
+    nav: normalized.nav?.length ? normalized.nav : defaultSettings.nav,
+    supporterCompanies: normalized.supporterCompanies?.length
+      ? normalized.supporterCompanies
+      : defaultSettings.supporterCompanies,
+    featureBanners: normalized.featureBanners?.length ? normalized.featureBanners : defaultSettings.featureBanners,
+  };
 }
 
 export async function getPosts(type?: PostType): Promise<PostShape[]> {

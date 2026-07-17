@@ -15,9 +15,7 @@ export function SectionHeading({
       <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
         {title}
       </h2>
-      {body ? (
-        <p className="mt-4 text-base leading-8 text-slate-600 md:text-lg">{body}</p>
-      ) : null}
+      {body ? <p className="mt-4 text-base leading-8 text-slate-600 md:text-lg">{body}</p> : null}
     </div>
   );
 }

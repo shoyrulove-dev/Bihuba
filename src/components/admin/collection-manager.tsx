@@ -3,7 +3,14 @@
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { FloatingActions, ProductItem, SupporterItem, ThemeSettings } from "@/types/cms";
+import {
+  FeatureBannerItem,
+  FloatingActions,
+  ProductItem,
+  SocialLinks,
+  SupporterItem,
+  ThemeSettings,
+} from "@/types/cms";
 
 const RichTextEditor = dynamic(
   () => import("@/components/admin/rich-text-editor").then((mod) => mod.RichTextEditor),
@@ -32,7 +39,9 @@ type FieldType =
   | "nav"
   | "contact"
   | "social"
+  | "links"
   | "supporters"
+  | "banners"
   | "products"
   | "theme";
 
@@ -57,6 +66,7 @@ type CollectionManagerProps = {
   allowDelete?: boolean;
   hideSingletonEditButton?: boolean;
   closeHref?: string;
+  panelMaxWidthClass?: string;
 };
 
 type StatItem = { label: string; value: string };
@@ -129,7 +139,11 @@ function buildInitialValue(field: FieldConfig) {
       return { address: "", phone: "", email: "", website: "" };
     case "social":
       return { zaloUrl: "", facebookUrl: "", callNumber: "", callLabel: "" };
+    case "links":
+      return { zalo: "", facebook: "", tiktok: "", youtube: "" };
     case "supporters":
+      return [];
+    case "banners":
       return [];
     case "products":
       return [];
@@ -166,7 +180,14 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
     if (rawValue && typeof rawValue === "object") return rawValue;
     return { zaloUrl: "", facebookUrl: "", callNumber: "", callLabel: "" };
   }
+  if (field.type === "links") {
+    if (rawValue && typeof rawValue === "object") return rawValue;
+    return { zalo: "", facebook: "", tiktok: "", youtube: "" };
+  }
   if (field.type === "supporters") {
+    return Array.isArray(rawValue) ? rawValue : [];
+  }
+  if (field.type === "banners") {
     return Array.isArray(rawValue) ? rawValue : [];
   }
   if (field.type === "products") {
@@ -425,6 +446,241 @@ function SocialField({
   );
 }
 
+function LinksField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: SocialLinks) => void;
+}) {
+  const links = ((value && typeof value === "object" ? value : {}) as SocialLinks) ?? {
+    zalo: "",
+    facebook: "",
+    tiktok: "",
+    youtube: "",
+  };
+
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      <input
+        type="url"
+        value={links.zalo ?? ""}
+        onChange={(event) => onChange({ ...links, zalo: event.target.value })}
+        placeholder="Link Zalo OA hoặc Zalo cá nhân"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="url"
+        value={links.facebook ?? ""}
+        onChange={(event) => onChange({ ...links, facebook: event.target.value })}
+        placeholder="Link Fanpage Facebook"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="url"
+        value={links.tiktok ?? ""}
+        onChange={(event) => onChange({ ...links, tiktok: event.target.value })}
+        placeholder="Link TikTok"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+      <input
+        type="url"
+        value={links.youtube ?? ""}
+        onChange={(event) => onChange({ ...links, youtube: event.target.value })}
+        placeholder="Link YouTube"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+    </div>
+  );
+}
+
+function BannerListField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: FeatureBannerItem[]) => void;
+}) {
+  const items = (Array.isArray(value) ? value : []) as FeatureBannerItem[];
+
+  return (
+    <div className="space-y-4">
+      {items.map((item, index) => (
+        <div
+          key={`${item.title}-${index}`}
+          className="grid gap-4 rounded-[1.6rem] border border-slate-200 bg-white p-4 xl:grid-cols-[280px_minmax(0,1fr)]"
+        >
+          <div className="space-y-3">
+            <div className="overflow-hidden rounded-[1.2rem] border border-slate-200 bg-slate-100">
+              {item.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={item.imageUrl} alt={item.title || "Banner"} className="h-44 w-full object-cover" />
+              ) : (
+                <div className="flex h-44 items-center justify-center text-sm text-slate-500">Ảnh banner</div>
+              )}
+            </div>
+            <input
+              type="url"
+              value={item.imageUrl ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], imageUrl: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Link ảnh banner"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
+              Tải banner từ máy
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={async (event) => {
+                  const file = event.target.files?.[0];
+                  event.currentTarget.value = "";
+                  if (!file) return;
+                  const body = new FormData();
+                  body.append("file", file);
+                  body.append("folder", "banners");
+                  body.append("fileName", file.name);
+                  const response = await fetch("/api/admin/upload", { method: "POST", body });
+                  const result = await response.json();
+                  if (!response.ok) return;
+                  const next = [...items];
+                  next[index] = { ...next[index], imageUrl: String(result.url) };
+                  onChange(next);
+                }}
+              />
+            </label>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            <input
+              type="text"
+              value={item.eyebrow ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], eyebrow: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Nhãn nhỏ"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <input
+              type="text"
+              value={item.eventDate ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], eventDate: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Thời gian"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <input
+              type="text"
+              value={item.title ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], title: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Tiêu đề banner"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
+            />
+            <textarea
+              value={item.subtitle ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], subtitle: event.target.value };
+                onChange(next);
+              }}
+              rows={4}
+              placeholder="Mô tả ngắn"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
+            />
+            <input
+              type="url"
+              value={item.href ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], href: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Link chuyển trang"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <input
+              type="text"
+              value={item.buttonLabel ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], buttonLabel: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Nút bấm"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <div className="flex flex-wrap items-center gap-3 md:col-span-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (index === 0) return;
+                  const next = [...items];
+                  [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                  onChange(next);
+                }}
+                className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+              >
+                Lên
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (index === items.length - 1) return;
+                  const next = [...items];
+                  [next[index + 1], next[index]] = [next[index], next[index + 1]];
+                  onChange(next);
+                }}
+                className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+              >
+                Xuống
+              </button>
+              <button
+                type="button"
+                onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+                className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-600"
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() =>
+          onChange([
+            ...items,
+            {
+              title: "",
+              subtitle: "",
+              imageUrl: "",
+              href: "",
+              buttonLabel: "",
+              eyebrow: "",
+              eventDate: "",
+            },
+          ])
+        }
+        className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
+      >
+        Thêm banner
+      </button>
+    </div>
+  );
+}
+
 function SupportersField({
   value,
   onChange,
@@ -435,72 +691,44 @@ function SupportersField({
   const items = (Array.isArray(value) ? value : []) as SupporterItem[];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {items.map((item, index) => (
         <div
-          key={`${item.name}-${index}`}
-          className="grid gap-3 rounded-2xl border border-slate-200 p-4 md:grid-cols-2"
+          key={
+            [item.group, item.name, item.logoUrl, String(index)]
+              .filter(Boolean)
+              .join("-") || `supporter-${index}`
+          }
+          className="grid gap-4 rounded-[1.6rem] border border-slate-200 bg-white p-4 xl:grid-cols-[220px_minmax(0,1fr)]"
         >
-          <input
-            type="text"
-            value={item.name ?? ""}
-            onChange={(event) => {
-              const next = [...items];
-              next[index] = { ...next[index], name: event.target.value };
-              onChange(next);
-            }}
-            placeholder="Tên doanh nghiệp"
-            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-          />
-          <input
-            type="url"
-            value={item.website ?? ""}
-            onChange={(event) => {
-              const next = [...items];
-              next[index] = { ...next[index], website: event.target.value };
-              onChange(next);
-            }}
-            placeholder="Link website"
-            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-          />
-          <input
-            type="url"
-            value={item.logoUrl ?? ""}
-            onChange={(event) => {
-              const next = [...items];
-              next[index] = { ...next[index], logoUrl: event.target.value };
-              onChange(next);
-            }}
-            placeholder="Link logo"
-            className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
-          />
-          <div className="flex flex-wrap items-center gap-3 md:col-span-2">
-            <button
-              type="button"
-              onClick={() => {
-                if (index === 0) return;
+          <div className="space-y-3">
+            <div className="overflow-hidden rounded-[1.25rem] border border-slate-200 bg-slate-50">
+              {item.logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.logoUrl}
+                  alt={item.name || "Logo"}
+                  className="h-36 w-full object-contain p-4"
+                />
+              ) : (
+                <div className="flex h-36 items-center justify-center text-sm text-slate-500">
+                  Logo
+                </div>
+              )}
+            </div>
+            <input
+              type="url"
+              value={item.logoUrl ?? ""}
+              onChange={(event) => {
                 const next = [...items];
-                [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                next[index] = { ...next[index], logoUrl: event.target.value };
                 onChange(next);
               }}
-              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
-            >
-              Lên
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (index === items.length - 1) return;
-                const next = [...items];
-                [next[index + 1], next[index]] = [next[index], next[index + 1]];
-                onChange(next);
-              }}
-              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
-            >
-              Xuống
-            </button>
+              placeholder="Link logo"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
             <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
-              Tải logo từ máy
+              Tai logo tu may
               <input
                 type="file"
                 accept="image/*"
@@ -522,27 +750,90 @@ function SupportersField({
                 }}
               />
             </label>
-            <button
-              type="button"
-              onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
-              className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-600"
-            >
-              Xóa
-            </button>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            <input
+              type="text"
+              value={item.group ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], group: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Nhom hien thi"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <input
+              type="text"
+              value={item.name ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], name: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Ten doanh nghiep"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
+            <input
+              type="url"
+              value={item.website ?? ""}
+              onChange={(event) => {
+                const next = [...items];
+                next[index] = { ...next[index], website: event.target.value };
+                onChange(next);
+              }}
+              placeholder="Link website"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
+            />
+            <div className="flex flex-wrap items-center gap-3 md:col-span-2">
+              <span className="rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                Vi tri {index + 1}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  if (index === 0) return;
+                  const next = [...items];
+                  [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                  onChange(next);
+                }}
+                className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+              >
+                Len
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (index === items.length - 1) return;
+                  const next = [...items];
+                  [next[index + 1], next[index]] = [next[index], next[index + 1]];
+                  onChange(next);
+                }}
+                className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
+              >
+                Xuong
+              </button>
+              <button
+                type="button"
+                onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+                className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-600"
+              >
+                Xoa
+              </button>
+            </div>
           </div>
         </div>
       ))}
       <button
         type="button"
-        onClick={() => onChange([...items, { name: "", logoUrl: "", website: "" }])}
+        onClick={() => onChange([...items, { group: "", name: "", logoUrl: "", website: "" }])}
         className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
       >
-        Thêm doanh nghiệp đồng hành
+        Them doanh nghiep dong hanh
       </button>
     </div>
   );
 }
-
 function ProductsField({
   value,
   onChange,
@@ -788,6 +1079,7 @@ export function CollectionManager({
   allowDelete = true,
   hideSingletonEditButton = false,
   closeHref,
+  panelMaxWidthClass = "max-w-4xl",
 }: CollectionManagerProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -1166,7 +1458,9 @@ export function CollectionManager({
 
       {isPanelOpen ? (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm">
-          <div className="ml-auto h-full w-full max-w-4xl overflow-y-auto border-l border-white/10 bg-white text-slate-950 shadow-[0_0_70px_rgba(2,6,23,0.45)]">
+          <div
+            className={`ml-auto h-full w-full ${panelMaxWidthClass} overflow-y-auto border-l border-white/10 bg-white text-slate-950 shadow-[0_0_70px_rgba(2,6,23,0.45)]`}
+          >
             <div className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 px-6 py-5 backdrop-blur">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -1300,8 +1594,18 @@ export function CollectionManager({
                               value={form[field.name]}
                               onChange={(value) => updateField(field.name, value)}
                             />
+                          ) : field.type === "links" ? (
+                            <LinksField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
                           ) : field.type === "supporters" ? (
                             <SupportersField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "banners" ? (
+                            <BannerListField
                               value={form[field.name]}
                               onChange={(value) => updateField(field.name, value)}
                             />

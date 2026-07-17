@@ -6,10 +6,12 @@ export async function SettingsSectionManager({
   title,
   description,
   fields,
+  panelMaxWidthClass,
 }: {
   title: string;
   description: string;
   fields: FieldConfig[];
+  panelMaxWidthClass?: string;
 }) {
   const settings = await getSiteSettings();
 
@@ -24,6 +26,7 @@ export async function SettingsSectionManager({
         allowDelete={false}
         hideSingletonEditButton
         closeHref="/admin/settings"
+        panelMaxWidthClass={panelMaxWidthClass}
         fields={fields}
       />
     </AdminShell>
