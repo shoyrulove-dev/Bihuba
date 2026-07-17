@@ -3,15 +3,13 @@ import { SupporterItem } from "@/types/cms";
 
 function SupporterBubble({ item }: { item: SupporterItem }) {
   const bubble = (
-    <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full border border-white/12 bg-[#17314f] p-3 transition hover:-translate-y-1">
-      <div className="flex h-full w-full items-center justify-center rounded-full bg-white p-2">
-        {item.logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.logoUrl} alt={item.name} className="h-full w-full rounded-full object-contain" />
-        ) : (
-          <span className="text-center text-[10px] font-bold uppercase text-slate-900">{item.name}</span>
-        )}
-      </div>
+    <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-white p-2.5 transition hover:-translate-y-1">
+      {item.logoUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={item.logoUrl} alt={item.name} className="h-full w-full rounded-full object-contain" />
+      ) : (
+        <span className="text-center text-[10px] font-bold uppercase text-slate-900">{item.name}</span>
+      )}
     </div>
   );
 
@@ -42,7 +40,7 @@ export function SupportersMarquee({ items }: { items: SupporterItem[] }) {
         </div>
 
         <div className="overflow-hidden">
-          <div className="marquee-track flex w-max items-center gap-5">
+          <div className="marquee-track flex w-max items-center gap-6">
             {loop.map((item, index) => (
               <SupporterBubble key={`${item.name}-${index}`} item={item} />
             ))}

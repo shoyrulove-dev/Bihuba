@@ -1,31 +1,45 @@
-<svg width="1800" height="600" viewBox="0 0 1800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1800" height="600" rx="72" fill="url(#bg)"/>
-  <rect x="38" y="38" width="1724" height="524" rx="56" stroke="url(#stroke)" stroke-width="4" opacity="0.55"/>
-  <circle cx="250" cy="300" r="168" fill="rgba(255,255,255,0.98)"/>
-  <circle cx="250" cy="300" r="154" stroke="#0E4FAF" stroke-width="16"/>
-  <path d="M170 314C194 246 252 199 330 194C287 210 250 245 229 288C216 314 209 348 210 384C201 377 192 367 185 355C179 343 173 330 170 314Z" fill="#59D6FF"/>
-  <path d="M270 226L316 140H358L321 226H270Z" fill="#0E4FAF"/>
-  <path d="M325 226L370 118H416L382 226H325Z" fill="#6DE3FF"/>
-  <path d="M258 338C281 300 318 270 366 258C336 276 310 304 293 338H258Z" fill="#0E4FAF"/>
-  <rect x="148" y="356" width="206" height="16" rx="8" fill="#59D6FF"/>
-  <path d="M154 390H346" stroke="#59D6FF" stroke-width="10" stroke-linecap="round"/>
-  <path d="M138 436C158 423 180 416 204 416H326C345 416 362 422 376 434" stroke="#D9F8FF" stroke-width="7" stroke-linecap="round"/>
-  <path d="M180 470H320" stroke="#B5EEFF" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
-
-  <text x="470" y="228" fill="white" font-family="Arial, Helvetica, sans-serif" font-size="104" font-weight="800" letter-spacing="10">BIHUBA</text>
-  <text x="470" y="318" fill="#C6F4FF" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700" letter-spacing="6">HOI DOANH NGHIEP XA BINH HUNG</text>
-  <text x="470" y="380" fill="#E8FAFF" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600" letter-spacing="5">THANH PHO HO CHI MINH</text>
-  <text x="470" y="468" fill="#59D6FF" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" letter-spacing="4">DOAN KET · DOI MOI · HOI NHAP · PHAT TRIEN</text>
-
+<svg width="1600" height="420" viewBox="0 0 1600 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="420" rx="36" fill="url(#bg)" fill-opacity="0.01"/>
+  <g filter="url(#glow)">
+    <circle cx="430" cy="210" r="130" fill="white" fill-opacity="0.98"/>
+    <circle cx="430" cy="210" r="118" stroke="#0E4FAF" stroke-width="14"/>
+    <path d="M366 223C385 171 429 135 490 131C456 143 428 170 411 204C401 225 396 252 397 280C389 274 382 266 376 257C372 248 368 236 366 223Z" fill="#5BD8FF"/>
+    <path d="M447 157L482 89H515L486 157H447Z" fill="#0E4FAF"/>
+    <path d="M489 157L523 71H559L533 157H489Z" fill="#6DE6FF"/>
+    <path d="M438 243C456 212 485 188 523 179C499 194 478 216 465 243H438Z" fill="#0E4FAF"/>
+    <rect x="351" y="256" width="156" height="12" rx="6" fill="#61DDFF"/>
+    <path d="M357 283H500" stroke="#61DDFF" stroke-width="8" stroke-linecap="round"/>
+    <path d="M342 317C356 307 374 301 392 301H494C509 301 523 306 533 314" stroke="#DFF9FF" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <circle cx="430" cy="210" r="160" stroke="url(#ring)" stroke-width="2" opacity="0.5"/>
+  <path d="M625 164H1455" stroke="url(#beam)" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+  <path d="M690 210H1390" stroke="url(#beamSoft)" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+  <path d="M790 252H1310" stroke="url(#beamSoft)" stroke-width="2" stroke-linecap="round" opacity="0.32"/>
   <defs>
-    <linearGradient id="bg" x1="120" y1="80" x2="1700" y2="540" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#06224A"/>
-      <stop offset="0.55" stop-color="#0C57C1"/>
-      <stop offset="1" stop-color="#032141"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B2347"/>
+      <stop offset="1" stop-color="#0B2347"/>
     </linearGradient>
-    <linearGradient id="stroke" x1="92" y1="44" x2="1712" y2="560" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#7BE8FF"/>
+    <linearGradient id="ring" x1="270" y1="75" x2="592" y2="345" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#74E9FF"/>
       <stop offset="1" stop-color="#0E4FAF"/>
     </linearGradient>
+    <linearGradient id="beam" x1="625" y1="164" x2="1455" y2="164" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6BE6FF" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="#6BE6FF"/>
+      <stop offset="0.82" stop-color="#1E7DFF"/>
+      <stop offset="1" stop-color="#1E7DFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="beamSoft" x1="690" y1="210" x2="1390" y2="210" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6BE6FF" stop-opacity="0"/>
+      <stop offset="0.2" stop-color="#6BE6FF"/>
+      <stop offset="0.8" stop-color="#4AB7FF"/>
+      <stop offset="1" stop-color="#4AB7FF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="292" y="41" width="279" height="319" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="16" result="effect1_foregroundBlur_1_1"/>
+    </filter>
   </defs>
 </svg>
