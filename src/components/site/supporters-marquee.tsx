@@ -3,13 +3,15 @@ import { SupporterItem } from "@/types/cms";
 
 function SupporterBubble({ item }: { item: SupporterItem }) {
   const bubble = (
-    <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full border border-cyan-300/18 bg-white/10 p-4 shadow-[0_16px_32px_rgba(2,6,23,0.18)] backdrop-blur transition hover:-translate-y-1 hover:bg-white/14">
-      {item.logoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={item.logoUrl} alt={item.name} className="h-full w-full rounded-full object-contain" />
-      ) : (
-        <span className="text-center text-[10px] font-bold uppercase text-white">{item.name}</span>
-      )}
+    <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full border border-white/12 bg-[#17314f] p-3 transition hover:-translate-y-1">
+      <div className="flex h-full w-full items-center justify-center rounded-full bg-white p-2">
+        {item.logoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.logoUrl} alt={item.name} className="h-full w-full rounded-full object-contain" />
+        ) : (
+          <span className="text-center text-[10px] font-bold uppercase text-slate-900">{item.name}</span>
+        )}
+      </div>
     </div>
   );
 

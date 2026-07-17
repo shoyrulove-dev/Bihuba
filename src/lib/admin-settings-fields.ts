@@ -102,7 +102,7 @@ export const supporterFields: FieldConfig[] = [
     label: "Doanh nghiệp đồng hành",
     type: "supporters",
     fullWidth: true,
-    helpText: "Có thể nhóm theo vai trò hiển thị như Ban tổ chức, Đối tác chiến lược, Đồng hành...",
+    helpText: "Gợi ý logo: 800 x 800 px hoặc 1000 x 1000 px, nền trong hoặc nền trắng, bố cục vuông để hiển thị rõ trong khung tròn.",
     section: "Logo đồng hành",
   },
 ];
