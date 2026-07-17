@@ -11,9 +11,9 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
             <Image
               src={settings.wordmarkUrl}
               alt={settings.siteName}
-              width={420}
-              height={120}
-              className="h-auto max-h-[72px] w-[220px] max-w-full object-contain md:w-[280px] lg:w-[320px]"
+              width={620}
+              height={110}
+              className="h-auto max-h-[82px] w-[340px] max-w-full object-contain md:w-[430px] lg:w-[520px]"
               priority
             />
           ) : (
