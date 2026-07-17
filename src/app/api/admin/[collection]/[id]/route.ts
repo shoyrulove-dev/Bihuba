@@ -3,6 +3,7 @@ import { collectionMap, CollectionKey } from "@/lib/admin";
 import { ensureAdminUser, hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { slugify } from "@/lib/slug";
+import { DownloadModel } from "@/models/download";
 
 type Context = {
   params: Promise<{
@@ -91,6 +92,18 @@ export async function DELETE(_: NextRequest, context: Context) {
 
     if (user.isProtected || Number(user.userId) === 1) {
       return NextResponse.json({ message: "Không thể xóa tài khoản admin gốc." }, { status: 400 });
+    }
+  }
+
+  if (key === "downloadCategories") {
+    const category = await Model.findById(id).lean();
+    if (!category) {
+      return NextResponse.json({ message: "Không tìm thấy danh mục." }, { status: 404 });
+    }
+
+    const linkedCount = await DownloadModel.countDocuments({ categorySlug: category.slug });
+    if (linkedCount > 0) {
+      return NextResponse.json({ message: "Chỉ xóa được danh mục đang rỗng." }, { status: 400 });
     }
   }
 

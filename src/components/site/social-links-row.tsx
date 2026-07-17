@@ -46,14 +46,14 @@ export function SocialLinksRow({ links }: { links: SocialLinks }) {
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="flex min-w-max flex-nowrap items-center gap-3">
+      <div className="flex min-w-max flex-nowrap items-center gap-2">
         {activeEntries.map((entry) => (
           <Link
             key={entry.key}
             href={links[entry.key]}
             target="_blank"
             rel="noreferrer"
-            className={`inline-flex h-11 items-center gap-2 whitespace-nowrap rounded-full ${entry.tone} px-4 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(2,6,23,0.18)] transition hover:-translate-y-0.5`}
+            className={`inline-flex h-10 items-center gap-2 whitespace-nowrap rounded-full ${entry.tone} px-3.5 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(2,6,23,0.16)] transition hover:-translate-y-0.5`}
           >
             <SocialIcon type={entry.key} />
             <span>{entry.label}</span>

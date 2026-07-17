@@ -4,7 +4,6 @@ import { FeatureBannerCarousel } from "@/components/site/feature-banner-carousel
 import { MemberCard } from "@/components/site/member-card";
 import { PostCard } from "@/components/site/post-card";
 import { SectionHeading } from "@/components/site/section-heading";
-import { SupporterShowcase } from "@/components/site/supporter-showcase";
 import { getDownloads, getMembers, getPosts, getSiteSettings } from "@/lib/content";
 
 const impactItems = [
@@ -152,31 +151,33 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-6 lg:grid-cols-[1.04fr_0.96fr]">
-          <div className="rounded-[1.8rem] bg-[#061a39] p-6 text-white shadow-[0_24px_80px_rgba(2,12,27,0.2)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">Nhịp vận hành</p>
-            <h2 className="mt-3 text-3xl font-black uppercase leading-tight">
-              Nội dung cập nhật, gọn và dễ điều phối cho website cộng đồng doanh nghiệp
-            </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/88">
-              Bài viết, sự kiện, hội viên, tài liệu và chương trình đồng hành đều có thể quản lý trực tiếp từ admin.
-              Bố cục mới rút bớt khoảng trắng và ưu tiên các khối nhìn nhanh, dễ tra cứu.
-            </p>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-[1.8rem] bg-[#061a39] p-6 text-white shadow-[0_24px_80px_rgba(2,12,27,0.2)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">Nhịp vận hành</p>
+          <div className="mt-3 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <h2 className="text-3xl font-black uppercase leading-tight">
+                Nội dung cập nhật, gọn và dễ điều phối cho website cộng đồng doanh nghiệp
+              </h2>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/88">
+                Bài viết, sự kiện, hội viên, tài liệu và chương trình đồng hành đều có thể quản lý trực tiếp từ admin.
+                Bố cục mới rút bớt khoảng trắng và ưu tiên các khối nhìn nhanh, dễ tra cứu.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
               {latestPosts.map((post) => (
                 <Link
                   key={post.slug}
                   href={`/bai-viet/${post.slug}`}
                   className="rounded-[1.25rem] border border-white/10 bg-white/6 p-4 transition hover:bg-white/10"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">{post.category}</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
+                    {post.category}
+                  </p>
                   <p className="mt-2 text-sm font-semibold leading-6 text-white">{post.title}</p>
                 </Link>
               ))}
             </div>
           </div>
-
-          <SupporterShowcase items={settings.supporterCompanies || []} />
         </div>
       </section>
 

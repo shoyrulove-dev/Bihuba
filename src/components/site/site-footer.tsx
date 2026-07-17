@@ -10,10 +10,6 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
       <SupportersMarquee items={settings.supporterCompanies || []} />
       <footer className="border-t border-cyan-300/10 bg-[#031634]">
         <div className="mx-auto max-w-7xl px-6 py-10">
-          <div className="mb-6 border-b border-white/10 pb-5">
-            <SocialLinksRow links={settings.socialLinks} />
-          </div>
-
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.8fr_0.8fr]">
             <div>
               <div className="flex items-center gap-4">
@@ -38,7 +34,9 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">Điều hướng</h4>
+              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
+                Điều hướng
+              </h4>
               <div className="mt-4 grid gap-3 text-sm">
                 {settings.nav.map((item) => (
                   <Link
@@ -53,7 +51,9 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">Liên hệ</h4>
+              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
+                Liên hệ
+              </h4>
               <div className="mt-4 space-y-3 text-sm leading-7 text-slate-200">
                 <p>{settings.contact.address}</p>
                 <p>{settings.contact.phone}</p>
@@ -61,6 +61,10 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
                 {settings.contact.website ? <p>{settings.contact.website}</p> : null}
               </div>
             </div>
+          </div>
+
+          <div className="mt-8 border-t border-white/10 pt-5">
+            <SocialLinksRow links={settings.socialLinks} />
           </div>
         </div>
       </footer>
