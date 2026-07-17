@@ -12,7 +12,7 @@ export function PartnerCard({ partner }: { partner: PartnerShape }) {
           className="h-16 w-16 rounded-2xl border border-slate-200 object-contain p-2"
         />
       ) : null}
-      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
+      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">
         {partner.partnerType}
       </p>
       <h3 className="mt-3 line-clamp-2 text-lg font-semibold text-slate-950">{partner.name}</h3>

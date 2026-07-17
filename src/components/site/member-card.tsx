@@ -15,7 +15,7 @@ export function MemberCard({ member }: { member: MemberShape }) {
             )}
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">
               {member.groupType}
             </p>
             <h3 className="mt-2 line-clamp-2 text-lg font-semibold text-slate-950">{member.name}</h3>

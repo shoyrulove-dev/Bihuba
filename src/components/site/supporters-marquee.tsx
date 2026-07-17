@@ -3,7 +3,7 @@ import { SupporterItem } from "@/types/cms";
 
 function SupporterBubble({ item }: { item: SupporterItem }) {
   const bubble = (
-    <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-white p-2.5 transition hover:-translate-y-1">
+    <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-full bg-white p-2 transition hover:-translate-y-1">
       {item.logoUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={item.logoUrl} alt={item.name} className="h-full w-full rounded-full object-contain" />
@@ -34,13 +34,11 @@ export function SupportersMarquee({ items }: { items: SupporterItem[] }) {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-5 flex items-center gap-3">
           <span className="h-2.5 w-2.5 rounded-full bg-cyan-300" />
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
-            Doanh nghiệp đồng hành
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">Doanh nghiệp đồng hành</p>
         </div>
 
         <div className="overflow-hidden">
-          <div className="marquee-track flex w-max items-center gap-6">
+          <div className="marquee-track flex w-max items-center gap-7">
             {loop.map((item, index) => (
               <SupporterBubble key={`${item.name}-${index}`} item={item} />
             ))}
