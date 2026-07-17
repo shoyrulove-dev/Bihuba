@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ADMIN_SESSION_COOKIE } from "@/lib/auth-shared";
+
+const ADMIN_SESSION_COOKIE = "bihuba_admin_session";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
