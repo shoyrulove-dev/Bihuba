@@ -37,9 +37,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
-                Điều hướng
-              </h4>
+              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">Điều hướng</h4>
               <div className="mt-4 grid gap-3 text-sm">
                 {settings.nav.map((item) => (
                   <Link
@@ -54,9 +52,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
-                Liên hệ
-              </h4>
+              <h4 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">Liên hệ</h4>
               <div className="mt-4 space-y-3 text-sm leading-7 text-slate-200">
                 <p>{settings.contact.address}</p>
                 <p>{settings.contact.phone}</p>

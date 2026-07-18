@@ -36,7 +36,7 @@ export function MemberCard({ member }: { member: MemberShape }) {
         href={`/hoi-vien/${member.slug}`}
         className="mt-5 inline-flex rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
       >
-        Xem hồ sơ
+        {"Xem h\u1ed3 s\u01a1"}
       </Link>
     </article>
   );

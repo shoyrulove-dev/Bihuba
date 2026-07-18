@@ -11,10 +11,10 @@ function normalizeDownloads(items: DownloadShape[]) {
 }
 
 function buildPreviewLines(item: DownloadShape) {
-  const title = item.title || item.documentType || "Tài liệu";
-  const summary = item.summary || "Tài liệu nội bộ";
+  const title = item.title || item.documentType || "T\u00e0i li\u1ec7u";
+  const summary = item.summary || "T\u00e0i li\u1ec7u n\u1ed9i b\u1ed9";
 
-  return [title.slice(0, 20).trim(), summary.slice(0, 24).trim(), item.publishedAt || "Cập nhật"];
+  return [title.slice(0, 20).trim(), summary.slice(0, 24).trim(), item.publishedAt || "C\u1eadp nh\u1eadt"];
 }
 
 function Thumbnail({ item, format }: { item: DownloadShape; format: string }) {
@@ -61,7 +61,7 @@ export function DownloadBrowser({
   return (
     <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
       <aside className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Danh mục</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">{"Danh m\u1ee5c"}</h3>
         <div className="mt-4 space-y-2">
           {sortedCategories.map((category) => {
             const count = downloads.filter((item) => item.categorySlug === category.slug).length;
@@ -126,7 +126,7 @@ export function DownloadBrowser({
                             href={`/download/${item.slug}`}
                             className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
                           >
-                            Xem chi tiết
+                            {"Xem chi ti\u1ebft"}
                           </Link>
                           {item.fileUrl ? (
                             <Link
@@ -135,7 +135,7 @@ export function DownloadBrowser({
                               rel="noreferrer"
                               className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
                             >
-                              Tải file
+                              {"T\u1ea3i file"}
                             </Link>
                           ) : null}
                         </div>
@@ -144,7 +144,7 @@ export function DownloadBrowser({
                   })
                 ) : (
                   <div className="rounded-[1.1rem] border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
-                    Chưa có tài liệu trong mục này.
+                    {"Ch\u01b0a c\u00f3 t\u00e0i li\u1ec7u trong m\u1ee5c n\u00e0y."}
                   </div>
                 )}
               </div>

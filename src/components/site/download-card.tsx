@@ -5,7 +5,7 @@ import { DownloadShape } from "@/types/cms";
 function buildPreviewLines(item: DownloadShape, format: string) {
   return [
     item.title.slice(0, 18).trim(),
-    (item.summary || "Tài liệu nội bộ").slice(0, 22).trim(),
+    (item.summary || "T\u00e0i li\u1ec7u n\u1ed9i b\u1ed9").slice(0, 22).trim(),
     item.publishedAt || format,
   ];
 }
@@ -61,7 +61,7 @@ export function DownloadCard({ item }: { item: DownloadShape }) {
           href={`/download/${item.slug}`}
           className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
         >
-          Xem chi tiết
+          {"Xem chi ti\u1ebft"}
         </Link>
         {item.fileUrl ? (
           <Link
@@ -70,7 +70,7 @@ export function DownloadCard({ item }: { item: DownloadShape }) {
             rel="noreferrer"
             className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
           >
-            Tải file
+            {"T\u1ea3i file"}
           </Link>
         ) : null}
       </div>

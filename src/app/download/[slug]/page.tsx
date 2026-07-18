@@ -57,7 +57,7 @@ export default async function DownloadDetailPage({
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
             >
-              Xem file gốc
+              {"Xem file g\u1ed1c"}
             </Link>
             <Link
               href={item.fileUrl}
@@ -66,7 +66,7 @@ export default async function DownloadDetailPage({
               download
               className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
             >
-              Tải xuống
+              {"T\u1ea3i xu\u1ed1ng"}
             </Link>
           </div>
         </aside>
@@ -80,7 +80,9 @@ export default async function DownloadDetailPage({
             <div className="mt-8">
               <div className="mb-4 flex items-center justify-between gap-4">
                 <h2 className="text-xl font-semibold text-slate-950">Xem nhanh PDF</h2>
-                <span className="text-sm text-slate-500">Có thể mở toàn màn hình hoặc tải xuống khi cần.</span>
+                <span className="text-sm text-slate-500">
+                  {"C\u00f3 th\u1ec3 m\u1edf to\u00e0n m\u00e0n h\u00ecnh ho\u1eb7c t\u1ea3i xu\u1ed1ng khi c\u1ea7n."}
+                </span>
               </div>
               <div className="overflow-hidden rounded-[1.6rem] border border-slate-200 bg-slate-50">
                 <iframe
@@ -92,8 +94,9 @@ export default async function DownloadDetailPage({
             </div>
           ) : (
             <div className="mt-8 rounded-[1.4rem] border border-dashed border-slate-300 bg-slate-50 p-5 text-sm leading-7 text-slate-600">
-              Tài liệu dạng {format} không hỗ trợ xem trực tiếp ngay trong website. Bạn có thể mở file gốc
-              hoặc tải xuống để xem trên máy.
+              {"T\u00e0i li\u1ec7u d\u1ea1ng "}
+              {format}
+              {" kh\u00f4ng h\u1ed7 tr\u1ee3 xem tr\u1ef1c ti\u1ebfp ngay trong website. B\u1ea1n c\u00f3 th\u1ec3 m\u1edf file g\u1ed1c ho\u1eb7c t\u1ea3i xu\u1ed1ng \u0111\u1ec3 xem tr\u00ean m\u00e1y."}
             </div>
           )}
         </section>

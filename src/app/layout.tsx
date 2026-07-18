@@ -6,6 +6,8 @@ import { SiteHeader } from "@/components/site/site-header";
 import { getSiteSettings } from "@/lib/content";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -18,7 +20,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "BIHUBA",
-  description: "Cổng thông tin của Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh.",
+  description: "C\u1ed5ng th\u00f4ng tin c\u1ee7a H\u1ed9i Doanh nghi\u1ec7p X\u00e3 B\u00ecnh H\u01b0ng Th\u00e0nh ph\u1ed1 H\u1ed3 Ch\u00ed Minh.",
 };
 
 export default async function RootLayout({

@@ -2,6 +2,8 @@ import { PostCard } from "@/components/site/post-card";
 import { SectionHeading } from "@/components/site/section-heading";
 import { getPosts } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 export default async function EventsPage() {
   const posts = await getPosts("event");
 

@@ -6,26 +6,28 @@ import { PostCard } from "@/components/site/post-card";
 import { SectionHeading } from "@/components/site/section-heading";
 import { getDownloads, getMembers, getPosts, getSiteSettings } from "@/lib/content";
 
+export const dynamic = "force-dynamic";
+
 const impactItems = [
   {
-    title: "Kết nối",
-    body: "Liên kết doanh nghiệp, chuyên gia và đối tác trong khu vực Bình Hưng.",
+    title: "K\u1ebft n\u1ed1i",
+    body: "Li\u00ean k\u1ebft doanh nghi\u1ec7p, chuy\u00ean gia v\u00e0 \u0111\u1ed1i t\u00e1c trong khu v\u1ef1c B\u00ecnh H\u01b0ng.",
   },
   {
-    title: "Đồng hành",
-    body: "Hỗ trợ truyền thông, sự kiện, xúc tiến thương mại và nâng cao năng lực vận hành.",
+    title: "\u0110\u1ed3ng h\u00e0nh",
+    body: "H\u1ed7 tr\u1ee3 truy\u1ec1n th\u00f4ng, s\u1ef1 ki\u1ec7n, x\u00fac ti\u1ebfn th\u01b0\u01a1ng m\u1ea1i v\u00e0 n\u00e2ng cao n\u0103ng l\u1ef1c v\u1eadn h\u00e0nh.",
   },
   {
-    title: "Phát triển",
-    body: "Tạo nền tảng nội dung và hình ảnh chung cho cộng đồng doanh nghiệp địa phương.",
+    title: "Ph\u00e1t tri\u1ec3n",
+    body: "T\u1ea1o n\u1ec1n t\u1ea3ng n\u1ed9i dung v\u00e0 h\u00ecnh \u1ea3nh chung cho c\u1ed9ng \u0111\u1ed3ng doanh nghi\u1ec7p \u0111\u1ecba ph\u01b0\u01a1ng.",
   },
 ];
 
 const actionLinks = [
-  { label: "Tin tức nổi bật", href: "/tin-tuc" },
-  { label: "Sự kiện sắp diễn ra", href: "/su-kien" },
-  { label: "Kết nối giao thương", href: "/ket-noi-giao-thuong" },
-  { label: "Danh bạ hội viên", href: "/hoi-vien" },
+  { label: "Tin t\u1ee9c n\u1ed5i b\u1eadt", href: "/tin-tuc" },
+  { label: "S\u1ef1 ki\u1ec7n s\u1eafp di\u1ec5n ra", href: "/su-kien" },
+  { label: "K\u1ebft n\u1ed1i giao th\u01b0\u01a1ng", href: "/ket-noi-giao-thuong" },
+  { label: "Danh b\u1ea1 h\u1ed9i vi\u00ean", href: "/hoi-vien" },
 ];
 
 export default async function Home() {
@@ -58,7 +60,7 @@ export default async function Home() {
           <div>
             <div className="inline-flex items-center gap-3 rounded-full border border-cyan-300/30 bg-white/8 px-4 py-2 text-sm text-cyan-100">
               <span className="h-2.5 w-2.5 rounded-full bg-cyan-300" />
-              Cộng đồng doanh nghiệp Bình Hưng - Thành phố Hồ Chí Minh
+              {"C\u1ed9ng \u0111\u1ed3ng doanh nghi\u1ec7p B\u00ecnh H\u01b0ng - Th\u00e0nh ph\u1ed1 H\u1ed3 Ch\u00ed Minh"}
             </div>
 
             <h1 className="mt-6 max-w-4xl text-4xl font-black uppercase leading-tight md:text-6xl">
@@ -77,7 +79,7 @@ export default async function Home() {
                 href="/hoi-vien"
                 className="rounded-full border border-white/30 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
               >
-                Xem danh bạ hội viên
+                {"Xem danh b\u1ea1 h\u1ed9i vi\u00ean"}
               </Link>
             </div>
 
@@ -104,7 +106,7 @@ export default async function Home() {
               <div className="p-6 sm:p-8">
                 <div className="rounded-[1.5rem] border border-cyan-300/20 bg-[#031634]/78 p-6 shadow-[0_18px_50px_rgba(2,6,23,0.4)]">
                   <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">
-                    Hình ảnh hoạt động
+                    {"H\u00ecnh \u1ea3nh ho\u1ea1t \u0111\u1ed9ng"}
                   </p>
                   <h2 className="mt-3 text-2xl font-bold leading-tight text-white">{settings.siteName}</h2>
                   <p className="mt-3 text-sm leading-7 text-blue-100/88">{settings.slogan}</p>
@@ -130,7 +132,7 @@ export default async function Home() {
       <section className="mx-auto max-w-7xl px-6">
         <div className="grid gap-6 lg:grid-cols-[0.94fr_1.06fr] lg:items-start">
           <div>
-            <SectionHeading eyebrow="Giới thiệu" title={settings.introTitle} body={settings.introBody} />
+            <SectionHeading eyebrow={"Gi\u1edbi thi\u1ec7u"} title={settings.introTitle} body={settings.introBody} />
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {impactItems.map((item) => (
@@ -152,15 +154,14 @@ export default async function Home() {
 
       <section className="mx-auto max-w-7xl px-6">
         <div className="rounded-[1.8rem] bg-[#061a39] p-6 text-white shadow-[0_24px_80px_rgba(2,12,27,0.2)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">Nhịp vận hành</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">{"Nh\u1ecbp v\u1eadn h\u00e0nh"}</p>
           <div className="mt-3 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
               <h2 className="text-3xl font-black uppercase leading-tight">
-                Nội dung cập nhật, gọn và dễ điều phối cho website cộng đồng doanh nghiệp
+                {"N\u1ed9i dung c\u1eadp nh\u1eadt, g\u1ecdn v\u00e0 d\u1ec5 \u0111i\u1ec1u ph\u1ed1i cho website c\u1ed9ng \u0111\u1ed3ng doanh nghi\u1ec7p"}
               </h2>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/88">
-                Bài viết, sự kiện, hội viên, tài liệu và chương trình đồng hành đều có thể quản lý trực tiếp từ admin.
-                Bố cục mới rút bớt khoảng trắng và ưu tiên các khối nhìn nhanh, dễ tra cứu.
+                {"B\u00e0i vi\u1ebft, s\u1ef1 ki\u1ec7n, h\u1ed9i vi\u00ean, t\u00e0i li\u1ec7u v\u00e0 ch\u01b0\u01a1ng tr\u00ecnh \u0111\u1ed3ng h\u00e0nh \u0111\u1ec1u c\u00f3 th\u1ec3 qu\u1ea3n l\u00fd tr\u1ef1c ti\u1ebfp t\u1eeb admin. B\u1ed1 c\u1ee5c m\u1edbi r\u00fat b\u1edbt kho\u1ea3ng tr\u1eafng v\u00e0 \u01b0u ti\u00ean c\u00e1c kh\u1ed1i nh\u00ecn nhanh, d\u1ec5 tra c\u1ee9u."}
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -183,9 +184,9 @@ export default async function Home() {
 
       <section className="mx-auto max-w-7xl px-6">
         <SectionHeading
-          eyebrow="Tin nổi bật"
-          title="Bài viết và hoạt động mới"
-          body="Nhóm bài nổi bật luôn được ưu tiên hiển thị rõ để người xem nắm nhanh thông tin mới nhất."
+          eyebrow={"Tin n\u1ed5i b\u1eadt"}
+          title={"B\u00e0i vi\u1ebft v\u00e0 ho\u1ea1t \u0111\u1ed9ng m\u1edbi"}
+          body={"Nh\u00f3m b\u00e0i n\u1ed5i b\u1eadt lu\u00f4n \u0111\u01b0\u1ee3c \u01b0u ti\u00ean hi\u1ec3n th\u1ecb r\u00f5 \u0111\u1ec3 ng\u01b0\u1eddi xem n\u1eafm nhanh th\u00f4ng tin m\u1edbi nh\u1ea5t."}
         />
         <div className="mt-6 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
           {featuredPosts.map((post) => (
@@ -198,9 +199,9 @@ export default async function Home() {
         <div className="grid gap-6 lg:grid-cols-2">
           <div>
             <SectionHeading
-              eyebrow="Hội viên"
-              title="Doanh nghiệp tiêu biểu"
-              body="Danh bạ hội viên giữ vai trò như hồ sơ thương mại và điểm chạm kết nối giữa các doanh nghiệp."
+              eyebrow={"H\u1ed9i vi\u00ean"}
+              title={"Doanh nghi\u1ec7p ti\u00eau bi\u1ec3u"}
+              body={"Danh b\u1ea1 h\u1ed9i vi\u00ean gi\u1eef vai tr\u00f2 nh\u01b0 h\u1ed3 s\u01a1 th\u01b0\u01a1ng m\u1ea1i v\u00e0 \u0111i\u1ec3m ch\u1ea1m k\u1ebft n\u1ed1i gi\u1eefa c\u00e1c doanh nghi\u1ec7p."}
             />
             <div className="mt-6 grid gap-6 xl:grid-cols-2">
               {featuredMembers.map((member) => (
@@ -211,9 +212,9 @@ export default async function Home() {
 
           <div>
             <SectionHeading
-              eyebrow="Tài liệu"
-              title="Tài liệu cần theo dõi"
-              body="Các tài liệu mới được gợi ý ngay trên trang chủ để thuận tiện truy cập nhanh."
+              eyebrow={"T\u00e0i li\u1ec7u"}
+              title={"T\u00e0i li\u1ec7u c\u1ea7n theo d\u00f5i"}
+              body={"C\u00e1c t\u00e0i li\u1ec7u m\u1edbi \u0111\u01b0\u1ee3c g\u1ee3i \u00fd ngay tr\u00ean trang ch\u1ee7 \u0111\u1ec3 thu\u1eadn ti\u1ec7n truy c\u1eadp nhanh."}
             />
             <div className="mt-6 grid gap-4">
               {featuredDownloads.map((item) => (
