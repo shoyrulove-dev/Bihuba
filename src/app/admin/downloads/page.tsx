@@ -11,7 +11,7 @@ export default async function AdminDownloadsPage() {
   return (
     <AdminShell
       title="Quản lý tài liệu"
-      description="Quản lý danh mục và file tài liệu theo cấu trúc folder rõ ràng, dễ nhìn."
+      description="Quản lý danh mục và file tài liệu theo cấu trúc rõ ràng, hỗ trợ ảnh bìa và upload file trực tiếp từ máy."
     >
       <CollectionManager
         collection="downloadCategories"
@@ -29,11 +29,23 @@ export default async function AdminDownloadsPage() {
       <CollectionManager
         collection="downloads"
         title="File tài liệu"
-        description="Mỗi file hiển thị gọn một dòng và gắn vào danh mục tương ứng."
+        description="Mỗi tài liệu có ảnh bìa, loại file, link file và trang chi tiết riêng để xem hoặc tải."
         initialItems={downloads as unknown as Record<string, unknown>[]}
         fields={[
           { name: "title", label: "Tiêu đề" },
           { name: "slug", label: "Slug" },
+          {
+            name: "documentType",
+            label: "Loại tài liệu",
+            type: "select",
+            options: [
+              { label: "Thông báo", value: "Thông báo" },
+              { label: "Biểu mẫu", value: "Biểu mẫu" },
+              { label: "Quyết định", value: "Quyết định" },
+              { label: "Báo cáo", value: "Báo cáo" },
+              { label: "Văn bản", value: "Văn bản" },
+            ],
+          },
           {
             name: "category",
             label: "Tên danh mục",
@@ -47,12 +59,32 @@ export default async function AdminDownloadsPage() {
             options: categories.map((item) => ({ label: item.slug, value: item.slug })),
           },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
+          {
+            name: "fileFormat",
+            label: "Định dạng file",
+            type: "select",
+            options: [
+              { label: "PDF", value: "pdf" },
+              { label: "DOC", value: "doc" },
+              { label: "DOCX", value: "docx" },
+              { label: "XLS", value: "xls" },
+              { label: "XLSX", value: "xlsx" },
+              { label: "PPT", value: "ppt" },
+              { label: "Khác", value: "other" },
+            ],
+          },
           { name: "summary", label: "Tóm tắt", type: "textarea" },
           {
+            name: "coverImage",
+            label: "Ảnh bìa",
+            type: "image",
+            helpText: "Tải ảnh bìa từ máy lên ImageKit hoặc dán link ảnh.",
+          },
+          {
             name: "fileUrl",
-            label: "Link file",
+            label: "File PDF / DOC / XLS",
             type: "file",
-            helpText: "Upload file hoặc dán đường dẫn tài liệu.",
+            helpText: "Tải file từ máy lên ImageKit hoặc dán đường dẫn file tài liệu.",
           },
         ]}
       />

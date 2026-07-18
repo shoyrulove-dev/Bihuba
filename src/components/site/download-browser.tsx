@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
-import { DownloadCategoryShape, DownloadShape } from "@/types/cms";
 import { slugify } from "@/lib/slug";
+import { getDownloadFormat, getDownloadTypeLabel } from "@/lib/downloads";
+import { DownloadCategoryShape, DownloadShape } from "@/types/cms";
 
 function normalizeDownloads(items: DownloadShape[]) {
   return items.map((item) => ({
@@ -22,7 +24,7 @@ export function DownloadBrowser({
   return (
     <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-700">Danh mục</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-700">Danh mục</h3>
         <div className="mt-4 space-y-2">
           {sortedCategories.map((category) => {
             const count = downloads.filter((item) => item.categorySlug === category.slug).length;
@@ -56,44 +58,71 @@ export function DownloadBrowser({
                 ) : null}
               </div>
 
-              <div className="mt-4 overflow-hidden rounded-[1.1rem] border border-slate-200">
+              <div className="mt-4 space-y-3">
                 {files.length ? (
-                  files.map((item, index) => (
-                    <article
-                      key={item.slug}
-                      className={`grid gap-3 px-4 py-4 md:grid-cols-[140px_minmax(0,1fr)_auto] md:items-center ${
-                        index !== files.length - 1 ? "border-b border-slate-200" : ""
-                      }`}
-                    >
-                      <div className="text-sm font-medium text-slate-500">{item.publishedAt}</div>
-                      <div className="min-w-0">
-                        <h4 className="truncate text-base font-semibold text-slate-900">{item.title}</h4>
-                        {item.summary ? (
-                          <p className="truncate text-sm text-slate-500">{item.summary}</p>
-                        ) : null}
-                      </div>
-                      <div className="flex shrink-0 gap-3">
+                  files.map((item) => {
+                    const format = getDownloadFormat(item);
+                    const typeLabel = getDownloadTypeLabel(item);
+
+                    return (
+                      <article
+                        key={item.slug}
+                        className="grid gap-4 rounded-[1.3rem] border border-slate-200 p-4 md:grid-cols-[120px_minmax(0,1fr)_auto] md:items-center"
+                      >
                         <Link
                           href={`/download/${item.slug}`}
-                          className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
+                          className="relative block aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-100"
                         >
-                          Xem
+                          {item.coverImage ? (
+                            <Image
+                              src={item.coverImage}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                              sizes="120px"
+                            />
+                          ) : (
+                            <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.16),_transparent_58%),linear-gradient(135deg,_#0f172a,_#1d4ed8)] p-3 text-center">
+                              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-100">{format}</span>
+                            </div>
+                          )}
                         </Link>
-                        {item.fileUrl ? (
+
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                            <span className="rounded-full bg-cyan-50 px-3 py-1 text-cyan-700">{typeLabel}</span>
+                            <span className="rounded-full bg-slate-100 px-3 py-1">{format}</span>
+                            <span className="ml-auto normal-case tracking-normal">{item.publishedAt}</span>
+                          </div>
+                          <h4 className="mt-3 text-lg font-semibold text-slate-900">{item.title}</h4>
+                          {item.summary ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{item.summary}</p> : null}
+                        </div>
+
+                        <div className="flex shrink-0 flex-wrap gap-3 md:justify-end">
                           <Link
-                            href={item.fileUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+                            href={`/download/${item.slug}`}
+                            className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
                           >
-                            Tải
+                            Xem chi tiết
                           </Link>
-                        ) : null}
-                      </div>
-                    </article>
-                  ))
+                          {item.fileUrl ? (
+                            <Link
+                              href={item.fileUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+                            >
+                              Tải file
+                            </Link>
+                          ) : null}
+                        </div>
+                      </article>
+                    );
+                  })
                 ) : (
-                  <div className="px-4 py-6 text-sm text-slate-500">Chưa có tài liệu trong mục này.</div>
+                  <div className="rounded-[1.1rem] border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
+                    Chưa có tài liệu trong mục này.
+                  </div>
                 )}
               </div>
             </section>

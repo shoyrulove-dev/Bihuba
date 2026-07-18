@@ -132,7 +132,10 @@ export interface DownloadShape {
   title: string;
   slug: string;
   summary: string;
+  coverImage?: string;
   fileUrl: string;
+  documentType?: string;
+  fileFormat?: string;
   category: string;
   categorySlug?: string;
   publishedAt: string;
