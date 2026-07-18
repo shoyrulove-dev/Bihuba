@@ -8,6 +8,7 @@ import {
 } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { slugify } from "@/lib/slug";
+import { repairDeepText } from "@/lib/text";
 
 type Context = {
   params: Promise<{
@@ -49,7 +50,7 @@ export async function GET(_: NextRequest, context: Context) {
         : ([["createdAt", -1]] as [string, 1 | -1][]);
 
   const items = await Model.find().sort(sort).lean();
-  const serialized = JSON.parse(JSON.stringify(items)).map((item: Record<string, unknown>) => {
+  const serialized = repairDeepText(JSON.parse(JSON.stringify(items))).map((item: Record<string, unknown>) => {
     if (key !== "users") return item;
     const { passwordHash, ...safeItem } = item;
     void passwordHash;

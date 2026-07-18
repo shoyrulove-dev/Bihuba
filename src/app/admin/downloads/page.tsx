@@ -29,7 +29,7 @@ export default async function AdminDownloadsPage() {
       <CollectionManager
         collection="downloads"
         title="File tài liệu"
-        description="Mỗi tài liệu có ảnh bìa, loại file, link file và trang chi tiết riêng để xem hoặc tải."
+        description="Mỗi tài liệu có thumbnail gọn ngoài danh sách, ảnh bìa riêng trong trang chi tiết và file gốc để xem hoặc tải."
         initialItems={downloads as unknown as Record<string, unknown>[]}
         fields={[
           { name: "title", label: "Tiêu đề" },
@@ -78,7 +78,8 @@ export default async function AdminDownloadsPage() {
             name: "coverImage",
             label: "Ảnh bìa",
             type: "image",
-            helpText: "Tải ảnh bìa từ máy lên ImageKit hoặc dán link ảnh.",
+            helpText:
+              "Khuyến nghị 1200x1600px hoặc 900x1200px, tỷ lệ 3:4. Ảnh này dùng cho trang chi tiết tài liệu, thumbnail danh sách sẽ tự rút gọn theo mẫu văn bản.",
           },
           {
             name: "fileUrl",

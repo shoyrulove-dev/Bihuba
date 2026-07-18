@@ -26,9 +26,10 @@ import {
 import { ensureAdminUser } from "@/lib/auth";
 import { UserModel } from "@/models/user";
 import { slugify } from "@/lib/slug";
+import { repairDeepText } from "@/lib/text";
 
 function serialize<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value));
+  return repairDeepText(JSON.parse(JSON.stringify(value)));
 }
 
 export async function getSiteSettings(): Promise<SiteSettingsShape> {

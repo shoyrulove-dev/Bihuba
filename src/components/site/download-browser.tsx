@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { getDownloadFormat, getDownloadTypeLabel } from "@/lib/downloads";
 import { slugify } from "@/lib/slug";
@@ -11,25 +10,44 @@ function normalizeDownloads(items: DownloadShape[]) {
   }));
 }
 
+function buildPreviewLines(item: DownloadShape) {
+  const title = item.title || item.documentType || "Tài liệu";
+  const summary = item.summary || "Tài liệu nội bộ";
+
+  return [
+    title.slice(0, 20).trim(),
+    summary.slice(0, 24).trim(),
+    item.publishedAt || "Cập nhật",
+  ];
+}
+
 function Thumbnail({ item, format }: { item: DownloadShape; format: string }) {
+  const lines = buildPreviewLines(item);
+
   return (
     <Link
       href={`/download/${item.slug}`}
-      className="relative block h-[78px] w-[58px] shrink-0 overflow-hidden rounded-[0.95rem] border border-slate-200 bg-slate-100"
+      className="group relative block h-[82px] w-[62px] shrink-0 overflow-hidden rounded-[1rem] bg-[linear-gradient(135deg,_#0b2c5c,_#1d4ed8)] p-[3px] shadow-[0_10px_24px_rgba(15,23,42,0.12)]"
     >
-      {item.coverImage ? (
-        <Image
-          src={item.coverImage}
-          alt={item.title}
-          fill
-          className="object-cover"
-          sizes="58px"
-        />
-      ) : (
-        <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.18),_transparent_58%),linear-gradient(135deg,_#0f172a,_#1d4ed8)] p-2 text-center">
-          <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-cyan-100">{format}</span>
+      <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[0.85rem] bg-white">
+        <div className="h-[7px] w-full bg-[linear-gradient(90deg,_#22d3ee,_#2563eb)]" />
+        <div className="flex-1 px-[6px] py-[5px]">
+          <div className="inline-flex rounded-full bg-slate-100 px-[5px] py-[1px] text-[7px] font-black uppercase tracking-[0.22em] text-slate-600">
+            {format}
+          </div>
+          <div className="mt-[5px] space-y-[3px] text-[6px] leading-[1.25] text-slate-700">
+            {lines.map((line, index) => (
+              <p
+                key={`${item.slug}-${index}`}
+                className={`truncate ${index === 0 ? "font-bold text-slate-900" : "text-slate-500"}`}
+              >
+                {line}
+              </p>
+            ))}
+          </div>
         </div>
-      )}
+        <div className="absolute right-0 top-0 h-0 w-0 border-l-[11px] border-t-[11px] border-l-transparent border-t-cyan-100/80" />
+      </div>
     </Link>
   );
 }
@@ -68,6 +86,7 @@ export function DownloadBrowser({
       <div className="space-y-5">
         {sortedCategories.map((category) => {
           const files = downloads.filter((item) => item.categorySlug === category.slug);
+
           return (
             <section
               key={category.slug}
@@ -75,7 +94,7 @@ export function DownloadBrowser({
               className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]"
             >
               <div className="border-b border-slate-200 pb-4">
-                <h3 className="text-[30px] font-semibold text-slate-950">{category.name}</h3>
+                <h3 className="text-2xl font-semibold text-slate-950">{category.name}</h3>
                 {category.description ? (
                   <p className="mt-2 text-sm leading-6 text-slate-600">{category.description}</p>
                 ) : null}
@@ -90,7 +109,7 @@ export function DownloadBrowser({
                     return (
                       <article
                         key={item.slug}
-                        className="grid gap-4 rounded-[1.2rem] border border-slate-200 px-4 py-4 md:grid-cols-[58px_minmax(0,1fr)_auto] md:items-center"
+                        className="grid gap-4 rounded-[1.2rem] border border-slate-200 px-4 py-4 md:grid-cols-[62px_minmax(0,1fr)_auto] md:items-center"
                       >
                         <Thumbnail item={item} format={format} />
 
