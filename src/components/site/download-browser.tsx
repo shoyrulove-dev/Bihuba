@@ -14,11 +14,7 @@ function buildPreviewLines(item: DownloadShape) {
   const title = item.title || item.documentType || "Tài liệu";
   const summary = item.summary || "Tài liệu nội bộ";
 
-  return [
-    title.slice(0, 20).trim(),
-    summary.slice(0, 24).trim(),
-    item.publishedAt || "Cập nhật",
-  ];
+  return [title.slice(0, 20).trim(), summary.slice(0, 24).trim(), item.publishedAt || "Cập nhật"];
 }
 
 function Thumbnail({ item, format }: { item: DownloadShape; format: string }) {
