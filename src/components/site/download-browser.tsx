@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { slugify } from "@/lib/slug";
 import { getDownloadFormat, getDownloadTypeLabel } from "@/lib/downloads";
+import { slugify } from "@/lib/slug";
 import { DownloadCategoryShape, DownloadShape } from "@/types/cms";
 
 function normalizeDownloads(items: DownloadShape[]) {
@@ -9,6 +9,29 @@ function normalizeDownloads(items: DownloadShape[]) {
     ...item,
     categorySlug: item.categorySlug || slugify(item.category || "khac"),
   }));
+}
+
+function Thumbnail({ item, format }: { item: DownloadShape; format: string }) {
+  return (
+    <Link
+      href={`/download/${item.slug}`}
+      className="relative block h-[78px] w-[58px] shrink-0 overflow-hidden rounded-[0.95rem] border border-slate-200 bg-slate-100"
+    >
+      {item.coverImage ? (
+        <Image
+          src={item.coverImage}
+          alt={item.title}
+          fill
+          className="object-cover"
+          sizes="58px"
+        />
+      ) : (
+        <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.18),_transparent_58%),linear-gradient(135deg,_#0f172a,_#1d4ed8)] p-2 text-center">
+          <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-cyan-100">{format}</span>
+        </div>
+      )}
+    </Link>
+  );
 }
 
 export function DownloadBrowser({
@@ -22,9 +45,9 @@ export function DownloadBrowser({
   const sortedCategories = [...categories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
-      <aside className="rounded-[1.6rem] border border-slate-200 bg-white p-4 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-700">Danh mục</h3>
+    <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+      <aside className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-[0_18px_45px_rgba(15,23,42,0.05)]">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-700">Danh mục</h3>
         <div className="mt-4 space-y-2">
           {sortedCategories.map((category) => {
             const count = downloads.filter((item) => item.categorySlug === category.slug).length;
@@ -52,7 +75,7 @@ export function DownloadBrowser({
               className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-[0_18px_45px_rgba(15,23,42,0.05)]"
             >
               <div className="border-b border-slate-200 pb-4">
-                <h3 className="text-2xl font-semibold text-slate-950">{category.name}</h3>
+                <h3 className="text-[30px] font-semibold text-slate-950">{category.name}</h3>
                 {category.description ? (
                   <p className="mt-2 text-sm leading-6 text-slate-600">{category.description}</p>
                 ) : null}
@@ -67,35 +90,20 @@ export function DownloadBrowser({
                     return (
                       <article
                         key={item.slug}
-                        className="grid gap-4 rounded-[1.3rem] border border-slate-200 p-4 md:grid-cols-[120px_minmax(0,1fr)_auto] md:items-center"
+                        className="grid gap-4 rounded-[1.2rem] border border-slate-200 px-4 py-4 md:grid-cols-[58px_minmax(0,1fr)_auto] md:items-center"
                       >
-                        <Link
-                          href={`/download/${item.slug}`}
-                          className="relative block aspect-[4/5] overflow-hidden rounded-[1rem] bg-slate-100"
-                        >
-                          {item.coverImage ? (
-                            <Image
-                              src={item.coverImage}
-                              alt={item.title}
-                              fill
-                              className="object-cover"
-                              sizes="120px"
-                            />
-                          ) : (
-                            <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.16),_transparent_58%),linear-gradient(135deg,_#0f172a,_#1d4ed8)] p-3 text-center">
-                              <span className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-100">{format}</span>
-                            </div>
-                          )}
-                        </Link>
+                        <Thumbnail item={item} format={format} />
 
                         <div className="min-w-0">
-                          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
                             <span className="rounded-full bg-cyan-50 px-3 py-1 text-cyan-700">{typeLabel}</span>
                             <span className="rounded-full bg-slate-100 px-3 py-1">{format}</span>
                             <span className="ml-auto normal-case tracking-normal">{item.publishedAt}</span>
                           </div>
-                          <h4 className="mt-3 text-lg font-semibold text-slate-900">{item.title}</h4>
-                          {item.summary ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{item.summary}</p> : null}
+                          <h4 className="mt-2 line-clamp-1 text-lg font-semibold text-slate-900">{item.title}</h4>
+                          {item.summary ? (
+                            <p className="mt-1 line-clamp-1 text-sm text-slate-500">{item.summary}</p>
+                          ) : null}
                         </div>
 
                         <div className="flex shrink-0 flex-wrap gap-3 md:justify-end">
