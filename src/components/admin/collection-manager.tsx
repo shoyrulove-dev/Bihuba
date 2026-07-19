@@ -850,6 +850,12 @@ function SupportersField({
 }) {
   const items = (Array.isArray(value) ? value : []) as SupporterItem[];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [supporterPage, setSupporterPage] = useState(1);
+  const supporterPageSize = 20;
+  const supporterTotalPages = Math.max(1, Math.ceil(items.length / supporterPageSize));
+  const supporterCurrentPage = Math.min(supporterPage, supporterTotalPages);
+  const supporterStart = (supporterCurrentPage - 1) * supporterPageSize;
+  const visibleSupporters = items.slice(supporterStart, supporterStart + supporterPageSize);
   const updateItem = (index: number, patch: Partial<SupporterItem>) => {
     const next = [...items];
     next[index] = { ...next[index], ...patch };
@@ -858,6 +864,7 @@ function SupportersField({
   const addItem = () => {
     onChange([{ group: "", name: "", logoUrl: "", website: "" }, ...items]);
     setOpenIndex(0);
+    setSupporterPage(1);
   };
 
   return (
@@ -890,7 +897,10 @@ function SupportersField({
           </div>
         </div>
       </div>
-      {items.map((item, index) => (
+      {visibleSupporters.map((item, visibleIndex) => {
+        const index = supporterStart + visibleIndex;
+
+        return (
         <div
           key={
             [item.group, item.name, item.logoUrl, String(index)]
@@ -1056,7 +1066,37 @@ function SupportersField({
           </div>
         </div>
         </div>
-      ))}
+        );
+      })}
+      {supporterTotalPages > 1 ? (
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3">
+          <p className="text-sm font-semibold text-slate-600">
+            Trang {supporterCurrentPage} / {supporterTotalPages}
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={supporterCurrentPage <= 1}
+              onClick={() => setSupporterPage((current) => Math.max(1, current - 1))}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-700 disabled:opacity-40"
+              title="Trang trước"
+              aria-label="Trang trước"
+            >
+              <ChevronLeftIcon />
+            </button>
+            <button
+              type="button"
+              disabled={supporterCurrentPage >= supporterTotalPages}
+              onClick={() => setSupporterPage((current) => Math.min(supporterTotalPages, current + 1))}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-700 disabled:opacity-40"
+              title="Trang sau"
+              aria-label="Trang sau"
+            >
+              <ChevronRightIcon />
+            </button>
+          </div>
+        </div>
+      ) : null}
       <button
         type="button"
         onClick={() => onChange([...items, { group: "", name: "", logoUrl: "", website: "" }])}
@@ -1744,7 +1784,7 @@ export function CollectionManager({
               <div className={`grid gap-5 ${isComposeForm ? "grid-cols-1" : "xl:grid-cols-2"}`}>
                 {fieldSections.map((section) => {
                   const hasRichText = section.fields.some((field) => field.type === "richtext");
-                  const isSectionOpen = openSections[section.title] ?? (isComposeForm || hasRichText);
+                  const isSectionOpen = openSections[section.title] ?? true;
 
                   return (
                   <section
