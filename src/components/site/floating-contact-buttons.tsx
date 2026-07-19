@@ -39,19 +39,23 @@ function UserIcon() {
 
 function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mode: "login" | "register") => void }) {
   return (
-    <div className="absolute bottom-full right-0 mb-3 w-[min(92vw,360px)] overflow-hidden rounded-[1.5rem] border border-white/15 bg-slate-950 text-white shadow-[0_24px_60px_rgba(2,6,23,0.35)]">
-      <div className="flex border-b border-white/10 p-2">
+    <div className="absolute bottom-full right-0 mb-3 w-[min(92vw,360px)] overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white text-slate-950 shadow-[0_24px_60px_rgba(15,23,42,0.2)]">
+      <div className="flex border-b border-slate-100 bg-slate-50 p-2">
         <button
           type="button"
           onClick={() => setMode("login")}
-          className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold ${mode === "login" ? "bg-cyan-400 text-slate-950" : "text-slate-300"}`}
+          className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
+            mode === "login" ? "bg-cyan-400 text-slate-950 shadow-sm" : "text-slate-500 hover:text-slate-950"
+          }`}
         >
           Đăng nhập
         </button>
         <button
           type="button"
           onClick={() => setMode("register")}
-          className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold ${mode === "register" ? "bg-cyan-400 text-slate-950" : "text-slate-300"}`}
+          className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
+            mode === "register" ? "bg-cyan-400 text-slate-950 shadow-sm" : "text-slate-500 hover:text-slate-950"
+          }`}
         >
           Đăng ký
         </button>
@@ -65,20 +69,20 @@ function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mo
             type="email"
             placeholder="Email"
             autoComplete="username"
-            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-300 focus:bg-white"
           />
           <input
             name="password"
             type="password"
             placeholder="Mật khẩu"
             autoComplete="current-password"
-            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-300 focus:bg-white"
           />
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs font-medium text-slate-600">
             <input name="remember" type="checkbox" value="30d" className="h-4 w-4" />
             Ghi nhớ 30 ngày
           </label>
-          <button type="submit" className="w-full rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950">
+          <button type="submit" className="w-full rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950 shadow-[0_10px_22px_rgba(34,211,238,0.22)]">
             Vào
           </button>
         </form>
@@ -90,23 +94,23 @@ function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mo
             type="email"
             placeholder="Email doanh nghiệp"
             autoComplete="email"
-            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-300 focus:bg-white"
           />
           <input
             name="phone"
             type="tel"
             placeholder="Số điện thoại"
             autoComplete="tel"
-            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-300 focus:bg-white"
           />
           <input
             name="password"
             type="password"
             placeholder="Mật khẩu tối thiểu 6 ký tự"
             autoComplete="new-password"
-            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+            className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition focus:border-cyan-300 focus:bg-white"
           />
-          <button type="submit" className="w-full rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950">
+          <button type="submit" className="w-full rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950 shadow-[0_10px_22px_rgba(34,211,238,0.22)]">
             Tạo tài khoản
           </button>
         </form>

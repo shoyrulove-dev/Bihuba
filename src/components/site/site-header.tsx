@@ -27,12 +27,12 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061934]/96 shadow-[0_18px_55px_rgba(2,12,27,0.18)] backdrop-blur">
-      <div className="flex flex-col gap-4 px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:gap-8 xl:px-9">
+      <div className="flex flex-col gap-4 px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4 xl:px-7 2xl:px-9">
         <Link
           href="/"
-          className="group flex min-h-[66px] w-full min-w-0 items-center gap-3 rounded-[1.1rem] border border-cyan-200/15 bg-gradient-to-r from-white/[0.10] via-cyan-300/[0.05] to-transparent px-3 py-2 shadow-[0_14px_34px_rgba(2,12,27,0.2)] lg:w-[500px] lg:max-w-[500px] lg:shrink-0 xl:w-[530px] xl:max-w-[530px]"
+          className="group flex min-h-[58px] w-full min-w-0 items-center gap-2.5 rounded-[1rem] border border-cyan-200/15 bg-gradient-to-r from-white/[0.10] via-cyan-300/[0.05] to-transparent px-3 py-2 shadow-[0_14px_34px_rgba(2,12,27,0.2)] lg:w-[390px] lg:max-w-[390px] lg:shrink-0 xl:w-[420px] xl:max-w-[420px] 2xl:w-[450px] 2xl:max-w-[450px]"
         >
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-cyan-200/20 bg-[#09254d] p-1.5 shadow-[0_0_24px_rgba(86,214,255,0.16)]">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-cyan-200/20 bg-[#09254d] p-1.5 shadow-[0_0_24px_rgba(86,214,255,0.16)]">
             <Image
               src={settings.logoUrl || "/bihuba-mark.svg"}
               alt={settings.shortName || "BIHUBA"}
@@ -44,20 +44,20 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
           </span>
 
           <span className="min-w-0">
-            <span className="block text-[16px] font-black leading-none tracking-[0.01em] text-white drop-shadow-[0_2px_10px_rgba(86,214,255,0.22)] xl:text-[17px]">
+            <span className="block text-[15px] font-black leading-none tracking-[0.01em] text-white drop-shadow-[0_2px_10px_rgba(86,214,255,0.22)] xl:text-[16px]">
               {settings.shortName || "BIHUBA"}
             </span>
-            <span className="mt-1 block text-[10px] font-bold leading-4 text-cyan-100 xl:text-[11px]">
+            <span className="mt-1 block text-[9px] font-bold leading-3 text-cyan-100 xl:text-[10px]">
               {nameLines.lineOne}
             </span>
-            <span className="block text-[9px] font-semibold leading-4 text-blue-100/85 xl:text-[10px]">
+            <span className="block text-[9px] font-semibold leading-3 text-blue-100/85">
               {nameLines.lineTwo}
             </span>
           </span>
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 overflow-x-auto lg:flex lg:justify-end">
-          <div className="ml-auto flex min-w-max flex-nowrap items-center justify-end gap-1.5 pr-0">
+        <nav className="hidden min-w-0 flex-1 overflow-visible lg:flex lg:justify-end">
+          <div className="ml-auto flex min-w-0 flex-nowrap items-center justify-end gap-1 pr-0">
             {settings.nav.map((item) => {
               const isContact = item.href === "/lien-he";
 
@@ -65,7 +65,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`whitespace-nowrap rounded-full px-2.5 py-2 text-[10px] font-bold transition xl:px-3 xl:text-[11px] 2xl:px-4 2xl:text-[12px] ${
+                  className={`whitespace-nowrap rounded-full px-2 py-1.5 text-[10px] font-bold transition xl:px-2.5 xl:text-[10.5px] 2xl:px-3 2xl:text-[11px] ${
                     isContact
                       ? "bg-cyan-300 text-slate-950 shadow-[0_10px_22px_rgba(86,214,255,0.2)] hover:bg-cyan-200"
                       : "border border-white/10 bg-white/6 text-slate-100 hover:border-cyan-300/35 hover:bg-white/12 hover:text-cyan-100"
