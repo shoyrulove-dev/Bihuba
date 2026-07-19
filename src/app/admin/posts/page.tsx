@@ -95,7 +95,7 @@ export default async function AdminPostsPage() {
         title="Bài viết"
         description="Danh sách tin tức, sự kiện, lịch tuần và bài kết nối giao thương."
         initialItems={posts as unknown as Record<string, unknown>[]}
-        panelMaxWidthClass="max-w-[1180px]"
+        panelMaxWidthClass="max-w-[1360px]"
         fields={postFields}
       />
     </AdminShell>

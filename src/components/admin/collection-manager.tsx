@@ -1509,7 +1509,7 @@ export function CollectionManager({
                   </p>
                 </div>
               ) : null}
-              <div className={`grid gap-5 ${isComposeForm ? "xl:grid-cols-[minmax(0,1fr)_320px]" : "xl:grid-cols-2"}`}>
+              <div className={`grid gap-5 ${isComposeForm ? "grid-cols-1" : "xl:grid-cols-2"}`}>
                 {fieldSections.map((section) => (
                   <section
                     key={section.title}
