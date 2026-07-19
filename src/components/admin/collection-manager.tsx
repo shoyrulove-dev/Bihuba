@@ -549,15 +549,82 @@ function BannerListField({
   onChange: (nextValue: FeatureBannerItem[]) => void;
 }) {
   const items = (Array.isArray(value) ? value : []) as FeatureBannerItem[];
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const addItem = () => {
+    onChange([
+      {
+        title: "",
+        subtitle: "",
+        imageUrl: "",
+        href: "",
+        buttonLabel: "",
+        eyebrow: "",
+        eventDate: "",
+      },
+      ...items,
+    ]);
+    setOpenIndex(0);
+  };
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-slate-600">Banner nổi bật</p>
+        <button
+          type="button"
+          onClick={addItem}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-lg font-bold text-white"
+          title="Thêm banner"
+          aria-label="Thêm banner"
+        >
+          +
+        </button>
+      </div>
       {items.map((item, index) => (
         <div
           key={`${item.title}-${index}`}
-          className="grid gap-4 rounded-[1.6rem] border border-slate-200 bg-white p-4 xl:grid-cols-[280px_minmax(0,1fr)]"
+          className="rounded-[1.25rem] border border-slate-200 bg-white p-3"
         >
-          <div className="space-y-3">
+          <div className="grid grid-cols-[96px_minmax(0,1fr)_auto] items-center gap-3">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+              {item.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={item.imageUrl} alt={item.title || "Banner"} className="h-14 w-24 object-cover" />
+              ) : (
+                <div className="flex h-14 w-24 items-center justify-center text-[10px] font-bold uppercase text-slate-400">
+                  Banner
+                </div>
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-bold text-slate-900">{item.title || "Banner mới"}</p>
+              <p className="truncate text-xs text-slate-500">
+                {[item.eyebrow, item.eventDate, item.href].filter(Boolean).join(" - ") || "Chưa có thông tin"}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400 text-slate-950"
+                title="Sửa"
+                aria-label="Sửa"
+              >
+                <EditIcon />
+              </button>
+              <button
+                type="button"
+                onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-red-200 text-red-600"
+                title="Xóa"
+                aria-label="Xóa"
+              >
+                <DeleteIcon />
+              </button>
+            </div>
+          </div>
+          <div className={`mt-4 grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)] ${openIndex === index ? "" : "hidden"}`}>
+            <div className="space-y-3">
             <div className="overflow-hidden rounded-[1.2rem] border border-slate-200 bg-slate-100">
               {item.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -668,7 +735,7 @@ function BannerListField({
               placeholder="Nút bấm"
               className="w-full rounded-2xl border border-slate-200 px-4 py-3"
             />
-            <div className="flex flex-wrap items-center gap-3 md:col-span-2">
+            <div className="hidden">
               <button
                 type="button"
                 onClick={() => {
@@ -703,6 +770,7 @@ function BannerListField({
             </div>
           </div>
         </div>
+        </div>
       ))}
       <button
         type="button"
@@ -720,7 +788,7 @@ function BannerListField({
             },
           ])
         }
-        className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
+        className="hidden"
       >
         Thêm banner
       </button>
@@ -781,14 +849,31 @@ function SupportersField({
   onChange: (nextValue: SupporterItem[]) => void;
 }) {
   const items = (Array.isArray(value) ? value : []) as SupporterItem[];
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const updateItem = (index: number, patch: Partial<SupporterItem>) => {
     const next = [...items];
     next[index] = { ...next[index], ...patch };
     onChange(next);
   };
+  const addItem = () => {
+    onChange([{ group: "", name: "", logoUrl: "", website: "" }, ...items]);
+    setOpenIndex(0);
+  };
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-slate-600">Danh sách doanh nghiệp đồng hành</p>
+        <button
+          type="button"
+          onClick={addItem}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-lg font-bold text-white"
+          title="Thêm doanh nghiệp đồng hành"
+          aria-label="Thêm doanh nghiệp đồng hành"
+        >
+          +
+        </button>
+      </div>
       <div className="grid gap-4 rounded-2xl border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950 lg:grid-cols-[minmax(0,1fr)_150px] lg:items-center">
         <div>
           <p className="font-bold">Gợi ý logo đồng hành dạng tròn</p>
@@ -812,9 +897,9 @@ function SupportersField({
               .filter(Boolean)
               .join("-") || `supporter-${index}`
           }
-          className="grid gap-3 rounded-[1.25rem] border border-slate-200 bg-white p-3 xl:grid-cols-[76px_minmax(160px,1fr)_minmax(150px,0.8fr)_minmax(180px,1fr)_auto] xl:items-center"
+          className="rounded-[1.25rem] border border-slate-200 bg-white p-3"
         >
-          <div className="flex items-center gap-3">
+          <div className="grid grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-3">
             <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-slate-100 p-2 ring-1 ring-slate-200">
               {item.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -823,11 +908,64 @@ function SupportersField({
                 <span className="text-[10px] font-bold uppercase text-slate-400">Logo</span>
               )}
             </div>
-            <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase text-slate-500 xl:hidden">
-              {index + 1}
-            </span>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-bold text-slate-900">{item.name || "Doanh nghiệp mới"}</p>
+              <p className="truncate text-xs text-slate-500">
+                {[item.group, item.website].filter(Boolean).join(" - ") || "Chưa có thông tin"}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (index === 0) return;
+                  const next = [...items];
+                  [next[index - 1], next[index]] = [next[index], next[index - 1]];
+                  onChange(next);
+                }}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-700"
+                title="Lên"
+                aria-label="Lên"
+              >
+                ↑
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (index === items.length - 1) return;
+                  const next = [...items];
+                  [next[index + 1], next[index]] = [next[index], next[index + 1]];
+                  onChange(next);
+                }}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-700"
+                title="Xuống"
+                aria-label="Xuống"
+              >
+                ↓
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-400 text-slate-950"
+                title="Sửa"
+                aria-label="Sửa"
+              >
+                <EditIcon />
+              </button>
+              <button
+                type="button"
+                onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-red-200 text-red-600"
+                title="Xóa"
+                aria-label="Xóa"
+              >
+                <DeleteIcon />
+              </button>
+            </div>
           </div>
 
+          <div className={`mt-4 grid gap-3 xl:grid-cols-[76px_minmax(160px,1fr)_minmax(150px,0.8fr)_minmax(180px,1fr)_auto] xl:items-center ${openIndex === index ? "" : "hidden"}`}>
+          <div className="hidden" />
           <input
             type="text"
             value={item.name ?? ""}
@@ -917,11 +1055,12 @@ function SupportersField({
             </button>
           </div>
         </div>
+        </div>
       ))}
       <button
         type="button"
         onClick={() => onChange([...items, { group: "", name: "", logoUrl: "", website: "" }])}
-        className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
+        className="hidden"
       >
         Thêm doanh nghiệp đồng hành
       </button>
@@ -1195,6 +1334,7 @@ export function CollectionManager({
   const [isUploading, setIsUploading] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const mode = searchParams.get("mode");
   const editId = searchParams.get("edit");
   const isPanelOpen = singleton ? mode === "edit" : mode === "new" || Boolean(editId);
@@ -1256,6 +1396,7 @@ export function CollectionManager({
         setForm(buildFormFromRecord(fields, baseState, record));
         setEditingId(record._id ? String(record._id) : null);
         setStatus("");
+        setOpenSections({});
       });
 
       return () => window.cancelAnimationFrame(frame);
@@ -1267,6 +1408,7 @@ export function CollectionManager({
           setForm(baseState);
           setEditingId(null);
           setStatus("");
+          setOpenSections({});
         });
         return () => window.cancelAnimationFrame(frame);
       }
@@ -1280,6 +1422,7 @@ export function CollectionManager({
       setForm(buildFormFromRecord(fields, baseState, match as Record<string, unknown>));
       setEditingId(editId);
       setStatus("");
+      setOpenSections({});
     });
 
     return () => window.cancelAnimationFrame(frame);
@@ -1296,6 +1439,7 @@ export function CollectionManager({
     setForm(baseState);
     setEditingId(null);
     setStatus("");
+    setOpenSections({});
     router.replace(`${pathname}?mode=new`, { scroll: false });
   }
 
@@ -1304,11 +1448,13 @@ export function CollectionManager({
     setForm(buildFormFromRecord(fields, baseState, item));
     setEditingId(nextId);
     setStatus("");
+    setOpenSections({});
     router.replace(`${pathname}?mode=edit&edit=${nextId}`, { scroll: false });
   }
 
   function closePanel() {
     setStatus("");
+    setOpenSections({});
     router.replace(returnPath, { scroll: false });
   }
 
@@ -1596,23 +1742,42 @@ export function CollectionManager({
 
             <form className="space-y-5 px-6 py-6" onSubmit={handleSubmit}>
               <div className={`grid gap-5 ${isComposeForm ? "grid-cols-1" : "xl:grid-cols-2"}`}>
-                {fieldSections.map((section) => (
+                {fieldSections.map((section) => {
+                  const hasRichText = section.fields.some((field) => field.type === "richtext");
+                  const isSectionOpen = openSections[section.title] ?? (isComposeForm || hasRichText);
+
+                  return (
                   <section
                     key={section.title}
                     className={`rounded-[1.8rem] border border-slate-200 bg-slate-50 p-5 ${
-                      isComposeForm && (section.title === "Soạn bài" || section.fields.some((field) => field.type === "richtext"))
+                      isComposeForm && (section.title === "Soạn bài" || hasRichText)
                         ? "xl:col-span-2"
                         : !isComposeForm && section.fields.some((field) => field.fullWidth || field.type === "richtext")
                           ? "xl:col-span-2"
                           : ""
                     }`}
                   >
-                    <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
-                      {section.title}
-                    </h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenSections((current) => ({
+                          ...current,
+                          [section.title]: !isSectionOpen,
+                        }))
+                      }
+                      className="flex w-full items-center justify-between gap-3 text-left"
+                    >
+                      <span className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
+                        {section.title}
+                      </span>
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-lg font-bold text-slate-700 ring-1 ring-slate-200">
+                        {isSectionOpen ? "-" : "+"}
+                      </span>
+                    </button>
+                    {isSectionOpen ? (
                     <div
                       className={`mt-4 grid gap-4 ${
-                        section.fields.some((field) => field.type === "richtext")
+                        hasRichText
                           ? "grid-cols-1"
                           : "md:grid-cols-2"
                       }`}
@@ -1770,8 +1935,10 @@ export function CollectionManager({
                         </label>
                       ))}
                     </div>
+                    ) : null}
                   </section>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="sticky bottom-0 flex flex-wrap items-center gap-3 border-t border-slate-200 bg-white pt-5">
