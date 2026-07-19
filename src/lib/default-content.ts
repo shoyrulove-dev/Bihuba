@@ -36,13 +36,13 @@ export const defaultSettings: SiteSettingsShape = {
   slogan: "Đoàn kết - Đổi mới - Hội nhập - Phát triển",
   heroTitle: "Cộng đồng doanh nghiệp Bình Hưng kết nối nguồn lực và mở rộng cơ hội phát triển",
   heroSubtitle:
-    "Cổng thông tin BIHUBA được xây dựng theo hướng hiện đại, quản trị tập trung, phù hợp cho tin tức, sự kiện, hội viên, đối tác và các chương trình kết nối giao thương.",
+    "Không gian kết nối thông tin, sự kiện, hội viên, đối tác và các chương trình giao thương của cộng đồng doanh nghiệp Bình Hưng.",
   heroImage: "/bihuba-hero-generated.svg",
   heroCtaLabel: "Khám phá tin hoạt động",
   heroCtaHref: "/tin-tuc",
   introTitle: "Về BIHUBA",
   introBody:
-    "BIHUBA định hướng trở thành điểm kết nối doanh nghiệp tại khu vực Bình Hưng, thúc đẩy hợp tác, đổi mới và chia sẻ cơ hội tăng trưởng. ",
+    "BIHUBA định hướng trở thành điểm kết nối doanh nghiệp tại khu vực Bình Hưng, thúc đẩy hợp tác, đổi mới và chia sẻ cơ hội tăng trưởng.",
   memberStats: [
     { label: "Hội viên doanh nghiệp", value: "120+" },
     { label: "Chương trình kết nối", value: "36+" },

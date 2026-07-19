@@ -7,6 +7,79 @@ export default async function AdminPostsPage() {
   const session = await requireAdminPage("/admin/posts");
   const posts = await getPosts(undefined, { includeUnpublished: true });
   const isAdmin = session.role === "admin";
+  const postFields = [
+    { name: "title", label: "Tiêu đề", section: "Soạn bài", fullWidth: true },
+    { name: "slug", label: "Slug", section: "Thiết lập" },
+    {
+      name: "type",
+      label: "Loại",
+      type: "select" as const,
+      section: "Thiết lập",
+      options: [
+        { label: "Tin tức", value: "news" },
+        { label: "Sự kiện", value: "event" },
+        { label: "Lịch tuần", value: "schedule" },
+        { label: "Giao thương", value: "trade" },
+        { label: "Đồng hành", value: "sponsor" },
+      ],
+    },
+    { name: "category", label: "Danh mục", section: "Thiết lập" },
+    ...(isAdmin
+      ? [
+          {
+            name: "status",
+            label: "Trạng thái duyệt",
+            type: "select" as const,
+            section: "Thiết lập",
+            helpText: "Chọn Đã xuất bản để duyệt và hiển thị ngoài website.",
+            options: [
+              { label: "Bản nháp", value: "draft" },
+              { label: "Chờ duyệt", value: "pending" },
+              { label: "Đã xuất bản", value: "published" },
+            ],
+          },
+        ]
+      : []),
+    {
+      name: "publishedAt",
+      label: "Ngày đăng",
+      type: "date" as const,
+      section: "Thiết lập",
+    },
+    {
+      name: "excerpt",
+      label: "Tóm tắt",
+      type: "textarea" as const,
+      section: "Soạn bài",
+      fullWidth: true,
+    },
+    {
+      name: "content",
+      label: "Nội dung",
+      type: "richtext" as const,
+      section: "Trình soạn thảo",
+      fullWidth: true,
+      helpText: "Editor hỗ trợ định dạng, highlight, heading, bullet, link, ảnh upload ImageKit và video YouTube.",
+    },
+    {
+      name: "featuredImage",
+      label: "Ảnh đại diện",
+      type: "image" as const,
+      section: "Media",
+      fullWidth: true,
+      helpText: "Dán link hoặc upload ảnh. Gợi ý: 1600 x 900 px, JPG/WebP dưới 1 MB.",
+    },
+    ...(isAdmin
+      ? [
+          {
+            name: "isFeatured",
+            label: "Tin nổi bật",
+            type: "checkbox" as const,
+            section: "Thiết lập",
+          },
+        ]
+      : []),
+  ];
 
   return (
     <AdminShell
@@ -22,72 +95,8 @@ export default async function AdminPostsPage() {
         title="Bài viết"
         description="Danh sách tin tức, sự kiện, lịch tuần và bài kết nối giao thương."
         initialItems={posts as unknown as Record<string, unknown>[]}
-        panelMaxWidthClass="max-w-6xl"
-        fields={[
-          { name: "title", label: "Tiêu đề", section: "Soạn bài", fullWidth: true },
-          { name: "slug", label: "Slug", section: "Thiết lập" },
-          {
-            name: "type",
-            label: "Loại",
-            type: "select",
-            section: "Thiết lập",
-            options: [
-              { label: "Tin tức", value: "news" },
-              { label: "Sự kiện", value: "event" },
-              { label: "Lịch tuần", value: "schedule" },
-              { label: "Giao thương", value: "trade" },
-              { label: "Đồng hành", value: "sponsor" },
-            ],
-          },
-          { name: "category", label: "Danh mục", section: "Thiết lập" },
-          {
-            name: "status",
-            label: "Trạng thái duyệt",
-            type: "select",
-            section: "Thiết lập",
-            helpText: isAdmin ? "Chọn Published để duyệt và hiển thị ngoài website." : "Tài khoản quản lý luôn gửi bài ở trạng thái Chờ duyệt.",
-            options: [
-              { label: "Bản nháp", value: "draft" },
-              { label: "Chờ duyệt", value: "pending" },
-              { label: "Đã xuất bản", value: "published" },
-            ],
-          },
-          {
-            name: "publishedAt",
-            label: "Ngày đăng",
-            type: "date",
-            section: "Thiết lập",
-          },
-          {
-            name: "excerpt",
-            label: "Tóm tắt",
-            type: "textarea",
-            section: "Soạn bài",
-            fullWidth: true,
-          },
-          {
-            name: "content",
-            label: "Nội dung",
-            type: "richtext",
-            section: "Trình soạn thảo",
-            fullWidth: true,
-            helpText: "Editor hỗ trợ định dạng, highlight, heading, bullet, link, ảnh upload ImageKit và video YouTube.",
-          },
-          {
-            name: "featuredImage",
-            label: "Ảnh đại diện",
-            type: "image",
-            section: "Media",
-            fullWidth: true,
-            helpText: "Dán link hoặc upload ảnh. Gợi ý: 1600 x 900 px, JPG/WebP dưới 1 MB.",
-          },
-          {
-            name: "isFeatured",
-            label: "Tin nổi bật",
-            type: "checkbox",
-            section: "Thiết lập",
-          },
-        ]}
+        panelMaxWidthClass="max-w-[1180px]"
+        fields={postFields}
       />
     </AdminShell>
   );

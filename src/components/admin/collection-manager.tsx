@@ -692,6 +692,10 @@ function SupportersField({
 
   return (
     <div className="space-y-4">
+      <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
+        Gợi ý logo đồng hành: ảnh vuông 800 x 800 px hoặc 1000 x 1000 px, PNG/WebP nền trong hoặc nền trắng,
+        logo nằm giữa và chừa vùng an toàn khoảng 12% để hiển thị rõ trong khung tròn.
+      </div>
       {items.map((item, index) => (
         <div
           key={
@@ -1498,19 +1502,23 @@ export function CollectionManager({
               {isComposeForm ? (
                 <div className="rounded-[1.8rem] border border-cyan-200 bg-cyan-50 px-5 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-800">
-                    Trình soạn bài
+                    Composer
                   </p>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Soạn nội dung theo từng khối giống bài viết/forum. Ảnh và file media upload lên ImageKit, không lưu trực tiếp vào database.
+                    Soạn tiêu đề, tóm tắt, nội dung, ảnh và video trong một màn hình rộng như trình đăng bài.
                   </p>
                 </div>
               ) : null}
-              <div className={`grid gap-5 ${isComposeForm ? "" : "xl:grid-cols-2"}`}>
+              <div className={`grid gap-5 ${isComposeForm ? "xl:grid-cols-[minmax(0,1fr)_320px]" : "xl:grid-cols-2"}`}>
                 {fieldSections.map((section) => (
                   <section
                     key={section.title}
                     className={`rounded-[1.8rem] border border-slate-200 bg-slate-50 p-5 ${
-                      section.fields.some((field) => field.fullWidth || field.type === "richtext") ? "xl:col-span-2" : ""
+                      isComposeForm && (section.title === "Soạn bài" || section.fields.some((field) => field.type === "richtext"))
+                        ? "xl:col-span-2"
+                        : !isComposeForm && section.fields.some((field) => field.fullWidth || field.type === "richtext")
+                          ? "xl:col-span-2"
+                          : ""
                     }`}
                   >
                     <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
