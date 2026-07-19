@@ -16,6 +16,22 @@ type Context = {
 function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number) {
   payload.submittedBy = userId;
 
+  if (!payload.publishedAt) {
+    payload.publishedAt = new Date().toISOString().slice(0, 10);
+  }
+
+  if (!payload.displayDate) {
+    payload.displayDate = payload.publishedAt;
+  }
+
+  if (role === "business") {
+    payload.status = "published";
+    payload.isFeatured = false;
+    delete payload.approvedBy;
+    delete payload.approvedAt;
+    return;
+  }
+
   if (role !== "admin") {
     payload.status = "pending";
     payload.isFeatured = false;
@@ -77,6 +93,13 @@ export async function PUT(request: NextRequest, context: Context) {
     );
   }
 
+  if (key === "posts" && session.role !== "admin") {
+    const existingPost = await Model.findById(id).lean();
+    if (!existingPost || Number(existingPost.submittedBy) !== session.userId) {
+      return NextResponse.json({ message: "Tài khoản chưa được cấp quyền cập nhật bài viết này." }, { status: 403 });
+    }
+  }
+
   const payload = (await request.json()) as Record<string, unknown>;
 
   if ("title" in payload && !payload.slug) {
@@ -108,6 +131,8 @@ export async function PUT(request: NextRequest, context: Context) {
     }
 
     payload.username = String(payload.username ?? existingUser.username).trim().toLowerCase();
+    payload.email = String(payload.email ?? existingUser.email ?? "").trim().toLowerCase();
+    payload.phone = String(payload.phone ?? existingUser.phone ?? "").trim();
     normalizeUserPermissions(payload);
 
     if (payload.password) {

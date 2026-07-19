@@ -2,7 +2,7 @@ export const ADMIN_SESSION_COOKIE = "bihuba_admin_session";
 export const SESSION_MAX_AGE_DEFAULT = 60 * 60 * 8;
 export const SESSION_MAX_AGE_REMEMBER = 60 * 60 * 24 * 30;
 
-export type AdminRole = "admin" | "manager";
+export type AdminRole = "admin" | "manager" | "business";
 
 export type SessionUser = {
   userId: number;

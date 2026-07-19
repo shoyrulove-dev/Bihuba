@@ -12,6 +12,7 @@ export default async function AdminProfilePage() {
   const name = String(user?.name ?? session.name);
   const username = String(user?.username ?? session.username);
   const role = String(user?.role ?? session.role);
+  const roleLabel = role === "admin" ? "Admin" : role === "business" ? "Doanh nghiệp" : "Quản lý";
 
   return (
     <AdminShell title="Hồ sơ quản trị" description="Đổi tên hiển thị và mật khẩu đăng nhập.">
@@ -41,7 +42,7 @@ export default async function AdminProfilePage() {
         <label className="block">
           <span className="mb-2 block text-sm font-medium text-white">Nhóm quyền</span>
           <input
-            value={role === "admin" ? "Admin" : "Quản lý"}
+            value={roleLabel}
             readOnly
             className="w-full rounded-2xl border border-white/10 bg-slate-900/40 px-4 py-3 text-slate-400"
           />

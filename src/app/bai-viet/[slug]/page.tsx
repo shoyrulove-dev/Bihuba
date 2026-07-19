@@ -49,6 +49,7 @@ export default async function PostDetailPage({
     },
     allowedSchemes: ["http", "https", "mailto", "data"],
   });
+  const displayDate = post.displayDate || post.publishedAt;
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
@@ -58,7 +59,7 @@ export default async function PostDetailPage({
       <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">
         {post.title}
       </h1>
-      <p className="mt-3 text-sm text-slate-500">{post.publishedAt}</p>
+      <p className="mt-3 text-sm text-slate-500">{displayDate}</p>
       <div
         className="mt-8 h-80 rounded-[2rem] bg-slate-200 bg-cover bg-center"
         style={{ backgroundImage: `url(${post.featuredImage})` }}

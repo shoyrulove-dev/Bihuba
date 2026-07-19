@@ -20,9 +20,20 @@ const userSchema = new Schema(
       trim: true,
       lowercase: true,
     },
+    email: {
+      type: String,
+      default: "",
+      trim: true,
+      lowercase: true,
+    },
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     role: {
       type: String,
-      enum: ["admin", "manager"],
+      enum: ["admin", "manager", "business"],
       default: "manager",
     },
     permissions: {

@@ -31,8 +31,26 @@ function serialize<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
 }
 
+function getPostDisplayTimestamp(post: Pick<PostShape, "publishedAt" | "displayDate">) {
+  const value = post.displayDate || post.publishedAt;
+  if (!value) return 0;
+
+  const normalized = value.includes("T") ? value : `${value}T01:00:00+07:00`;
+  const timestamp = Date.parse(normalized);
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
 function isPublishedPost(post: PostShape) {
-  return !post.status || post.status === "published";
+  return (!post.status || post.status === "published") && getPostDisplayTimestamp(post) <= Date.now();
+}
+
+function sortPostsByDisplayDate(posts: PostShape[]) {
+  return [...posts].sort((left, right) => {
+    const rightTime = getPostDisplayTimestamp(right);
+    const leftTime = getPostDisplayTimestamp(left);
+    if (rightTime !== leftTime) return rightTime - leftTime;
+    return String(right.publishedAt || "").localeCompare(String(left.publishedAt || ""));
+  });
 }
 
 export async function getSiteSettings(): Promise<SiteSettingsShape> {
@@ -85,19 +103,19 @@ export async function getPosts(
 
   if (!process.env.MONGODB_URI || !connection) {
     const posts = type ? defaultPosts.filter((post) => post.type === type) : defaultPosts;
-    return repairDeepText(options.includeUnpublished ? posts : posts.filter(isPublishedPost));
+    return repairDeepText(sortPostsByDisplayDate(options.includeUnpublished ? posts : posts.filter(isPublishedPost)));
   }
 
   const query = type ? { type } : {};
-  const posts = await PostModel.find(query).sort({ publishedAt: -1 }).lean();
+  const posts = await PostModel.find(query).lean();
 
   if (!posts.length) {
     const fallbackPosts = type ? defaultPosts.filter((post) => post.type === type) : defaultPosts;
-    return repairDeepText(options.includeUnpublished ? fallbackPosts : fallbackPosts.filter(isPublishedPost));
+    return repairDeepText(sortPostsByDisplayDate(options.includeUnpublished ? fallbackPosts : fallbackPosts.filter(isPublishedPost)));
   }
 
   const serialized = serialize(posts) as PostShape[];
-  return repairDeepText(options.includeUnpublished ? serialized : serialized.filter(isPublishedPost));
+  return repairDeepText(sortPostsByDisplayDate(options.includeUnpublished ? serialized : serialized.filter(isPublishedPost)));
 }
 
 export async function getPostBySlug(slug: string): Promise<PostShape | null> {

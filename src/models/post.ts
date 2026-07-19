@@ -14,6 +14,7 @@ const PostSchema = new Schema(
     content: { type: String, default: "" },
     featuredImage: { type: String, default: "" },
     publishedAt: { type: String, required: true },
+    displayDate: { type: String, default: "" },
     status: {
       type: String,
       enum: ["draft", "pending", "published"],

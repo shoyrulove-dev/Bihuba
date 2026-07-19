@@ -11,7 +11,7 @@ export default async function AdminUsersPage() {
   return (
     <AdminShell
       title="Quản lý tài khoản"
-      description="Admin toàn quyền. Tài khoản quản lý chỉ dùng các chức năng được cấp."
+      description="Admin toàn quyền. Quản lý dùng các chức năng được cấp. Doanh nghiệp có thể đăng bài và chịu trách nhiệm nội dung của mình."
     >
       <CollectionManager
         collection="users"
@@ -21,6 +21,8 @@ export default async function AdminUsersPage() {
         fields={[
           { name: "name", label: "Tên hiển thị" },
           { name: "username", label: "Tài khoản" },
+          { name: "email", label: "Email" },
+          { name: "phone", label: "Số điện thoại" },
           {
             name: "role",
             label: "Nhóm quyền",
@@ -28,6 +30,7 @@ export default async function AdminUsersPage() {
             options: [
               { label: "Admin", value: "admin" },
               { label: "Quản lý", value: "manager" },
+              { label: "Doanh nghiệp", value: "business" },
             ],
           },
           {
@@ -35,7 +38,7 @@ export default async function AdminUsersPage() {
             label: "Quyền chức năng",
             type: "permissions",
             fullWidth: true,
-            helpText: "Admin luôn có toàn quyền. Với tài khoản quản lý, chọn các mục được phép thao tác.",
+            helpText: "Admin luôn có toàn quyền. Quản lý và Doanh nghiệp chỉ dùng các mục được cấp, mặc định có quyền đăng bài.",
           },
           {
             name: "password",

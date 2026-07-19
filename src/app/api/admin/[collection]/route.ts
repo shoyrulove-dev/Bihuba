@@ -20,6 +20,22 @@ type Context = {
 function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number) {
   payload.submittedBy = userId;
 
+  if (!payload.publishedAt) {
+    payload.publishedAt = new Date().toISOString().slice(0, 10);
+  }
+
+  if (!payload.displayDate) {
+    payload.displayDate = payload.publishedAt;
+  }
+
+  if (role === "business") {
+    payload.status = "published";
+    payload.isFeatured = false;
+    delete payload.approvedBy;
+    delete payload.approvedAt;
+    return;
+  }
+
   if (role !== "admin") {
     payload.status = "pending";
     payload.isFeatured = false;
@@ -90,9 +106,12 @@ export async function GET(_: NextRequest, context: Context) {
       ? ([["order", 1], ["createdAt", 1]] as [string, 1 | -1][])
       : key === "users"
         ? ([["userId", 1]] as [string, 1 | -1][])
+        : key === "posts"
+          ? ([["displayDate", -1], ["publishedAt", -1], ["createdAt", -1]] as [string, 1 | -1][])
         : ([["createdAt", -1]] as [string, 1 | -1][]);
 
-  const items = await Model.find().sort(sort).lean();
+  const filter = key === "posts" && session.role !== "admin" ? { submittedBy: session.userId } : {};
+  const items = await Model.find(filter).sort(sort).lean();
   const serialized = JSON.parse(JSON.stringify(items)).map((item: Record<string, unknown>) => {
     if (key !== "users") return item;
     const { passwordHash, ...safeItem } = item;
@@ -162,6 +181,8 @@ export async function POST(request: NextRequest, context: Context) {
     normalizeUserPermissions(payload);
     payload.userId = await getNextUserId();
     payload.username = String(payload.username ?? "").trim().toLowerCase();
+    payload.email = String(payload.email ?? "").trim().toLowerCase();
+    payload.phone = String(payload.phone ?? "").trim();
     payload.passwordHash = hashPassword(String(payload.password ?? ""));
     payload.isProtected = false;
     delete payload.password;

@@ -95,6 +95,7 @@ export interface PostShape {
   content: string;
   featuredImage: string;
   publishedAt: string;
+  displayDate?: string;
   status?: "draft" | "pending" | "published";
   submittedBy?: number | null;
   approvedBy?: number | null;
@@ -158,7 +159,9 @@ export interface UserShape {
   userId: number;
   name: string;
   username: string;
-  role: "admin" | "manager";
+  email?: string;
+  phone?: string;
+  role: "admin" | "manager" | "business";
   permissions?: string[];
   password?: string;
   isProtected?: boolean;

@@ -7,6 +7,8 @@ export default async function AdminPostsPage() {
   const session = await requireAdminPage("/admin/posts");
   const posts = await getPosts(undefined, { includeUnpublished: true });
   const isAdmin = session.role === "admin";
+  const isBusiness = session.role === "business";
+  const visiblePosts = isAdmin ? posts : posts.filter((post) => post.submittedBy === session.userId);
   const postFields = [
     { name: "title", label: "Tiêu đề", section: "Soạn bài", fullWidth: true },
     { name: "slug", label: "Slug", section: "Thiết lập" },
@@ -45,6 +47,13 @@ export default async function AdminPostsPage() {
       label: "Ngày đăng",
       type: "date" as const,
       section: "Thiết lập",
+    },
+    {
+      name: "displayDate",
+      label: "Ngày hiển thị",
+      type: "date" as const,
+      section: "Thiết lập",
+      helpText: "Nếu để trống sẽ dùng ngày đăng. Bài bắt đầu hiển thị từ 01:00 sáng ngày này.",
     },
     {
       name: "excerpt",
@@ -87,14 +96,16 @@ export default async function AdminPostsPage() {
       description={
         isAdmin
           ? "Admin có quyền đăng, duyệt và xuất bản bài viết."
-          : "Quản lý có thể soạn bài mới. Bài viết sẽ chờ admin duyệt trước khi hiển thị ngoài website."
+          : isBusiness
+            ? "Tài khoản doanh nghiệp có thể đăng bài và tự chịu trách nhiệm với nội dung đã đăng."
+            : "Quản lý có thể soạn bài mới. Bài viết sẽ chờ admin duyệt trước khi hiển thị ngoài website."
       }
     >
       <CollectionManager
         collection="posts"
         title="Bài viết"
         description="Danh sách tin tức, sự kiện, lịch tuần và bài kết nối giao thương."
-        initialItems={posts as unknown as Record<string, unknown>[]}
+        initialItems={visiblePosts as unknown as Record<string, unknown>[]}
         panelMaxWidthClass="max-w-[1360px]"
         fields={postFields}
       />

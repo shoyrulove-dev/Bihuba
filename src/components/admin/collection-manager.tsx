@@ -171,6 +171,12 @@ function StatusIcon({ status }: { status: unknown }) {
   );
 }
 
+function getRoleLabel(role: unknown) {
+  if (role === "admin") return "Admin";
+  if (role === "business") return "Doanh nghiệp";
+  return "Quản lý";
+}
+
 function buildInitialValue(field: FieldConfig) {
   switch (field.type) {
     case "checkbox":
@@ -812,7 +818,7 @@ function PermissionsField({
   return (
     <div className="rounded-[1.35rem] border border-slate-200 bg-white p-4">
       <div className="mb-3 rounded-2xl bg-cyan-50 px-4 py-3 text-sm text-cyan-900">
-        Admin có toàn quyền đăng, duyệt, xóa và cấu hình. Tài khoản quản lý chỉ dùng các mục được chọn bên dưới.
+        Admin có toàn quyền đăng, duyệt, xóa và cấu hình. Quản lý và Doanh nghiệp chỉ dùng các mục được chọn bên dưới.
       </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {permissionOptions.map((option) => (
@@ -1690,7 +1696,7 @@ export function CollectionManager({
                       {record.status ? <StatusIcon status={record.status} /> : null}
                       {record.role ? (
                         <span className="shrink-0 rounded-full bg-white/8 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-cyan-200">
-                          {record.role === "admin" ? "Admin" : "Quản lý"}
+                          {getRoleLabel(record.role)}
                         </span>
                       ) : null}
                       {permissionLabels ? (

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { FloatingActions } from "@/types/cms";
 
 function ZaloIcon() {
@@ -25,45 +28,149 @@ function PhoneIcon() {
   );
 }
 
+function UserIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
+    </svg>
+  );
+}
+
+function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mode: "login" | "register") => void }) {
+  return (
+    <div className="absolute bottom-full right-0 mb-3 w-[min(92vw,360px)] overflow-hidden rounded-[1.5rem] border border-white/15 bg-slate-950 text-white shadow-[0_24px_60px_rgba(2,6,23,0.35)]">
+      <div className="flex border-b border-white/10 p-2">
+        <button
+          type="button"
+          onClick={() => setMode("login")}
+          className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold ${mode === "login" ? "bg-cyan-400 text-slate-950" : "text-slate-300"}`}
+        >
+          Đăng nhập
+        </button>
+        <button
+          type="button"
+          onClick={() => setMode("register")}
+          className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold ${mode === "register" ? "bg-cyan-400 text-slate-950" : "text-slate-300"}`}
+        >
+          Đăng ký
+        </button>
+      </div>
+
+      {mode === "login" ? (
+        <form action="/api/auth/login" method="post" className="space-y-3 p-4">
+          <input type="hidden" name="next" value="/admin/posts" />
+          <input
+            name="username"
+            type="email"
+            placeholder="Email"
+            autoComplete="username"
+            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Mật khẩu"
+            autoComplete="current-password"
+            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+          />
+          <label className="flex items-center gap-2 text-xs text-slate-300">
+            <input name="remember" type="checkbox" value="30d" className="h-4 w-4" />
+            Ghi nhớ 30 ngày
+          </label>
+          <button type="submit" className="w-full rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950">
+            Vào
+          </button>
+        </form>
+      ) : (
+        <form action="/api/auth/register" method="post" className="space-y-3 p-4">
+          <input type="hidden" name="next" value="/admin/posts" />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email doanh nghiệp"
+            autoComplete="email"
+            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+          />
+          <input
+            name="phone"
+            type="tel"
+            placeholder="Số điện thoại"
+            autoComplete="tel"
+            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Mật khẩu tối thiểu 6 ký tự"
+            autoComplete="new-password"
+            className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-slate-950 outline-none"
+          />
+          <button type="submit" className="w-full rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950">
+            Tạo tài khoản
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
+
 export function FloatingContactButtons({ actions }: { actions: FloatingActions }) {
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [mode, setMode] = useState<"login" | "register">("login");
   const hasAnyAction = actions.zaloUrl || actions.facebookUrl || actions.callNumber;
-  if (!hasAnyAction) return null;
 
   return (
     <div className="floating-contact-buttons fixed bottom-4 right-3 z-40 flex flex-col gap-2">
-      {actions.zaloUrl ? (
-        <Link
-          href={actions.zaloUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0068FF] text-white shadow-[0_14px_24px_rgba(0,104,255,0.26)] transition hover:scale-105"
-          aria-label="Zalo"
-          title="Zalo"
+      <div className="relative">
+        {isAuthOpen ? <AuthPanel mode={mode} setMode={setMode} /> : null}
+        <button
+          type="button"
+          onClick={() => setIsAuthOpen((current) => !current)}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-white shadow-[0_14px_24px_rgba(2,6,23,0.26)] transition hover:scale-105"
+          aria-label="Đăng nhập hoặc đăng ký"
+          title="Đăng nhập / Đăng ký"
         >
-          <ZaloIcon />
-        </Link>
-      ) : null}
-      {actions.facebookUrl ? (
-        <Link
-          href={actions.facebookUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-[0_14px_24px_rgba(24,119,242,0.26)] transition hover:scale-105"
-          aria-label="Facebook"
-          title="Facebook"
-        >
-          <FacebookIcon />
-        </Link>
-      ) : null}
-      {actions.callNumber ? (
-        <a
-          href={`tel:${actions.callNumber}`}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0E4FAF] text-white shadow-[0_14px_24px_rgba(14,79,175,0.26)] transition hover:scale-105"
-          aria-label={actions.callLabel || "Gọi ngay"}
-          title={actions.callLabel || "Gọi ngay"}
-        >
-          <PhoneIcon />
-        </a>
+          <UserIcon />
+        </button>
+      </div>
+      {hasAnyAction ? (
+        <>
+          {actions.zaloUrl ? (
+            <Link
+              href={actions.zaloUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0068FF] text-white shadow-[0_14px_24px_rgba(0,104,255,0.26)] transition hover:scale-105"
+              aria-label="Zalo"
+              title="Zalo"
+            >
+              <ZaloIcon />
+            </Link>
+          ) : null}
+          {actions.facebookUrl ? (
+            <Link
+              href={actions.facebookUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-[0_14px_24px_rgba(24,119,242,0.26)] transition hover:scale-105"
+              aria-label="Facebook"
+              title="Facebook"
+            >
+              <FacebookIcon />
+            </Link>
+          ) : null}
+          {actions.callNumber ? (
+            <a
+              href={`tel:${actions.callNumber}`}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0E4FAF] text-white shadow-[0_14px_24px_rgba(14,79,175,0.26)] transition hover:scale-105"
+              aria-label={actions.callLabel || "Gọi ngay"}
+              title={actions.callLabel || "Gọi ngay"}
+            >
+              <PhoneIcon />
+            </a>
+          ) : null}
+        </>
       ) : null}
     </div>
   );
