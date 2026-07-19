@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { collectionMap, CollectionKey } from "@/lib/admin";
 import { ensureAdminUser, getCurrentAdminUser, hashPassword } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
-import { canAccessCollection, MANAGER_PERMISSION_OPTIONS } from "@/lib/permissions";
+import { canAccessCollection, canApprovePosts, MANAGER_PERMISSION_OPTIONS } from "@/lib/permissions";
 import { slugify } from "@/lib/slug";
 import { DownloadModel } from "@/models/download";
 
@@ -13,31 +13,32 @@ type Context = {
   }>;
 };
 
-function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number) {
-  payload.submittedBy = userId;
+function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number, canApprove: boolean) {
+  payload.submittedBy = Number(payload.submittedBy ?? userId);
+  const today = new Date().toISOString().slice(0, 10);
 
   if (!payload.publishedAt) {
-    payload.publishedAt = new Date().toISOString().slice(0, 10);
+    payload.publishedAt = today;
   }
 
   if (!payload.displayDate) {
-    payload.displayDate = payload.publishedAt;
+    payload.displayDate = today;
   }
 
-  if (role === "business") {
-    payload.status = "published";
-    payload.isFeatured = false;
-    delete payload.approvedBy;
-    delete payload.approvedAt;
-    return;
-  }
-
-  if (role !== "admin") {
+  if (role !== "admin" && !canApprove) {
     payload.status = "pending";
     payload.isFeatured = false;
     delete payload.approvedBy;
     delete payload.approvedAt;
     return;
+  }
+
+  if (role !== "admin" && canApprove && !payload.status) {
+    payload.status = "pending";
+  }
+
+  if (role !== "admin") {
+    payload.isFeatured = false;
   }
 
   if (!payload.status) {
@@ -61,7 +62,10 @@ function normalizeUserPermissions(payload: Record<string, unknown>) {
   }
 
   const selected = Array.isArray(payload.permissions) ? payload.permissions.map(String) : ["posts"];
-  payload.permissions = selected.filter((item) => allPermissions.includes(item as (typeof allPermissions)[number]));
+  payload.permissions = selected.filter((item) => {
+    if (!allPermissions.includes(item as (typeof allPermissions)[number])) return false;
+    return payload.role === "manager" || item !== "approvePosts";
+  });
   if (!(payload.permissions as string[]).length) {
     payload.permissions = ["posts"];
   }
@@ -93,8 +97,10 @@ export async function PUT(request: NextRequest, context: Context) {
     );
   }
 
-  if (key === "posts" && session.role !== "admin") {
-    const existingPost = await Model.findById(id).lean();
+  const canApproveCurrentPosts = key === "posts" ? await canApprovePosts(session) : false;
+  const existingPost = key === "posts" ? await Model.findById(id).lean() : null;
+
+  if (key === "posts" && session.role !== "admin" && !canApproveCurrentPosts) {
     if (!existingPost || Number(existingPost.submittedBy) !== session.userId) {
       return NextResponse.json({ message: "Tài khoản chưa được cấp quyền cập nhật bài viết này." }, { status: 403 });
     }
@@ -115,7 +121,8 @@ export async function PUT(request: NextRequest, context: Context) {
   }
 
   if (key === "posts") {
-    applyPostWorkflow(payload, session.role, session.userId);
+    payload.submittedBy = Number(existingPost?.submittedBy ?? session.userId);
+    applyPostWorkflow(payload, session.role, session.userId, canApproveCurrentPosts);
   }
 
   if (key === "users") {

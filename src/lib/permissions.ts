@@ -4,6 +4,7 @@ import { UserModel } from "@/models/user";
 
 export const MANAGER_PERMISSION_OPTIONS = [
   { label: "Đăng bài viết", value: "posts" },
+  { label: "Duyệt bài viết", value: "approvePosts" },
   { label: "Quản lý hội viên", value: "members" },
   { label: "Quản lý đối tác", value: "partners" },
   { label: "Quản lý tài liệu", value: "downloads" },
@@ -37,6 +38,9 @@ export async function canAccessCollection(session: SessionUser, collection: Coll
   const permissions = await getSessionPermissions(session);
 
   if (collection === "users") return false;
+  if (collection === "posts") {
+    return permissions.includes("posts") || permissions.includes("approvePosts");
+  }
   if (collection === "settings") {
     return permissions.includes("settings") || permissions.includes("supporters");
   }
@@ -50,3 +54,9 @@ export async function canUploadAssets(session: SessionUser) {
   return permissions.some((item) => ["posts", "members", "partners", "downloads", "supporters", "settings"].includes(item));
 }
 
+export async function canApprovePosts(session: SessionUser) {
+  if (session.role === "admin") return true;
+  if (session.role !== "manager") return false;
+  const permissions = await getSessionPermissions(session);
+  return permissions.includes("approvePosts");
+}

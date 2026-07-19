@@ -2,13 +2,15 @@ import { AdminShell } from "@/components/admin/admin-shell";
 import { CollectionManager } from "@/components/admin/collection-manager";
 import { requireAdminPage } from "@/lib/admin-auth";
 import { getPosts } from "@/lib/content";
+import { canApprovePosts } from "@/lib/permissions";
 
 export default async function AdminPostsPage() {
   const session = await requireAdminPage("/admin/posts");
   const posts = await getPosts(undefined, { includeUnpublished: true });
   const isAdmin = session.role === "admin";
   const isBusiness = session.role === "business";
-  const visiblePosts = isAdmin ? posts : posts.filter((post) => post.submittedBy === session.userId);
+  const canApprove = await canApprovePosts(session);
+  const visiblePosts = isAdmin || canApprove ? posts : posts.filter((post) => post.submittedBy === session.userId);
   const postFields = [
     { name: "title", label: "Tiêu đề", section: "Soạn bài", fullWidth: true },
     { name: "slug", label: "Slug", section: "Thiết lập" },
@@ -26,7 +28,7 @@ export default async function AdminPostsPage() {
       ],
     },
     { name: "category", label: "Danh mục", section: "Thiết lập" },
-    ...(isAdmin
+    ...(canApprove
       ? [
           {
             name: "status",
@@ -94,10 +96,10 @@ export default async function AdminPostsPage() {
     <AdminShell
       title="Quản lý bài viết"
       description={
-        isAdmin
-          ? "Admin có quyền đăng, duyệt và xuất bản bài viết."
+        canApprove
+          ? "Tài khoản có quyền đăng, duyệt và xuất bản bài viết."
           : isBusiness
-            ? "Tài khoản doanh nghiệp có thể đăng bài và tự chịu trách nhiệm với nội dung đã đăng."
+            ? "Tài khoản doanh nghiệp có thể gửi bài và tự chịu trách nhiệm với nội dung đã đăng. Bài viết sẽ chờ duyệt trước khi hiển thị."
             : "Quản lý có thể soạn bài mới. Bài viết sẽ chờ admin duyệt trước khi hiển thị ngoài website."
       }
     >
