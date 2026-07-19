@@ -50,6 +50,7 @@ export async function ensureAdminUser() {
       name: "Administrator",
       username: credentials.username.toLowerCase(),
       role: "admin",
+      permissions: ["posts", "members", "partners", "downloadCategories", "downloads", "supporters", "settings"],
       passwordHash,
       isProtected: true,
     });
@@ -61,6 +62,10 @@ export async function ensureAdminUser() {
     }
     if (existingAdmin.role !== "admin") {
       existingAdmin.role = "admin";
+      shouldSave = true;
+    }
+    if (!Array.isArray(existingAdmin.permissions) || existingAdmin.permissions.length < 7) {
+      existingAdmin.permissions = ["posts", "members", "partners", "downloadCategories", "downloads", "supporters", "settings"];
       shouldSave = true;
     }
     if (existingAdmin.username !== credentials.username.toLowerCase()) {

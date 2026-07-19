@@ -40,6 +40,7 @@ type FieldType =
   | "contact"
   | "social"
   | "links"
+  | "permissions"
   | "supporters"
   | "banners"
   | "products"
@@ -78,6 +79,16 @@ type FieldSection = {
   title: string;
   fields: FieldConfig[];
 };
+
+const permissionOptions = [
+  { label: "Đăng bài viết", value: "posts" },
+  { label: "Quản lý hội viên", value: "members" },
+  { label: "Quản lý đối tác", value: "partners" },
+  { label: "Quản lý tài liệu", value: "downloads" },
+  { label: "Danh mục tài liệu", value: "downloadCategories" },
+  { label: "Doanh nghiệp đồng hành", value: "supporters" },
+  { label: "Cấu hình website", value: "settings" },
+];
 
 function EditIcon() {
   return (
@@ -128,6 +139,37 @@ function CloseIcon() {
   );
 }
 
+function StatusIcon({ status }: { status: unknown }) {
+  const value = String(status);
+  if (value === "published") {
+    return (
+      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300" title="Đã duyệt" aria-label="Đã duyệt">
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4">
+          <path d="m5 12 4 4L19 6" />
+        </svg>
+      </span>
+    );
+  }
+  if (value === "pending") {
+    return (
+      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-200" title="Chờ duyệt" aria-label="Chờ duyệt">
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
+          <circle cx="6" cy="12" r="1.8" />
+          <circle cx="12" cy="12" r="1.8" />
+          <circle cx="18" cy="12" r="1.8" />
+        </svg>
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-400/15 text-slate-300" title="Bản nháp" aria-label="Bản nháp">
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="6" />
+      </svg>
+    </span>
+  );
+}
+
 function buildInitialValue(field: FieldConfig) {
   switch (field.type) {
     case "checkbox":
@@ -141,6 +183,8 @@ function buildInitialValue(field: FieldConfig) {
       return { zaloUrl: "", facebookUrl: "", callNumber: "", callLabel: "" };
     case "links":
       return { zalo: "", facebook: "", tiktok: "", youtube: "" };
+    case "permissions":
+      return ["posts"];
     case "supporters":
       return [];
     case "banners":
@@ -183,6 +227,9 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
   if (field.type === "links") {
     if (rawValue && typeof rawValue === "object") return rawValue;
     return { zalo: "", facebook: "", tiktok: "", youtube: "" };
+  }
+  if (field.type === "permissions") {
+    return Array.isArray(rawValue) && rawValue.length ? rawValue : ["posts"];
   }
   if (field.type === "supporters") {
     return Array.isArray(rawValue) ? rawValue : [];
@@ -681,6 +728,51 @@ function BannerListField({
   );
 }
 
+function PermissionsField({
+  value,
+  role,
+  onChange,
+}: {
+  value: unknown;
+  role: unknown;
+  onChange: (nextValue: string[]) => void;
+}) {
+  const selected = new Set((Array.isArray(value) ? value : ["posts"]).map(String));
+  const isAdmin = role === "admin";
+
+  return (
+    <div className="rounded-[1.35rem] border border-slate-200 bg-white p-4">
+      <div className="mb-3 rounded-2xl bg-cyan-50 px-4 py-3 text-sm text-cyan-900">
+        Admin có toàn quyền đăng, duyệt, xóa và cấu hình. Tài khoản quản lý chỉ dùng các mục được chọn bên dưới.
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {permissionOptions.map((option) => (
+          <label
+            key={option.value}
+            className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold ${
+              isAdmin ? "border-cyan-100 bg-cyan-50 text-cyan-900" : "border-slate-200 bg-slate-50 text-slate-700"
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={isAdmin || selected.has(option.value)}
+              disabled={isAdmin}
+              onChange={(event) => {
+                const next = new Set(selected);
+                if (event.target.checked) next.add(option.value);
+                else next.delete(option.value);
+                onChange(Array.from(next));
+              }}
+              className="h-5 w-5"
+            />
+            {option.label}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function SupportersField({
   value,
   onChange,
@@ -689,12 +781,29 @@ function SupportersField({
   onChange: (nextValue: SupporterItem[]) => void;
 }) {
   const items = (Array.isArray(value) ? value : []) as SupporterItem[];
+  const updateItem = (index: number, patch: Partial<SupporterItem>) => {
+    const next = [...items];
+    next[index] = { ...next[index], ...patch };
+    onChange(next);
+  };
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
-        Gợi ý logo đồng hành: ảnh vuông 800 x 800 px hoặc 1000 x 1000 px, PNG/WebP nền trong hoặc nền trắng,
-        logo nằm giữa và chừa vùng an toàn khoảng 12% để hiển thị rõ trong khung tròn.
+      <div className="grid gap-4 rounded-2xl border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950 lg:grid-cols-[minmax(0,1fr)_150px] lg:items-center">
+        <div>
+          <p className="font-bold">Gợi ý logo đồng hành dạng tròn</p>
+          <p>
+            Upload ảnh vuông 1000 x 1000 px hoặc 800 x 800 px, tỷ lệ 1:1. Logo đặt giữa, nền trong
+            hoặc nền trắng, chừa vùng an toàn 12-15% vì ngoài website sẽ bo tròn.
+          </p>
+        </div>
+        <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-white p-4 shadow-inner ring-1 ring-cyan-200">
+          <div className="flex h-full w-full items-center justify-center rounded-full border-2 border-dashed border-cyan-300 text-center text-[10px] font-black uppercase tracking-[0.16em] text-cyan-800">
+            1:1
+            <br />
+            1000px
+          </div>
+        </div>
       </div>
       {items.map((item, index) => (
         <div
@@ -703,36 +812,59 @@ function SupportersField({
               .filter(Boolean)
               .join("-") || `supporter-${index}`
           }
-          className="grid gap-4 rounded-[1.6rem] border border-slate-200 bg-white p-4 xl:grid-cols-[220px_minmax(0,1fr)]"
+          className="grid gap-3 rounded-[1.25rem] border border-slate-200 bg-white p-3 xl:grid-cols-[76px_minmax(160px,1fr)_minmax(150px,0.8fr)_minmax(180px,1fr)_auto] xl:items-center"
         >
-          <div className="space-y-3">
-            <div className="overflow-hidden rounded-[1.25rem] border border-slate-200 bg-slate-50">
+          <div className="flex items-center gap-3">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-slate-100 p-2 ring-1 ring-slate-200">
               {item.logoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={item.logoUrl}
-                  alt={item.name || "Logo"}
-                  className="h-36 w-full object-contain p-4"
-                />
+                <img src={item.logoUrl} alt={item.name || "Logo"} className="h-full w-full rounded-full object-contain" />
               ) : (
-                <div className="flex h-36 items-center justify-center text-sm text-slate-500">
-                  Logo
-                </div>
+                <span className="text-[10px] font-bold uppercase text-slate-400">Logo</span>
               )}
             </div>
+            <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold uppercase text-slate-500 xl:hidden">
+              {index + 1}
+            </span>
+          </div>
+
+          <input
+            type="text"
+            value={item.name ?? ""}
+            onChange={(event) => updateItem(index, { name: event.target.value })}
+            placeholder="Tên doanh nghiệp"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <input
+            type="text"
+            value={item.group ?? ""}
+            onChange={(event) => updateItem(index, { group: event.target.value })}
+            placeholder="Nhóm hiển thị"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+          />
+          <div className="grid gap-2">
+            <input
+              type="url"
+              value={item.website ?? ""}
+              onChange={(event) => updateItem(index, { website: event.target.value })}
+              placeholder="Link website"
+              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+            />
             <input
               type="url"
               value={item.logoUrl ?? ""}
-              onChange={(event) => {
-                const next = [...items];
-                next[index] = { ...next[index], logoUrl: event.target.value };
-                onChange(next);
-              }}
+              onChange={(event) => updateItem(index, { logoUrl: event.target.value })}
               placeholder="Link logo"
               className="w-full rounded-2xl border border-slate-200 px-4 py-3"
             />
-            <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
-              Tai logo tu may
+          </div>
+
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <span className="hidden rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 xl:inline-flex">
+              {index + 1}
+            </span>
+            <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700">
+              Tải logo
               <input
                 type="file"
                 accept="image/*"
@@ -748,92 +880,50 @@ function SupportersField({
                   const response = await fetch("/api/admin/upload", { method: "POST", body });
                   const result = await response.json();
                   if (!response.ok) return;
-                  const next = [...items];
-                  next[index] = { ...next[index], logoUrl: String(result.url) };
-                  onChange(next);
+                  updateItem(index, { logoUrl: String(result.url) });
                 }}
               />
             </label>
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <input
-              type="text"
-              value={item.group ?? ""}
-              onChange={(event) => {
+            <button
+              type="button"
+              onClick={() => {
+                if (index === 0) return;
                 const next = [...items];
-                next[index] = { ...next[index], group: event.target.value };
+                [next[index - 1], next[index]] = [next[index], next[index - 1]];
                 onChange(next);
               }}
-              placeholder="Nhom hien thi"
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-            />
-            <input
-              type="text"
-              value={item.name ?? ""}
-              onChange={(event) => {
+              className="rounded-full border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700"
+            >
+              Lên
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (index === items.length - 1) return;
                 const next = [...items];
-                next[index] = { ...next[index], name: event.target.value };
+                [next[index + 1], next[index]] = [next[index], next[index + 1]];
                 onChange(next);
               }}
-              placeholder="Ten doanh nghiep"
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3"
-            />
-            <input
-              type="url"
-              value={item.website ?? ""}
-              onChange={(event) => {
-                const next = [...items];
-                next[index] = { ...next[index], website: event.target.value };
-                onChange(next);
-              }}
-              placeholder="Link website"
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
-            />
-            <div className="flex flex-wrap items-center gap-3 md:col-span-2">
-              <span className="rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Vi tri {index + 1}
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  if (index === 0) return;
-                  const next = [...items];
-                  [next[index - 1], next[index]] = [next[index], next[index - 1]];
-                  onChange(next);
-                }}
-                className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
-              >
-                Len
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  if (index === items.length - 1) return;
-                  const next = [...items];
-                  [next[index + 1], next[index]] = [next[index], next[index + 1]];
-                  onChange(next);
-                }}
-                className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700"
-              >
-                Xuong
-              </button>
-              <button
-                type="button"
-                onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
-                className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-600"
-              >
-                Xoa
-              </button>
-            </div>
+              className="rounded-full border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700"
+            >
+              Xuống
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}
+              className="rounded-full border border-red-200 px-3 py-2 text-xs font-semibold text-red-600"
+            >
+              Xóa
+            </button>
           </div>
         </div>
       ))}
       <button
         type="button"
         onClick={() => onChange([...items, { group: "", name: "", logoUrl: "", website: "" }])}
-        className="rounded-full border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700"
+        className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
       >
-        Them doanh nghiep dong hanh
+        Thêm doanh nghiệp đồng hành
       </button>
     </div>
   );
@@ -1189,7 +1279,7 @@ export function CollectionManager({
     const frame = window.requestAnimationFrame(() => {
       setForm(buildFormFromRecord(fields, baseState, match as Record<string, unknown>));
       setEditingId(editId);
-      setStatus("Đang chỉnh sửa mục đã chọn.");
+      setStatus("");
     });
 
     return () => window.cancelAnimationFrame(frame);
@@ -1213,7 +1303,7 @@ export function CollectionManager({
     const nextId = String(item._id);
     setForm(buildFormFromRecord(fields, baseState, item));
     setEditingId(nextId);
-    setStatus("Đang chỉnh sửa mục đã chọn.");
+    setStatus("");
     router.replace(`${pathname}?mode=edit&edit=${nextId}`, { scroll: false });
   }
 
@@ -1366,7 +1456,13 @@ export function CollectionManager({
           {!singleton && pagedItems.map((item) => {
             const record = item as Record<string, unknown>;
             const headline = String(record.title ?? record.name ?? record.siteName ?? "Nội dung");
-            const subhead = String(record.slug ?? record.category ?? record.partnerType ?? record.shortName ?? "");
+            const subhead = String(record.username ?? record.slug ?? record.category ?? record.partnerType ?? record.shortName ?? "");
+            const permissionLabels = Array.isArray(record.permissions)
+              ? permissionOptions
+                  .filter((option) => (record.permissions as unknown[]).map(String).includes(option.value))
+                  .map((option) => option.label)
+                  .join(", ")
+              : "";
             const previewImage = String(
               record.logo ?? record.featuredImage ?? record.coverImage ?? record.introImage ?? ""
             );
@@ -1403,14 +1499,14 @@ export function CollectionManager({
                           {subhead}
                         </p>
                       ) : null}
-                      {record.status ? (
-                        <span className="shrink-0 rounded-full bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-200">
-                          {record.status === "published"
-                            ? "Đã duyệt"
-                            : record.status === "pending"
-                              ? "Chờ duyệt"
-                              : "Bản nháp"}
+                      {record.status ? <StatusIcon status={record.status} /> : null}
+                      {record.role ? (
+                        <span className="shrink-0 rounded-full bg-white/8 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-cyan-200">
+                          {record.role === "admin" ? "Admin" : "Quản lý"}
                         </span>
+                      ) : null}
+                      {permissionLabels ? (
+                        <p className="truncate text-xs text-slate-500">{permissionLabels}</p>
                       ) : null}
                     </div>
                   </div>
@@ -1499,16 +1595,6 @@ export function CollectionManager({
             </div>
 
             <form className="space-y-5 px-6 py-6" onSubmit={handleSubmit}>
-              {isComposeForm ? (
-                <div className="rounded-[1.8rem] border border-cyan-200 bg-cyan-50 px-5 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-800">
-                    Composer
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    Soạn tiêu đề, tóm tắt, nội dung, ảnh và video trong một màn hình rộng như trình đăng bài.
-                  </p>
-                </div>
-              ) : null}
               <div className={`grid gap-5 ${isComposeForm ? "grid-cols-1" : "xl:grid-cols-2"}`}>
                 {fieldSections.map((section) => (
                   <section
@@ -1633,6 +1719,12 @@ export function CollectionManager({
                           ) : field.type === "links" ? (
                             <LinksField
                               value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "permissions" ? (
+                            <PermissionsField
+                              value={form[field.name]}
+                              role={form.role}
                               onChange={(value) => updateField(field.name, value)}
                             />
                           ) : field.type === "supporters" ? (

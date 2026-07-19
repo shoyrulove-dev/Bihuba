@@ -25,6 +25,10 @@ const userSchema = new Schema(
       enum: ["admin", "manager"],
       default: "manager",
     },
+    permissions: {
+      type: [String],
+      default: ["posts"],
+    },
     passwordHash: {
       type: String,
       required: true,

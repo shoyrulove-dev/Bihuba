@@ -103,7 +103,7 @@ export const supporterFields: FieldConfig[] = [
     type: "supporters",
     fullWidth: true,
     helpText:
-      "Gợi ý logo đồng hành: 800 x 800 px hoặc 1000 x 1000 px, tỷ lệ 1:1, PNG/WebP nền trong hoặc nền trắng, vùng an toàn 12%, chữ/logo nằm giữa để hiển thị rõ trong khung tròn.",
+      "Logo hiển thị dạng tròn ngoài website. Upload ảnh vuông 1000 x 1000 px hoặc 800 x 800 px, tỷ lệ 1:1, PNG/WebP nền trong hoặc nền trắng, logo nằm giữa và chừa vùng an toàn 12-15%.",
     section: "Logo đồng hành",
   },
 ];

@@ -212,14 +212,14 @@ export const posts = [
     isFeatured: false,
   },
   {
-    title: "AI trong doanh nghiệp: 10 xu hướng sẽ thay đổi mô hình kinh doanh trong 5 năm tới",
-    slug: "ai-trong-doanh-nghiep-10-xu-huong-se-thay-doi-mo-hinh-kinh-doanh-trong-5-nam-toi",
+    title: "10 xu hướng chuyển đổi số sẽ thay đổi mô hình kinh doanh trong 5 năm tới",
+    slug: "10-xu-huong-chuyen-doi-so-se-thay-doi-mo-hinh-kinh-doanh-trong-5-nam-toi",
     type: "news",
     category: "Tin tức",
     excerpt:
-      "Bài viết tổng hợp xu hướng tự động hóa, dữ liệu và ứng dụng AI dành cho cộng đồng doanh nghiệp.",
+      "Bài viết tổng hợp xu hướng tự động hóa, dữ liệu và nền tảng vận hành dành cho cộng đồng doanh nghiệp.",
     content:
-      "Chuyên mục tin tức của BIHUBA có thể khai thác các chủ đề như AI, chuyển đổi số, năng lực quản trị và nâng cao hiệu quả vận hành để tạo giá trị đọc thường xuyên cho hội viên.",
+      "Chuyên mục tin tức của BIHUBA tập trung vào chuyển đổi số, năng lực quản trị và nâng cao hiệu quả vận hành để tạo giá trị đọc thường xuyên cho hội viên.",
     featuredImage: "https://huba.vn/wp-content/uploads/2026/07/featured-image-1.png",
     publishedAt: "2026-07-15",
     isFeatured: true,

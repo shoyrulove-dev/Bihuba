@@ -10,13 +10,13 @@ export default async function AdminUsersPage() {
 
   return (
     <AdminShell
-      title="Quản lý user"
-      description="Quản lý tài khoản đăng nhập quản trị."
+      title="Quản lý tài khoản"
+      description="Admin toàn quyền. Tài khoản quản lý chỉ dùng các chức năng được cấp."
     >
       <CollectionManager
         collection="users"
-        title="Users"
-        description=""
+        title="Tài khoản"
+        description="Danh sách tài khoản đăng nhập admin."
         initialItems={users as unknown as Record<string, unknown>[]}
         fields={[
           { name: "name", label: "Tên hiển thị" },
@@ -29,6 +29,13 @@ export default async function AdminUsersPage() {
               { label: "Admin", value: "admin" },
               { label: "Quản lý", value: "manager" },
             ],
+          },
+          {
+            name: "permissions",
+            label: "Quyền chức năng",
+            type: "permissions",
+            fullWidth: true,
+            helpText: "Admin luôn có toàn quyền. Với tài khoản quản lý, chọn các mục được phép thao tác.",
           },
           {
             name: "password",

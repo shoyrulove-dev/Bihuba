@@ -159,6 +159,7 @@ export interface UserShape {
   name: string;
   username: string;
   role: "admin" | "manager";
+  permissions?: string[];
   password?: string;
   isProtected?: boolean;
 }

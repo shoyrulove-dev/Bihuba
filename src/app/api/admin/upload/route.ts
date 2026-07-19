@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentAdminUser } from "@/lib/auth";
+import { canUploadAssets } from "@/lib/permissions";
 
 export const runtime = "nodejs";
 
@@ -16,6 +17,10 @@ export async function POST(request: NextRequest) {
   const session = await getCurrentAdminUser();
   if (!session) {
     return NextResponse.json({ message: "Chưa đăng nhập." }, { status: 401 });
+  }
+
+  if (!(await canUploadAssets(session))) {
+    return NextResponse.json({ message: "Tài khoản chưa được cấp quyền upload." }, { status: 403 });
   }
 
   const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;

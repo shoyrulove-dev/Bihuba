@@ -7,6 +7,7 @@ import {
   hashPassword,
 } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
+import { canAccessCollection, MANAGER_PERMISSION_OPTIONS } from "@/lib/permissions";
 import { slugify } from "@/lib/slug";
 import { repairDeepText } from "@/lib/text";
 
@@ -15,10 +16,6 @@ type Context = {
     collection: string;
   }>;
 };
-
-function isManagerBlocked(collection: CollectionKey, role: string) {
-  return role !== "admin" && collection !== "posts";
-}
 
 function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number) {
   payload.submittedBy = userId;
@@ -44,6 +41,20 @@ function applyPostWorkflow(payload: Record<string, unknown>, role: string, userI
   }
 }
 
+function normalizeUserPermissions(payload: Record<string, unknown>) {
+  const allPermissions = MANAGER_PERMISSION_OPTIONS.map((item) => item.value);
+  if (payload.role === "admin") {
+    payload.permissions = allPermissions;
+    return;
+  }
+
+  const selected = Array.isArray(payload.permissions) ? payload.permissions.map(String) : ["posts"];
+  payload.permissions = selected.filter((item) => allPermissions.includes(item as (typeof allPermissions)[number]));
+  if (!(payload.permissions as string[]).length) {
+    payload.permissions = ["posts"];
+  }
+}
+
 export async function GET(_: NextRequest, context: Context) {
   const session = await getCurrentAdminUser();
   if (!session) {
@@ -58,8 +69,8 @@ export async function GET(_: NextRequest, context: Context) {
     return NextResponse.json({ message: "Collection không hợp lệ." }, { status: 404 });
   }
 
-  if (isManagerBlocked(key, session.role)) {
-    return NextResponse.json({ message: "Tài khoản quản lý chỉ được soạn bài viết chờ duyệt." }, { status: 403 });
+  if (!(await canAccessCollection(session, key))) {
+    return NextResponse.json({ message: "Tài khoản chưa được cấp quyền truy cập mục này." }, { status: 403 });
   }
 
   const connection = await connectToDatabase();
@@ -106,8 +117,8 @@ export async function POST(request: NextRequest, context: Context) {
     return NextResponse.json({ message: "Collection không hợp lệ." }, { status: 404 });
   }
 
-  if (isManagerBlocked(key, session.role)) {
-    return NextResponse.json({ message: "Tài khoản quản lý chỉ được soạn bài viết chờ duyệt." }, { status: 403 });
+  if (!(await canAccessCollection(session, key))) {
+    return NextResponse.json({ message: "Tài khoản chưa được cấp quyền cập nhật mục này." }, { status: 403 });
   }
 
   const connection = await connectToDatabase();
@@ -148,6 +159,7 @@ export async function POST(request: NextRequest, context: Context) {
     if (!payload.password) {
       return NextResponse.json({ message: "Mật khẩu không được để trống." }, { status: 400 });
     }
+    normalizeUserPermissions(payload);
     payload.userId = await getNextUserId();
     payload.username = String(payload.username ?? "").trim().toLowerCase();
     payload.passwordHash = hashPassword(String(payload.password ?? ""));
