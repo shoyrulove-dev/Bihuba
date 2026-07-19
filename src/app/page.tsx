@@ -154,14 +154,14 @@ export default async function Home() {
 
       <section className="mx-auto max-w-7xl px-6">
         <div className="rounded-[1.8rem] bg-[#061a39] p-6 text-white shadow-[0_24px_80px_rgba(2,12,27,0.2)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-cyan-300">{"Nh\u1ecbp v\u1eadn h\u00e0nh"}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">{"Hoạt động mới"}</p>
           <div className="mt-3 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
               <h2 className="text-3xl font-black uppercase leading-tight">
-                {"N\u1ed9i dung c\u1eadp nh\u1eadt, g\u1ecdn v\u00e0 d\u1ec5 \u0111i\u1ec1u ph\u1ed1i cho website c\u1ed9ng \u0111\u1ed3ng doanh nghi\u1ec7p"}
+                {"Tin tức, sự kiện và kết nối doanh nghiệp mới nhất"}
               </h2>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-100/88">
-                {"B\u00e0i vi\u1ebft, s\u1ef1 ki\u1ec7n, h\u1ed9i vi\u00ean, t\u00e0i li\u1ec7u v\u00e0 ch\u01b0\u01a1ng tr\u00ecnh \u0111\u1ed3ng h\u00e0nh \u0111\u1ec1u c\u00f3 th\u1ec3 qu\u1ea3n l\u00fd tr\u1ef1c ti\u1ebfp t\u1eeb admin. B\u1ed1 c\u1ee5c m\u1edbi r\u00fat b\u1edbt kho\u1ea3ng tr\u1eafng v\u00e0 \u01b0u ti\u00ean c\u00e1c kh\u1ed1i nh\u00ecn nhanh, d\u1ec5 tra c\u1ee9u."}
+                {"Cập nhật nhanh các hoạt động nổi bật, lịch kết nối, cơ hội giao thương và thông tin dành cho cộng đồng doanh nghiệp Bình Hưng."}
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -171,7 +171,7 @@ export default async function Home() {
                   href={`/bai-viet/${post.slug}`}
                   className="rounded-[1.25rem] border border-white/10 bg-white/6 p-4 transition hover:bg-white/10"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">
                     {post.category}
                   </p>
                   <p className="mt-2 text-sm font-semibold leading-6 text-white">{post.title}</p>

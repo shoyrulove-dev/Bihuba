@@ -12,6 +12,34 @@ type Context = {
   }>;
 };
 
+function isManagerBlocked(collection: CollectionKey, role: string) {
+  return role !== "admin" && collection !== "posts";
+}
+
+function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number) {
+  payload.submittedBy = userId;
+
+  if (role !== "admin") {
+    payload.status = "pending";
+    payload.isFeatured = false;
+    delete payload.approvedBy;
+    delete payload.approvedAt;
+    return;
+  }
+
+  if (!payload.status) {
+    payload.status = "published";
+  }
+
+  if (payload.status === "published") {
+    payload.approvedBy = userId;
+    payload.approvedAt = new Date().toISOString();
+  } else {
+    delete payload.approvedBy;
+    delete payload.approvedAt;
+  }
+}
+
 export async function PUT(request: NextRequest, context: Context) {
   const session = await getCurrentAdminUser();
   if (!session) {
@@ -26,6 +54,10 @@ export async function PUT(request: NextRequest, context: Context) {
     return NextResponse.json({ message: "Collection không hợp lệ." }, { status: 404 });
   }
 
+  if (isManagerBlocked(key, session.role)) {
+    return NextResponse.json({ message: "Tài khoản quản lý chỉ được soạn bài viết chờ duyệt." }, { status: 403 });
+  }
+
   const connection = await connectToDatabase();
   if (!connection) {
     return NextResponse.json(
@@ -34,18 +66,22 @@ export async function PUT(request: NextRequest, context: Context) {
     );
   }
 
-  const payload = await request.json();
+  const payload = (await request.json()) as Record<string, unknown>;
 
   if ("title" in payload && !payload.slug) {
-    payload.slug = slugify(payload.title);
+    payload.slug = slugify(String(payload.title ?? ""));
   }
 
   if ("name" in payload && !payload.slug) {
-    payload.slug = slugify(payload.name);
+    payload.slug = slugify(String(payload.name ?? ""));
   }
 
   if (key === "downloads" && payload.category && !payload.categorySlug) {
     payload.categorySlug = slugify(String(payload.category));
+  }
+
+  if (key === "posts") {
+    applyPostWorkflow(payload, session.role, session.userId);
   }
 
   if (key === "users") {
@@ -68,7 +104,9 @@ export async function PUT(request: NextRequest, context: Context) {
 
   await Model.findByIdAndUpdate(id, payload, { runValidators: true });
 
-  return NextResponse.json({ message: "Đã cập nhật thành công." });
+  return NextResponse.json({
+    message: key === "posts" && session.role !== "admin" ? "Đã cập nhật bài viết và gửi chờ duyệt." : "Đã cập nhật thành công.",
+  });
 }
 
 export async function DELETE(_: NextRequest, context: Context) {
@@ -83,6 +121,10 @@ export async function DELETE(_: NextRequest, context: Context) {
 
   if (!Model) {
     return NextResponse.json({ message: "Collection không hợp lệ." }, { status: 404 });
+  }
+
+  if (isManagerBlocked(key, session.role) || (key === "posts" && session.role !== "admin")) {
+    return NextResponse.json({ message: "Chỉ admin mới được xóa nội dung." }, { status: 403 });
   }
 
   const connection = await connectToDatabase();

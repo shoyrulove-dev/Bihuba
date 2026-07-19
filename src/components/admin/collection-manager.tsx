@@ -1106,6 +1106,7 @@ export function CollectionManager({
   const isPanelOpen = singleton ? mode === "edit" : mode === "new" || Boolean(editId);
   const returnPath = closeHref || pathname;
   const pageSize = 9;
+  const isComposeForm = fields.some((field) => field.type === "richtext");
 
   const filteredItems = useMemo(() => {
     const keyword = search.trim().toLowerCase();
@@ -1392,11 +1393,22 @@ export function CollectionManager({
                   )}
                   <div className="min-w-0 flex-1">
                     <h3 className="truncate text-sm font-semibold text-white">{headline}</h3>
-                    {subhead ? (
-                      <p className="truncate text-xs text-slate-400">
-                        {subhead}
-                      </p>
-                    ) : null}
+                    <div className="mt-1 flex min-w-0 items-center gap-2">
+                      {subhead ? (
+                        <p className="truncate text-xs text-slate-400">
+                          {subhead}
+                        </p>
+                      ) : null}
+                      {record.status ? (
+                        <span className="shrink-0 rounded-full bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-200">
+                          {record.status === "published"
+                            ? "Đã duyệt"
+                            : record.status === "pending"
+                              ? "Chờ duyệt"
+                              : "Bản nháp"}
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                   <div className="ml-auto flex shrink-0 items-center gap-2">
                     <button
@@ -1483,22 +1495,38 @@ export function CollectionManager({
             </div>
 
             <form className="space-y-5 px-6 py-6" onSubmit={handleSubmit}>
-              <div className="grid gap-5 xl:grid-cols-2">
+              {isComposeForm ? (
+                <div className="rounded-[1.8rem] border border-cyan-200 bg-cyan-50 px-5 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-800">
+                    Trình soạn bài
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    Soạn nội dung theo từng khối giống bài viết/forum. Ảnh và file media upload lên ImageKit, không lưu trực tiếp vào database.
+                  </p>
+                </div>
+              ) : null}
+              <div className={`grid gap-5 ${isComposeForm ? "" : "xl:grid-cols-2"}`}>
                 {fieldSections.map((section) => (
                   <section
                     key={section.title}
                     className={`rounded-[1.8rem] border border-slate-200 bg-slate-50 p-5 ${
-                      section.fields.some((field) => field.fullWidth) ? "xl:col-span-2" : ""
+                      section.fields.some((field) => field.fullWidth || field.type === "richtext") ? "xl:col-span-2" : ""
                     }`}
                   >
                     <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
                       {section.title}
                     </h3>
-                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                    <div
+                      className={`mt-4 grid gap-4 ${
+                        section.fields.some((field) => field.type === "richtext")
+                          ? "grid-cols-1"
+                          : "md:grid-cols-2"
+                      }`}
+                    >
                       {section.fields.map((field) => (
                         <label
                           key={field.name}
-                          className={`block ${field.fullWidth ? "md:col-span-2" : ""}`}
+                          className={`block ${field.fullWidth || field.type === "richtext" ? "md:col-span-2" : ""}`}
                         >
                           <span className="mb-2 block text-sm font-medium">{field.label}</span>
                           {field.type === "textarea" ? (

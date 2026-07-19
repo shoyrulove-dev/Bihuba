@@ -95,6 +95,10 @@ export interface PostShape {
   content: string;
   featuredImage: string;
   publishedAt: string;
+  status?: "draft" | "pending" | "published";
+  submittedBy?: number | null;
+  approvedBy?: number | null;
+  approvedAt?: string;
   isFeatured: boolean;
 }
 

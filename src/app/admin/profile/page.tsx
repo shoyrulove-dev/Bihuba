@@ -7,19 +7,14 @@ export default async function AdminProfilePage() {
   const session = await requireAdminPage("/admin/profile");
 
   const connection = await connectToDatabase();
-  const user = connection
-    ? await UserModel.findOne({ userId: session.userId }).lean()
-    : null;
+  const user = connection ? await UserModel.findOne({ userId: session.userId }).lean() : null;
 
   const name = String(user?.name ?? session.name);
   const username = String(user?.username ?? session.username);
   const role = String(user?.role ?? session.role);
 
   return (
-    <AdminShell
-      title="Hồ sơ quản trị"
-      description="Đổi tên hiển thị và mật khẩu đăng nhập."
-    >
+    <AdminShell title="Hồ sơ quản trị" description="Đổi tên hiển thị và mật khẩu đăng nhập.">
       <form
         action="/api/auth/profile"
         method="post"

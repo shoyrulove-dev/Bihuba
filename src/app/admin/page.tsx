@@ -29,7 +29,7 @@ export default async function AdminDashboardPage() {
   return (
     <AdminShell
       title="Bảng điều khiển BIHUBA"
-      description="Trang điều hành nội dung trung tâm. Từ đây bạn có thể đi tới từng khu vực để cập nhật dữ liệu cho website."
+      description="Trang điều hành nội dung trung tâm. Từ Đây bạn có thể đi tới từng khu vực để cập nhật dữ liệu cho website."
     >
       <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {stats.map((item) => (

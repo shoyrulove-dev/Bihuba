@@ -14,7 +14,7 @@ export const brandingFields: FieldConfig[] = [
     name: "wordmarkUrl",
     label: "Logo ngang",
     type: "image",
-    helpText: "Gợi ý: 1800 x 600 px, PNG nền trong.",
+    helpText: "Gợi ý: 1800 x 600 px hoặc 1500 x 500 px, PNG/WebP rõ nét.",
     section: "Nhận diện",
   },
   { name: "slogan", label: "Slogan", section: "Nhận diện" },
@@ -52,7 +52,7 @@ export const homepageFields: FieldConfig[] = [
     label: "Banner nổi bật",
     type: "banners",
     fullWidth: true,
-    helpText: "Dùng để giới thiệu sự kiện, chương trình và hoạt động sắp tới.",
+    helpText: "Dùng để giới thiệu sự kiện, chương trình và hoạt động sắp tới. Gợi ý ảnh: 1920 x 780 px.",
     section: "Banner hoạt động",
   },
   {
@@ -102,7 +102,8 @@ export const supporterFields: FieldConfig[] = [
     label: "Doanh nghiệp đồng hành",
     type: "supporters",
     fullWidth: true,
-    helpText: "Gợi ý logo: 800 x 800 px hoặc 1000 x 1000 px, nền trong hoặc nền trắng, bố cục vuông để hiển thị rõ trong khung tròn.",
+    helpText:
+      "Gợi ý logo đồng hành: 800 x 800 px hoặc 1000 x 1000 px, tỷ lệ 1:1, PNG/WebP nền trong hoặc nền trắng, vùng an toàn 12%, chữ/logo nằm giữa để hiển thị rõ trong khung tròn.",
     section: "Logo đồng hành",
   },
 ];

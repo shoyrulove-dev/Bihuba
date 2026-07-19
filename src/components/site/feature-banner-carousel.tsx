@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FeatureBannerItem } from "@/types/cms";
 
@@ -23,6 +23,16 @@ function ChevronRightIcon() {
 export function FeatureBannerCarousel({ items }: { items: FeatureBannerItem[] }) {
   const banners = useMemo(() => items.filter((item) => item.imageUrl && item.title), [items]);
   const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (banners.length <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setCurrent((previous) => (previous + 1) % banners.length);
+    }, 5000);
+
+    return () => window.clearInterval(timer);
+  }, [banners.length]);
 
   if (!banners.length) return null;
 
@@ -67,47 +77,50 @@ export function FeatureBannerCarousel({ items }: { items: FeatureBannerItem[] })
           ) : null}
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 border-t border-white/12 bg-[linear-gradient(180deg,rgba(3,15,34,0.18),rgba(3,15,34,0.9))] px-5 py-4 backdrop-blur sm:px-8">
-          <div className="flex flex-col gap-3 text-white lg:flex-row lg:items-center lg:justify-between">
-            <div className="min-w-0">
+        <div className="absolute inset-x-0 bottom-0 border-t border-white/12 bg-[linear-gradient(180deg,rgba(3,15,34,0.18),rgba(3,15,34,0.94))] px-5 py-4 backdrop-blur sm:px-8">
+          <div className="flex flex-col gap-4 text-white lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex min-w-0 items-center gap-4">
+              {banners.length > 1 ? (
+                <div className="flex shrink-0 items-center gap-2">
+                  {banners.map((item, index) => (
+                    <button
+                      key={`${item.title}-${index}`}
+                      type="button"
+                      onClick={() => goTo(index)}
+                      className={`h-2.5 rounded-full transition ${
+                        index === current ? "w-10 bg-cyan-300" : "w-2.5 bg-white/30 hover:bg-white/45"
+                      }`}
+                      aria-label={`Xem banner ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              ) : null}
+
               <p className="truncate text-sm font-bold sm:text-base lg:text-lg">
                 {active.title}
                 {active.eventDate ? ` ${active.eventDate}` : ""}
               </p>
             </div>
 
-            {active.href ? (
-              <Link
-                href={active.href}
-                className="inline-flex shrink-0 items-center justify-center rounded-full border border-cyan-300/25 bg-cyan-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
-              >
-                {active.buttonLabel || "Xem ch\u01b0\u01a1ng tr\u00ecnh"}
-              </Link>
-            ) : null}
+            <div className="flex items-center gap-4">
+              {banners.length > 1 ? (
+                <div className="shrink-0 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200/90">
+                  {current + 1} / {banners.length}
+                </div>
+              ) : null}
+
+              {active.href ? (
+                <Link
+                  href={active.href}
+                  className="inline-flex shrink-0 items-center justify-center rounded-full border border-cyan-300/25 bg-cyan-300 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
+                >
+                  {active.buttonLabel || "Xem ch\u01b0\u01a1ng tr\u00ecnh"}
+                </Link>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
-
-      {banners.length > 1 ? (
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 bg-[#04101F] px-6 py-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {banners.map((item, index) => (
-              <button
-                key={`${item.title}-${index}`}
-                type="button"
-                onClick={() => goTo(index)}
-                className={`h-2.5 rounded-full transition ${
-                  index === current ? "w-10 bg-cyan-300" : "w-2.5 bg-white/30 hover:bg-white/45"
-                }`}
-                aria-label={`Xem banner ${index + 1}`}
-              />
-            ))}
-          </div>
-          <div className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200/90">
-            {current + 1} / {banners.length}
-          </div>
-        </div>
-      ) : null}
     </section>
   );
 }

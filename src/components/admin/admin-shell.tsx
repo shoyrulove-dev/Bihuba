@@ -133,6 +133,7 @@ export function AdminShell({
                 );
               })}
             </nav>
+
             <form action="/api/auth/logout" method="post">
               <button
                 type="submit"
@@ -152,6 +153,7 @@ export function AdminShell({
               <h1 className="text-3xl font-semibold text-white">{title}</h1>
               <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300">{description}</p>
             </div>
+
             <Link
               href="/"
               className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
@@ -160,6 +162,7 @@ export function AdminShell({
               <span>Trang chủ</span>
             </Link>
           </div>
+
           {children}
         </main>
       </div>

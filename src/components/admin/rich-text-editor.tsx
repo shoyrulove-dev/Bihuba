@@ -17,7 +17,7 @@ type RichTextEditorProps = {
 };
 
 const toolbarButton =
-  "rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100";
+  "inline-flex shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-cyan-50 hover:text-cyan-800";
 
 export function RichTextEditor({
   value,
@@ -49,7 +49,7 @@ export function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          "min-h-[300px] rounded-b-[1.5rem] border border-t-0 border-slate-200 px-5 py-4 outline-none prose prose-slate max-w-none prose-img:rounded-2xl prose-a:text-cyan-700",
+          "min-h-[520px] border-t border-slate-200 bg-white px-5 py-5 outline-none prose prose-slate max-w-none prose-img:rounded-2xl prose-a:text-cyan-700",
       },
     },
     onUpdate({ editor: currentEditor }) {
@@ -96,16 +96,12 @@ export function RichTextEditor({
   function promptForYoutube() {
     const url = window.prompt("Dán link YouTube");
     if (!url) return;
-    activeEditor
-      .chain()
-      .focus()
-      .setYoutubeVideo({ src: url, width: 960, height: 540 })
-      .run();
+    activeEditor.chain().focus().setYoutubeVideo({ src: url, width: 960, height: 540 }).run();
   }
 
   return (
-    <div>
-      <div className="flex flex-wrap gap-2 rounded-t-[1.5rem] border border-slate-200 bg-slate-50 p-3">
+    <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-[0_20px_55px_rgba(15,23,42,0.08)]">
+      <div className="flex gap-2 overflow-x-auto bg-slate-50 p-3">
         <button
           type="button"
           className={toolbarButton}
@@ -165,11 +161,7 @@ export function RichTextEditor({
         <button type="button" className={toolbarButton} onClick={promptForLink}>
           Link
         </button>
-        <button
-          type="button"
-          className={toolbarButton}
-          onClick={() => uploadRef.current?.click()}
-        >
+        <button type="button" className={toolbarButton} onClick={() => uploadRef.current?.click()}>
           Ảnh
         </button>
         <button type="button" className={toolbarButton} onClick={promptForYoutube}>

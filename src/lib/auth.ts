@@ -33,9 +33,7 @@ function base64UrlDecode(value: string) {
 }
 
 function signPayload(payload: string) {
-  return createHmac("sha256", getAdminCredentials().sessionSecret)
-    .update(payload)
-    .digest("base64url");
+  return createHmac("sha256", getAdminCredentials().sessionSecret).update(payload).digest("base64url");
 }
 
 export async function ensureAdminUser() {
@@ -105,10 +103,7 @@ export async function authenticateAdmin(username: string, password: string) {
   } satisfies SessionUser;
 }
 
-export function createSessionToken(
-  user: SessionUser,
-  maxAge: number = SESSION_MAX_AGE_DEFAULT
-) {
+export function createSessionToken(user: SessionUser, maxAge: number = SESSION_MAX_AGE_DEFAULT) {
   const payload: SessionPayload = {
     ...user,
     exp: Math.floor(Date.now() / 1000) + maxAge,

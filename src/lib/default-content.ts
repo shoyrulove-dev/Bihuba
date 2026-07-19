@@ -42,7 +42,7 @@ export const defaultSettings: SiteSettingsShape = {
   heroCtaHref: "/tin-tuc",
   introTitle: "Về BIHUBA",
   introBody:
-    "BIHUBA định hướng trở thành điểm kết nối doanh nghiệp tại khu vực Bình Hưng, thúc đẩy hợp tác, đổi mới và chia sẻ cơ hội tăng trưởng. Toàn bộ nội dung trên website có thể được vận hành và cập nhật từ khu quản trị riêng.",
+    "BIHUBA định hướng trở thành điểm kết nối doanh nghiệp tại khu vực Bình Hưng, thúc đẩy hợp tác, đổi mới và chia sẻ cơ hội tăng trưởng. ",
   memberStats: [
     { label: "Hội viên doanh nghiệp", value: "120+" },
     { label: "Chương trình kết nối", value: "36+" },
@@ -194,7 +194,7 @@ export const defaultPosts: PostShape[] = [
     excerpt:
       "Lịch công tác tổng hợp cho văn phòng hội, phù hợp để cập nhật lịch họp, lịch tiếp khách và kế hoạch tuần.",
     content:
-      "Nội dung này dùng cho chuyên mục lịch tuần. BIHUBA có thể cập nhật lịch điều hành, lịch tiếp đối tác và các công việc trọng tâm trong tuần từ khu quản trị.",
+      "BIHUBA cập nhật lịch điều hành, lịch tiếp đối tác và các công việc trọng tâm trong tuần để hội viên theo dõi thuận tiện.",
     featuredImage:
       "https://huba.vn/wp-content/uploads/2026/07/Lich-cong-tac-HUBA-tu-ngay-13.7.2026-den-ngay-19.7.2026.webp",
     publishedAt: "2026-07-14",
@@ -408,7 +408,7 @@ export const defaultPosts: PostShape[] = [
     excerpt:
       "Thông tin hội chợ - triển lãm phục vụ nhóm doanh nghiệp sản xuất, thương mại và phân phối.",
     content:
-      "Module kết nối giao thương có thể đăng các tin mời tham gia triển lãm, giới thiệu gian hàng, hoạt động xúc tiến và mở rộng đầu mối phân phối.",
+      "Kênh kết nối giao thương cập nhật tin mời tham gia triển lãm, giới thiệu gian hàng, hoạt động xúc tiến và mở rộng đầu mối phân phối.",
     featuredImage: "https://huba.vn/wp-content/uploads/2026/07/Trien-lam-tai-chuong-trinh-cafe-huba-scaled.webp",
     publishedAt: "2026-07-03",
     isFeatured: true,
