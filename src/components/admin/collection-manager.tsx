@@ -83,6 +83,7 @@ type FieldSection = {
 
 const permissionOptions = [
   { label: "Đăng bài viết", value: "posts" },
+  { label: "Duyệt bài viết", value: "approvePosts" },
   { label: "Quản lý hội viên", value: "members" },
   { label: "Quản lý đối tác", value: "partners" },
   { label: "Quản lý tài liệu", value: "downloads" },
@@ -814,35 +815,45 @@ function PermissionsField({
 }) {
   const selected = new Set((Array.isArray(value) ? value : ["posts"]).map(String));
   const isAdmin = role === "admin";
+  const isBusiness = role === "business";
 
   return (
     <div className="rounded-[1.35rem] border border-slate-200 bg-white p-4">
       <div className="mb-3 rounded-2xl bg-cyan-50 px-4 py-3 text-sm text-cyan-900">
-        Admin có toàn quyền đăng, duyệt, xóa và cấu hình. Quản lý và Doanh nghiệp chỉ dùng các mục được chọn bên dưới.
+        Admin có toàn quyền. Quản lý dùng các mục được cấp và chỉ duyệt bài khi có quyền duyệt. Doanh nghiệp chỉ đăng bài của mình và luôn chờ duyệt.
       </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {permissionOptions.map((option) => (
-          <label
-            key={option.value}
-            className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold ${
-              isAdmin ? "border-cyan-100 bg-cyan-50 text-cyan-900" : "border-slate-200 bg-slate-50 text-slate-700"
-            }`}
-          >
-            <input
-              type="checkbox"
-              checked={isAdmin || selected.has(option.value)}
-              disabled={isAdmin}
-              onChange={(event) => {
-                const next = new Set(selected);
-                if (event.target.checked) next.add(option.value);
-                else next.delete(option.value);
-                onChange(Array.from(next));
-              }}
-              className="h-5 w-5"
-            />
-            {option.label}
-          </label>
-        ))}
+        {permissionOptions.map((option) => {
+          const isLockedBusinessOption = isBusiness && option.value !== "posts";
+          return (
+            <label
+              key={option.value}
+              className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold ${
+                isAdmin || (isBusiness && option.value === "posts")
+                  ? "border-cyan-100 bg-cyan-50 text-cyan-900"
+                  : "border-slate-200 bg-slate-50 text-slate-700"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={isAdmin || (isBusiness ? option.value === "posts" : selected.has(option.value))}
+                disabled={isAdmin || isLockedBusinessOption}
+                onChange={(event) => {
+                  if (isBusiness) {
+                    onChange(["posts"]);
+                    return;
+                  }
+                  const next = new Set(selected);
+                  if (event.target.checked) next.add(option.value);
+                  else next.delete(option.value);
+                  onChange(Array.from(next));
+                }}
+                className="h-5 w-5"
+              />
+              {option.label}
+            </label>
+          );
+        })}
       </div>
     </div>
   );

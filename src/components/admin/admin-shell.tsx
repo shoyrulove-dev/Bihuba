@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 function DashboardIcon() {
@@ -86,13 +86,13 @@ function HomeIcon() {
 }
 
 const nav = [
-  { label: "Tổng quan", href: "/admin", icon: DashboardIcon },
-  { label: "Bài viết", href: "/admin/posts", icon: PostIcon },
-  { label: "Hội viên", href: "/admin/members", icon: GroupIcon },
-  { label: "Đối tác", href: "/admin/partners", icon: PartnerIcon },
-  { label: "Tài liệu", href: "/admin/downloads", icon: FileIcon },
-  { label: "Người dùng", href: "/admin/users", icon: UserIcon },
-  { label: "Cấu hình", href: "/admin/settings", icon: SettingsIcon },
+  { key: "dashboard", label: "Tổng quan", href: "/admin", icon: DashboardIcon },
+  { key: "posts", label: "Bài viết", href: "/admin/posts", icon: PostIcon },
+  { key: "members", label: "Hội viên", href: "/admin/members", icon: GroupIcon },
+  { key: "partners", label: "Đối tác", href: "/admin/partners", icon: PartnerIcon },
+  { key: "downloads", label: "Tài liệu", href: "/admin/downloads", icon: FileIcon },
+  { key: "users", label: "Người dùng", href: "/admin/users", icon: UserIcon },
+  { key: "settings", label: "Cấu hình", href: "/admin/settings", icon: SettingsIcon },
 ];
 
 export function AdminShell({
@@ -105,6 +105,28 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+  const [allowedNav, setAllowedNav] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/api/admin/me", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (isMounted) {
+          setAllowedNav(Array.isArray(data?.navKeys) ? data.navKeys : []);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setAllowedNav([]);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const visibleNav = allowedNav ? nav.filter((item) => allowedNav.includes(item.key)) : [];
 
   return (
     <div className="admin-root min-h-screen overflow-x-hidden bg-slate-950 text-white">
@@ -112,7 +134,7 @@ export function AdminShell({
         <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-4">
           <div className="flex h-full flex-col items-center justify-between gap-4">
             <nav className="flex w-full flex-col items-center gap-2">
-              {nav.map((item) => {
+              {visibleNav.map((item) => {
                 const Icon = item.icon;
                 const isActive = item.href === "/admin" ? pathname === "/admin" : pathname?.startsWith(item.href);
 
@@ -160,6 +182,14 @@ export function AdminShell({
             >
               <HomeIcon />
               <span>Trang chủ</span>
+            </Link>
+            <Link
+              href="/admin/profile"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white transition hover:bg-white/10"
+              title="Hồ sơ"
+              aria-label="Hồ sơ"
+            >
+              <UserIcon />
             </Link>
           </div>
 

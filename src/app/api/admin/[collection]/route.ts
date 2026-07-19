@@ -65,6 +65,11 @@ function normalizeUserPermissions(payload: Record<string, unknown>) {
     return;
   }
 
+  if (payload.role === "business") {
+    payload.permissions = ["posts"];
+    return;
+  }
+
   const selected = Array.isArray(payload.permissions) ? payload.permissions.map(String) : ["posts"];
   payload.permissions = selected.filter((item) => {
     if (!allPermissions.includes(item as (typeof allPermissions)[number])) return false;
@@ -89,7 +94,10 @@ export async function GET(_: NextRequest, context: Context) {
     return NextResponse.json({ message: "Collection không hợp lệ." }, { status: 404 });
   }
 
-  if (!(await canAccessCollection(session, key))) {
+  const canAccessCurrentCollection =
+    (await canAccessCollection(session, key)) || (key === "settings" && (await canAccessCollection(session, "supporters")));
+
+  if (!canAccessCurrentCollection) {
     return NextResponse.json({ message: "Tài khoản chưa được cấp quyền truy cập mục này." }, { status: 403 });
   }
 
@@ -141,7 +149,10 @@ export async function POST(request: NextRequest, context: Context) {
     return NextResponse.json({ message: "Collection không hợp lệ." }, { status: 404 });
   }
 
-  if (!(await canAccessCollection(session, key))) {
+  const canAccessCurrentCollection =
+    (await canAccessCollection(session, key)) || (key === "settings" && (await canAccessCollection(session, "supporters")));
+
+  if (!canAccessCurrentCollection) {
     return NextResponse.json({ message: "Tài khoản chưa được cấp quyền cập nhật mục này." }, { status: 403 });
   }
 
@@ -154,6 +165,13 @@ export async function POST(request: NextRequest, context: Context) {
   }
 
   const payload = (await request.json()) as Record<string, unknown>;
+
+  if (key === "settings" && !(await canAccessCollection(session, "settings"))) {
+    payload.supporters = Array.isArray(payload.supporters) ? payload.supporters : [];
+    for (const field of Object.keys(payload)) {
+      if (field !== "supporters") delete payload[field];
+    }
+  }
 
   if ("title" in payload && !payload.slug) {
     payload.slug = slugify(String(payload.title ?? ""));

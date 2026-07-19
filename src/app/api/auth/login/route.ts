@@ -5,6 +5,7 @@ import {
   authenticateAdmin,
   createSessionToken,
 } from "@/lib/auth";
+import { getDefaultAdminPath } from "@/lib/permissions";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -22,7 +23,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(loginUrl, { status: 303 });
   }
 
-  const response = NextResponse.redirect(new URL(nextPath, request.url), {
+  const targetPath = nextPath === "/admin" && user.role !== "admin" ? await getDefaultAdminPath(user) : nextPath;
+
+  const response = NextResponse.redirect(new URL(targetPath, request.url), {
     status: 303,
   });
   const maxAge = remember ? SESSION_MAX_AGE_REMEMBER : SESSION_MAX_AGE_DEFAULT;
