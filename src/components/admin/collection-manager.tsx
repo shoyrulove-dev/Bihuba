@@ -68,6 +68,7 @@ type CollectionManagerProps = {
   hideSingletonEditButton?: boolean;
   closeHref?: string;
   panelMaxWidthClass?: string;
+  defaultSectionsOpen?: boolean;
 };
 
 type StatItem = { label: string; value: string };
@@ -1353,6 +1354,7 @@ export function CollectionManager({
   hideSingletonEditButton = false,
   closeHref,
   panelMaxWidthClass = "max-w-4xl",
+  defaultSectionsOpen = true,
 }: CollectionManagerProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -1784,7 +1786,7 @@ export function CollectionManager({
               <div className={`grid gap-5 ${isComposeForm ? "grid-cols-1" : "xl:grid-cols-2"}`}>
                 {fieldSections.map((section) => {
                   const hasRichText = section.fields.some((field) => field.type === "richtext");
-                  const isSectionOpen = openSections[section.title] ?? true;
+                  const isSectionOpen = openSections[section.title] ?? defaultSectionsOpen;
 
                   return (
                   <section
