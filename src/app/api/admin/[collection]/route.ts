@@ -164,7 +164,7 @@ export async function POST(request: NextRequest, context: Context) {
     );
   }
 
-  const payload = (await request.json()) as Record<string, unknown>;
+  const payload = repairDeepText((await request.json()) as Record<string, unknown>);
 
   if (key === "settings" && !(await canAccessCollection(session, "settings"))) {
     payload.supporters = Array.isArray(payload.supporters) ? payload.supporters : [];

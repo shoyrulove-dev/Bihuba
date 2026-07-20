@@ -12,6 +12,8 @@ export interface ContactInfo {
   email: string;
   phone: string;
   website?: string;
+  officeImageUrl?: string;
+  googleMapUrl?: string;
 }
 
 export interface FloatingActions {

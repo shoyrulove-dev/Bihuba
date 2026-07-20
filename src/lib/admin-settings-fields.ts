@@ -1,20 +1,24 @@
 import type { FieldConfig } from "@/components/admin/collection-manager";
 
 export const brandingFields: FieldConfig[] = [
-  { name: "siteName", label: "Tên đầy đủ", section: "Nhận diện" },
-  { name: "shortName", label: "Tên ngắn", section: "Nhận diện" },
   {
-    name: "logoUrl",
-    label: "Logo vuông",
-    type: "image",
-    helpText: "Gợi ý: 1200 x 1200 px, PNG nền trong.",
+    name: "siteName",
+    label: "Tên đầy đủ",
+    helpText: "Dòng chữ dài hiển thị trên banner/header, ví dụ: Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh.",
     section: "Nhận diện",
   },
   {
-    name: "wordmarkUrl",
-    label: "Logo ngang",
+    name: "shortName",
+    label: "Tên ngắn",
+    helpText: "Chữ ngắn đứng trước tên hội trên banner/header, ví dụ: BIHUBA.",
+    section: "Nhận diện",
+  },
+  {
+    name: "logoUrl",
+    label: "Logo BIHUBA",
     type: "image",
-    helpText: "Gợi ý: 1800 x 600 px hoặc 1500 x 500 px, PNG/WebP rõ nét.",
+    helpText:
+      "Chỉ upload 1 logo này. Chữ trên banner lấy từ Tên ngắn và Tên đầy đủ phía trên. Kích thước chuẩn: 1024 x 1024 px, tỷ lệ 1:1, PNG/WebP nền trong hoặc nền trắng.",
     section: "Nhận diện",
   },
   { name: "slogan", label: "Slogan", section: "Nhận diện" },
@@ -77,6 +81,7 @@ export const contactFields: FieldConfig[] = [
     label: "Thông tin liên hệ",
     type: "contact",
     fullWidth: true,
+    helpText: "Có thể thêm banner văn phòng 1600 x 720 px và link nhúng Google Map.",
     section: "Liên hệ",
   },
   {

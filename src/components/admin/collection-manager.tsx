@@ -73,7 +73,14 @@ type CollectionManagerProps = {
 
 type StatItem = { label: string; value: string };
 type NavItem = { label: string; href: string };
-type ContactItem = { address: string; phone: string; email: string; website?: string };
+type ContactItem = {
+  address: string;
+  phone: string;
+  email: string;
+  website?: string;
+  officeImageUrl?: string;
+  googleMapUrl?: string;
+};
 type FormState = Record<string, unknown>;
 
 type FieldSection = {
@@ -186,7 +193,7 @@ function buildInitialValue(field: FieldConfig) {
     case "nav":
       return [];
     case "contact":
-      return { address: "", phone: "", email: "", website: "" };
+      return { address: "", phone: "", email: "", website: "", officeImageUrl: "", googleMapUrl: "" };
     case "social":
       return { zaloUrl: "", facebookUrl: "", callNumber: "", callLabel: "" };
     case "links":
@@ -226,7 +233,7 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
   }
   if (field.type === "contact") {
     if (rawValue && typeof rawValue === "object") return rawValue;
-    return { address: "", phone: "", email: "", website: "" };
+    return { address: "", phone: "", email: "", website: "", officeImageUrl: "", googleMapUrl: "" };
   }
   if (field.type === "social") {
     if (rawValue && typeof rawValue === "object") return rawValue;
@@ -408,15 +415,19 @@ function NavListField({
 function ContactField({
   value,
   onChange,
+  onUploadImage,
 }: {
   value: unknown;
   onChange: (nextValue: ContactItem) => void;
+  onUploadImage: (file: File) => Promise<string>;
 }) {
   const contact = ((value && typeof value === "object" ? value : {}) as ContactItem) ?? {
     address: "",
     phone: "",
     email: "",
     website: "",
+    officeImageUrl: "",
+    googleMapUrl: "",
   };
 
   return (
@@ -447,6 +458,47 @@ function ContactField({
         value={contact.website ?? ""}
         onChange={(event) => onChange({ ...contact, website: event.target.value })}
         placeholder="Website"
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
+      />
+      <div className="space-y-3 md:col-span-2">
+        <input
+          type="url"
+          value={contact.officeImageUrl ?? ""}
+          onChange={(event) => onChange({ ...contact, officeImageUrl: event.target.value })}
+          placeholder="Ảnh/banner giới thiệu văn phòng (khuyến nghị 1600 x 720 px)"
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        />
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="inline-flex cursor-pointer rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700">
+            Tải banner văn phòng
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async (event) => {
+                const file = event.target.files?.[0];
+                event.currentTarget.value = "";
+                if (!file) return;
+                const url = await onUploadImage(file);
+                onChange({ ...contact, officeImageUrl: url });
+              }}
+            />
+          </label>
+          {contact.officeImageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={contact.officeImageUrl}
+              alt="Banner văn phòng"
+              className="h-16 w-28 rounded-2xl border border-slate-200 object-cover"
+            />
+          ) : null}
+        </div>
+      </div>
+      <input
+        type="url"
+        value={contact.googleMapUrl ?? ""}
+        onChange={(event) => onChange({ ...contact, googleMapUrl: event.target.value })}
+        placeholder="Link nhúng Google Map"
         className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
       />
     </div>
@@ -1934,6 +1986,7 @@ export function CollectionManager({
                             <ContactField
                               value={form[field.name]}
                               onChange={(value) => updateField(field.name, value)}
+                              onUploadImage={uploadAsset}
                             />
                           ) : field.type === "social" ? (
                             <SocialField

@@ -5,6 +5,7 @@ import { connectToDatabase } from "@/lib/db";
 import { canAccessCollection, canApprovePosts, MANAGER_PERMISSION_OPTIONS } from "@/lib/permissions";
 import { slugify } from "@/lib/slug";
 import { DownloadModel } from "@/models/download";
+import { repairDeepText } from "@/lib/text";
 
 type Context = {
   params: Promise<{
@@ -114,7 +115,7 @@ export async function PUT(request: NextRequest, context: Context) {
     }
   }
 
-  const payload = (await request.json()) as Record<string, unknown>;
+  const payload = repairDeepText((await request.json()) as Record<string, unknown>);
 
   if (key === "settings" && !(await canAccessCollection(session, "settings"))) {
     payload.supporters = Array.isArray(payload.supporters) ? payload.supporters : [];

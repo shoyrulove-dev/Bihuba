@@ -7,7 +7,7 @@ export default async function AdminSettingsBrandingPage() {
 
   return SettingsSectionManager({
     title: "Nhận diện website",
-    description: "Chỉnh tên hiển thị, logo vuông, logo ngang và slogan.",
+    description: "Chỉnh tên hiển thị, một logo thương hiệu chuẩn 1:1 và slogan.",
     fields: brandingFields,
     panelMaxWidthClass: "max-w-[calc(100vw-4rem)]",
   });

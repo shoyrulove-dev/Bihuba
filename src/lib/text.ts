@@ -1,5 +1,5 @@
-const MOJIBAKE_PATTERN =
-  /(\u00c3.|\u00c2.|\u00c4.|\u00c6.|\u00e1\u00ba|\u00e1\u00bb|\u00e1\u00b8|\u00d0.|\u00d1.|\ufffd)/;
+const UTF8_AS_LATIN1_PATTERN =
+  /(\u00c3[\u0080-\u00bf]|\u00c2[\u0080-\u00bf]|\u00c4[\u0080-\u00bf]|\u00c6[\u0080-\u00bf]|\u00e1[\u0080-\u00bf]{1,2}|\u00c4\u0091|\u00c4\u0090)/;
 
 const QUESTION_MARK_REPAIRS: Array<[RegExp, string]> = [
   [/10 xu h\?\?ng chuy\?n \?\?i s\? s\? thay \?\?i m\? h\?nh kinh doanh trong 5 n\?m t\?i/g, "10 xu hướng chuyển đổi số sẽ thay đổi mô hình kinh doanh trong 5 năm tới"],
@@ -16,10 +16,34 @@ const QUESTION_MARK_REPAIRS: Array<[RegExp, string]> = [
   [/doanh nghi\?p/g, "doanh nghiệp"],
 ];
 
+const REPLACEMENT_CHAR_REPAIRS: Array<[RegExp, string]> = [
+  [/H�nh tr�nh li�n k�t/g, "Hành trình liên kết"],
+  [/��ng h�nh ph�t tri�n/g, "đồng hành phát triển"],
+  [/c�a H�i Doanh Nghi�p/g, "của Hội Doanh Nghiệp"],
+  [/x� B�nh H�ng/g, "xã Bình Hưng"],
+  [/c�c Doanh nghi�p h�i vi�n/g, "các Doanh nghiệp hội viên"],
+  [/c�ng Tr��ng �?i h�?c V?n Hi?n/g, "cùng Trường Đại học Văn Hiến"],
+  [/�ng Nguy?n V?n C�m/g, "Ông Nguyễn Văn Cẩm"],
+  [/ch� t�?ch H�i Doanh Nghi�p/g, "chủ tịch Hội Doanh Nghiệp"],
+  [/gi�m ��c C�ng ty/g, "giám đốc Công ty"],
+  [/B� Nguy?n Th?y D��ng/g, "Bà Nguyễn Thùy Dương"],
+  [/gi�m ��c C�ng ty/g, "giám đốc Công ty"],
+  [/�ng V� Quang Ph�c/g, "Ông Võ Quang Phúc"],
+  [/t�ng gi�m ��c/g, "tổng giám đốc"],
+  [/c� ph�n ph�t tri�n th��ng/g, "cổ phần phát triển thương"],
+  [/�ng Nguy?n V?n M�t/g, "Ông Nguyễn Văn Một"],
+  [/th�c ph�m/g, "thực phẩm"],
+  [/�ng Tr?n Thanh Vi/g, "Ông Trần Thanh Vi"],
+  [/du l�?ch Qu�?c T�?/g, "du lịch Quốc Tế"],
+  [/L�? K�? K�?T & TRI �?N DOANH NGHI�?P/g, "LỄ KÝ KẾT & TRI ÂN DOANH NGHIỆP"],
+  [/M�? R�?NG H�?P T�?C DOANH NGHI�?P/g, "MỞ RỘNG HỢP TÁC DOANH NGHIỆP"],
+  [/N�NG T�?M C� H�?I NGH�? NGHI�?P/g, "NÂNG TẦM CƠ HỘI NGHỀ NGHIỆP"],
+];
+
 function repairString(value: string) {
   let repaired = value;
 
-  if (MOJIBAKE_PATTERN.test(repaired)) {
+  if (UTF8_AS_LATIN1_PATTERN.test(repaired)) {
     try {
       repaired = Buffer.from(repaired, "latin1").toString("utf8");
     } catch {
@@ -33,7 +57,13 @@ function repairString(value: string) {
     });
   }
 
-  return repaired;
+  if (repaired.includes("�")) {
+    REPLACEMENT_CHAR_REPAIRS.forEach(([pattern, replacement]) => {
+      repaired = repaired.replace(pattern, replacement);
+    });
+  }
+
+  return repaired.normalize("NFC");
 }
 
 export function repairDeepText<T>(value: T): T {

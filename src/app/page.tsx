@@ -40,7 +40,7 @@ export default async function Home() {
 
   const featuredPosts = posts.filter((item) => item.isFeatured).slice(0, 3);
   const latestPosts = posts.slice(0, 4);
-  const featuredMembers = members.slice(0, 3);
+  const featuredMembers = members.slice(0, 6);
   const featuredDownloads = downloads.slice(0, 3);
 
   return (
@@ -201,11 +201,10 @@ export default async function Home() {
             <SectionHeading
               eyebrow={"H\u1ed9i vi\u00ean"}
               title={"Doanh nghi\u1ec7p ti\u00eau bi\u1ec3u"}
-              body={"Danh b\u1ea1 h\u1ed9i vi\u00ean gi\u1eef vai tr\u00f2 nh\u01b0 h\u1ed3 s\u01a1 th\u01b0\u01a1ng m\u1ea1i v\u00e0 \u0111i\u1ec3m ch\u1ea1m k\u1ebft n\u1ed1i gi\u1eefa c\u00e1c doanh nghi\u1ec7p."}
             />
-            <div className="mt-6 grid gap-6 xl:grid-cols-2">
+            <div className="mt-6 grid gap-4">
               {featuredMembers.map((member) => (
-                <MemberCard key={member.slug} member={member} />
+                <MemberCard key={member.slug} member={member} variant="list" />
               ))}
             </div>
           </div>
