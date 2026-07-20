@@ -1,4 +1,4 @@
-export type PostType = "news" | "event" | "schedule" | "form" | "trade" | "sponsor";
+export type PostType = "news" | "event" | "schedule" | "trade" | "sponsor";
 
 export type MemberType = "business" | "individual" | "club";
 

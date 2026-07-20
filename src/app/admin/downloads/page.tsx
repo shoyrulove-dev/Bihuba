@@ -16,7 +16,7 @@ export default async function AdminDownloadsPage() {
       <CollectionManager
         collection="downloadCategories"
         title="Danh mục tài liệu"
-        description="Tạo và sắp xếp các nhóm như Thông báo, Biểu mẫu, Tài liệu hội viên."
+        description="Tạo và sắp xếp các nhóm như Thông báo, Form mẫu, Tài liệu hội viên."
         initialItems={categories as unknown as Record<string, unknown>[]}
         fields={[
           { name: "name", label: "Tên danh mục" },
@@ -40,7 +40,7 @@ export default async function AdminDownloadsPage() {
             type: "select",
             options: [
               { label: "Thông báo", value: "Thông báo" },
-              { label: "Biểu mẫu", value: "Biểu mẫu" },
+              { label: "Form mẫu", value: "Form mẫu" },
               { label: "Quyết định", value: "Quyết định" },
               { label: "Báo cáo", value: "Báo cáo" },
               { label: "Văn bản", value: "Văn bản" },

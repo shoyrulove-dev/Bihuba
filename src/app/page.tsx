@@ -26,9 +26,24 @@ const impactItems = [
 const actionLinks = [
   { label: "Tin t\u1ee9c n\u1ed5i b\u1eadt", href: "/tin-tuc" },
   { label: "S\u1ef1 ki\u1ec7n s\u1eafp di\u1ec5n ra", href: "/su-kien" },
+  { label: "Form m\u1eabu", href: "/form-mau" },
   { label: "K\u1ebft n\u1ed1i giao th\u01b0\u01a1ng", href: "/ket-noi-giao-thuong" },
   { label: "Danh b\u1ea1 h\u1ed9i vi\u00ean", href: "/hoi-vien" },
 ];
+
+function isFormDownload(item: { category?: string; categorySlug?: string; documentType?: string }) {
+  const values = [item.category, item.categorySlug, item.documentType].map((value) =>
+    String(value || "").toLowerCase()
+  );
+
+  return values.some(
+    (value) =>
+      value.includes("form") ||
+      value.includes("bieu-mau") ||
+      value.includes("biểu mẫu") ||
+      value.includes("mẫu")
+  );
+}
 
 export default async function Home() {
   const [settings, posts, members, downloads] = await Promise.all([
@@ -39,11 +54,11 @@ export default async function Home() {
   ]);
 
   const featuredPosts = posts.filter((item) => item.isFeatured).slice(0, 3);
-  const latestPosts = [
+  const latestItems = [
     { label: "Tin tức", href: "/tin-tuc", post: posts.find((item) => item.type === "news") },
     { label: "Sự kiện", href: "/su-kien", post: posts.find((item) => item.type === "event") },
     { label: "Lịch làm việc", href: "/lich-tuan", post: posts.find((item) => item.type === "schedule") },
-    { label: "Form mẫu", href: "/form-mau", post: posts.find((item) => item.type === "form") },
+    { label: "Form mẫu", href: "/form-mau", download: downloads.find(isFormDownload) },
   ];
   const featuredMembers = members.slice(0, 6);
   const featuredDownloads = downloads.slice(0, 3);
@@ -170,17 +185,25 @@ export default async function Home() {
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              {latestPosts.map((item) => (
+              {latestItems.map((item) => (
                 <Link
                   key={item.label}
-                  href={item.post ? `/bai-viet/${item.post.slug}` : item.href}
+                  href={
+                    "post" in item && item.post
+                      ? `/bai-viet/${item.post.slug}`
+                      : "download" in item && item.download
+                        ? `/download/${item.download.slug}`
+                        : item.href
+                  }
                   className="rounded-[1.25rem] border border-white/10 bg-white/6 p-4 transition hover:bg-white/10"
                 >
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">
                     {item.label}
                   </p>
                   <p className="mt-2 text-sm font-semibold leading-6 text-white">
-                    {item.post?.title || `Xem ${item.label.toLowerCase()}`}
+                    {("post" in item && item.post?.title) ||
+                      ("download" in item && item.download?.title) ||
+                      `Xem ${item.label.toLowerCase()}`}
                   </p>
                 </Link>
               ))}

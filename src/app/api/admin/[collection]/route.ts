@@ -85,7 +85,6 @@ function normalizePostCategory(payload: Record<string, unknown>) {
     news: "Tin tức",
     event: "Sự kiện",
     schedule: "Lịch làm việc",
-    form: "Form mẫu",
     trade: "Kết nối giao thương",
     sponsor: "Đồng hành",
   };

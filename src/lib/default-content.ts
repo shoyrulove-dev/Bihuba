@@ -15,8 +15,8 @@ export const defaultDownloadCategories: DownloadCategoryShape[] = [
     order: 1,
   },
   {
-    name: "Biểu mẫu",
-    slug: "bieu-mau",
+    name: "Form mẫu",
+    slug: "form-mau",
     description: "Biểu mẫu và hồ sơ cần tải xuống.",
     order: 2,
   },
@@ -721,13 +721,13 @@ export const defaultDownloads: DownloadShape[] = [
   {
     title: "Mẫu phiếu đăng ký hội viên BIHUBA",
     slug: "mau-phieu-dang-ky-hoi-vien-bihuba",
-    summary: "Tệp phục vụ khu vực tải tài liệu, đơn đăng ký và biểu mẫu nội bộ.",
+    summary: "Tệp phục vụ khu vực tải tài liệu, đơn đăng ký và form mẫu nội bộ.",
     coverImage: "/bihuba-program-3.svg",
     fileUrl: "https://example.com/files/phieu-dang-ky-hoi-vien.pdf",
-    documentType: "Biểu mẫu",
+    documentType: "Form mẫu",
     fileFormat: "pdf",
-    categorySlug: "bieu-mau",
-    category: "biểu-mẫu",
+    categorySlug: "form-mau",
+    category: "Form mẫu",
     publishedAt: "2026-07-06",
   },
 ];

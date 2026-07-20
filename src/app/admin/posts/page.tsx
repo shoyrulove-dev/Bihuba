@@ -15,7 +15,6 @@ export default async function AdminPostsPage() {
     { label: "Tin tức", value: "news" },
     { label: "Sự kiện", value: "event" },
     { label: "Lịch làm việc", value: "schedule" },
-    { label: "Form mẫu", value: "form" },
   ];
   const postFields = [
     { name: "title", label: "Tiêu đề", section: "Soạn bài", fullWidth: true },
@@ -106,7 +105,7 @@ export default async function AdminPostsPage() {
       <CollectionManager
         collection="posts"
         title="Bài viết"
-        description="Chọn hạng mục để tự chia bài vào Tin tức, Sự kiện, Lịch làm việc hoặc Form mẫu."
+        description="Chọn hạng mục để tự chia bài vào Tin tức, Sự kiện hoặc Lịch làm việc. Form mẫu nằm ở mục Tài liệu/Download."
         initialItems={visiblePosts as unknown as Record<string, unknown>[]}
         panelMaxWidthClass="max-w-[1360px]"
         fields={postFields}
