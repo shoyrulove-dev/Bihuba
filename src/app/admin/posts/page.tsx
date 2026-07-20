@@ -11,23 +11,23 @@ export default async function AdminPostsPage() {
   const isBusiness = session.role === "business";
   const canApprove = await canApprovePosts(session);
   const visiblePosts = isAdmin || canApprove ? posts : posts.filter((post) => post.submittedBy === session.userId);
+  const postTypeOptions = [
+    { label: "Tin tức", value: "news" },
+    { label: "Sự kiện", value: "event" },
+    { label: "Lịch làm việc", value: "schedule" },
+    { label: "Form mẫu", value: "form" },
+  ];
   const postFields = [
     { name: "title", label: "Tiêu đề", section: "Soạn bài", fullWidth: true },
     { name: "slug", label: "Slug", section: "Thiết lập" },
     {
       name: "type",
-      label: "Loại",
+      label: "Hạng mục",
       type: "select" as const,
       section: "Thiết lập",
-      options: [
-        { label: "Tin tức", value: "news" },
-        { label: "Sự kiện", value: "event" },
-        { label: "Lịch tuần", value: "schedule" },
-        { label: "Giao thương", value: "trade" },
-        { label: "Đồng hành", value: "sponsor" },
-      ],
+      helpText: "Chọn hạng mục chính, website sẽ tự chia bài vào đúng khu vực.",
+      options: postTypeOptions,
     },
-    { name: "category", label: "Danh mục", section: "Thiết lập" },
     ...(canApprove
       ? [
           {
@@ -106,10 +106,12 @@ export default async function AdminPostsPage() {
       <CollectionManager
         collection="posts"
         title="Bài viết"
-        description="Danh sách tin tức, sự kiện, lịch tuần và bài kết nối giao thương."
+        description="Chọn hạng mục để tự chia bài vào Tin tức, Sự kiện, Lịch làm việc hoặc Form mẫu."
         initialItems={visiblePosts as unknown as Record<string, unknown>[]}
         panelMaxWidthClass="max-w-[1360px]"
         fields={postFields}
+        filterField="type"
+        filterOptions={postTypeOptions}
       />
     </AdminShell>
   );

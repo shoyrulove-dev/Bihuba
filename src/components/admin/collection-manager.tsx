@@ -63,6 +63,8 @@ type CollectionManagerProps = {
   description: string;
   fields: FieldConfig[];
   initialItems: Record<string, unknown>[];
+  filterField?: string;
+  filterOptions?: Array<{ label: string; value: string }>;
   singleton?: boolean;
   allowDelete?: boolean;
   hideSingletonEditButton?: boolean;
@@ -1418,6 +1420,8 @@ export function CollectionManager({
   description,
   fields,
   initialItems,
+  filterField,
+  filterOptions = [],
   singleton = false,
   allowDelete = true,
   hideSingletonEditButton = false,
@@ -1444,6 +1448,7 @@ export function CollectionManager({
   const [status, setStatus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [search, setSearch] = useState("");
+  const [activeFilter, setActiveFilter] = useState("");
   const [page, setPage] = useState(1);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const mode = searchParams.get("mode");
@@ -1455,9 +1460,12 @@ export function CollectionManager({
 
   const filteredItems = useMemo(() => {
     const keyword = search.trim().toLowerCase();
-    if (!keyword) return items;
     return items.filter((item) => {
       const record = item as Record<string, unknown>;
+      if (filterField && activeFilter && String(record[filterField] ?? "") !== activeFilter) {
+        return false;
+      }
+      if (!keyword) return true;
       return [
         record.title,
         record.name,
@@ -1470,7 +1478,7 @@ export function CollectionManager({
         .map((value) => String(value ?? "").toLowerCase())
         .some((value) => value.includes(keyword));
     });
-  }, [items, search]);
+  }, [activeFilter, filterField, items, search]);
 
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
   const currentPage = Math.min(page, totalPages);
@@ -1693,7 +1701,42 @@ export function CollectionManager({
 
         <div className="mt-6 space-y-3">
           {!singleton ? (
-            <div>
+            <div className="space-y-3">
+              {filterField && filterOptions.length ? (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveFilter("");
+                      setPage(1);
+                    }}
+                    className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition ${
+                      activeFilter
+                        ? "border border-white/10 bg-slate-950/35 text-slate-300 hover:bg-white/10"
+                        : "bg-cyan-400 text-slate-950"
+                    }`}
+                  >
+                    Tất cả
+                  </button>
+                  {filterOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => {
+                        setActiveFilter(option.value);
+                        setPage(1);
+                      }}
+                      className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition ${
+                        activeFilter === option.value
+                          ? "bg-cyan-400 text-slate-950"
+                          : "border border-white/10 bg-slate-950/35 text-slate-300 hover:bg-white/10"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
               <input
                 type="text"
                 value={search}
@@ -1713,7 +1756,7 @@ export function CollectionManager({
           {!singleton && pagedItems.map((item) => {
             const record = item as Record<string, unknown>;
             const headline = String(record.title ?? record.name ?? record.siteName ?? "Nội dung");
-            const subhead = String(record.username ?? record.slug ?? record.category ?? record.partnerType ?? record.shortName ?? "");
+            const subhead = String(record.username ?? record.category ?? record.partnerType ?? record.slug ?? record.shortName ?? "");
             const permissionLabels = Array.isArray(record.permissions)
               ? permissionOptions
                   .filter((option) => (record.permissions as unknown[]).map(String).includes(option.value))
@@ -1721,7 +1764,7 @@ export function CollectionManager({
                   .join(", ")
               : "";
             const previewImage = String(
-              record.logo ?? record.featuredImage ?? record.coverImage ?? record.introImage ?? ""
+              record.bannerImage ?? record.logo ?? record.featuredImage ?? record.coverImage ?? record.introImage ?? ""
             );
             const canDelete =
               allowDelete &&

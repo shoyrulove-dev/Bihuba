@@ -39,7 +39,12 @@ export default async function Home() {
   ]);
 
   const featuredPosts = posts.filter((item) => item.isFeatured).slice(0, 3);
-  const latestPosts = posts.slice(0, 4);
+  const latestPosts = [
+    { label: "Tin tức", href: "/tin-tuc", post: posts.find((item) => item.type === "news") },
+    { label: "Sự kiện", href: "/su-kien", post: posts.find((item) => item.type === "event") },
+    { label: "Lịch làm việc", href: "/lich-tuan", post: posts.find((item) => item.type === "schedule") },
+    { label: "Form mẫu", href: "/form-mau", post: posts.find((item) => item.type === "form") },
+  ];
   const featuredMembers = members.slice(0, 6);
   const featuredDownloads = downloads.slice(0, 3);
 
@@ -165,16 +170,18 @@ export default async function Home() {
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              {latestPosts.map((post) => (
+              {latestPosts.map((item) => (
                 <Link
-                  key={post.slug}
-                  href={`/bai-viet/${post.slug}`}
+                  key={item.label}
+                  href={item.post ? `/bai-viet/${item.post.slug}` : item.href}
                   className="rounded-[1.25rem] border border-white/10 bg-white/6 p-4 transition hover:bg-white/10"
                 >
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">
-                    {post.category}
+                    {item.label}
                   </p>
-                  <p className="mt-2 text-sm font-semibold leading-6 text-white">{post.title}</p>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-white">
+                    {item.post?.title || `Xem ${item.label.toLowerCase()}`}
+                  </p>
                 </Link>
               ))}
             </div>

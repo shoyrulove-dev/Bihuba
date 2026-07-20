@@ -53,6 +53,8 @@ export const defaultSettings: SiteSettingsShape = {
     { label: "Trang chủ", href: "/" },
     { label: "Tin tức", href: "/tin-tuc" },
     { label: "Sự kiện", href: "/su-kien" },
+    { label: "Lịch làm việc", href: "/lich-tuan" },
+    { label: "Form mẫu", href: "/form-mau" },
     { label: "Kết nối giao thương", href: "/ket-noi-giao-thuong" },
     { label: "Hội viên", href: "/hoi-vien" },
     { label: "Đối tác", href: "/doi-tac" },
@@ -64,6 +66,7 @@ export const defaultSettings: SiteSettingsShape = {
     email: "vanphong@bihuba.vn",
     phone: "0900 000 000",
     website: "https://bihuba.vercel.app",
+    officeImageUrl: "/contact-office-demo.png",
   },
   floatingActions: {
     zaloUrl: "https://zalo.me/0900000000",

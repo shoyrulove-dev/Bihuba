@@ -6,6 +6,8 @@ const PartnerSchema = new Schema(
     slug: { type: String, required: true, unique: true },
     description: { type: String, default: "" },
     logo: { type: String, default: "" },
+    bannerImage: { type: String, default: "" },
+    activityImages: { type: Array, default: [] },
     website: { type: String, default: "" },
     partnerType: { type: String, default: "" },
   },

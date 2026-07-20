@@ -80,6 +80,19 @@ function normalizeUserPermissions(payload: Record<string, unknown>) {
   }
 }
 
+function normalizePostCategory(payload: Record<string, unknown>) {
+  const labels: Record<string, string> = {
+    news: "Tin tức",
+    event: "Sự kiện",
+    schedule: "Lịch làm việc",
+    form: "Form mẫu",
+    trade: "Kết nối giao thương",
+    sponsor: "Đồng hành",
+  };
+
+  payload.category = labels[String(payload.type ?? "")] || String(payload.category ?? "Tin tức");
+}
+
 export async function GET(_: NextRequest, context: Context) {
   const session = await getCurrentAdminUser();
   if (!session) {
@@ -186,6 +199,7 @@ export async function POST(request: NextRequest, context: Context) {
   }
 
   if (key === "posts") {
+    normalizePostCategory(payload);
     applyPostWorkflow(payload, session.role, session.userId, await canApprovePosts(session));
   }
 

@@ -6,7 +6,7 @@ const PostSchema = new Schema(
     slug: { type: String, required: true, unique: true },
     type: {
       type: String,
-      enum: ["news", "event", "schedule", "trade", "sponsor"],
+      enum: ["news", "event", "schedule", "form", "trade", "sponsor"],
       required: true,
     },
     category: { type: String, required: true },

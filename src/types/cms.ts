@@ -1,4 +1,4 @@
-export type PostType = "news" | "event" | "schedule" | "trade" | "sponsor";
+export type PostType = "news" | "event" | "schedule" | "form" | "trade" | "sponsor";
 
 export type MemberType = "business" | "individual" | "club";
 
@@ -130,6 +130,8 @@ export interface PartnerShape {
   slug: string;
   description: string;
   logo: string;
+  bannerImage?: string;
+  activityImages?: Array<{ title: string; subtitle?: string; imageUrl: string; href?: string }>;
   website: string;
   partnerType: string;
 }
