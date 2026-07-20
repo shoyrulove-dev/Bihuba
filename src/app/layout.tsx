@@ -7,6 +7,7 @@ import { getSiteSettings } from "@/lib/content";
 import "./globals.css";
 
 export const dynamic = "force-dynamic";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bihuba.vercel.app";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,10 +19,59 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "BIHUBA",
-  description: "C\u1ed5ng th\u00f4ng tin c\u1ee7a H\u1ed9i Doanh nghi\u1ec7p X\u00e3 B\u00ecnh H\u01b0ng Th\u00e0nh ph\u1ed1 H\u1ed3 Ch\u00ed Minh.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const title = `${settings.shortName || "BIHUBA"} - ${settings.siteName}`;
+  const description =
+    settings.heroSubtitle ||
+    "Cổng thông tin của Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh.";
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: title,
+      template: `%s | ${settings.shortName || "BIHUBA"}`,
+    },
+    description,
+    applicationName: settings.shortName || "BIHUBA",
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      type: "website",
+      locale: "vi_VN",
+      url: siteUrl,
+      siteName: settings.shortName || "BIHUBA",
+      title,
+      description,
+      images: [
+        {
+          url: settings.heroImage || "/bihuba-hero-generated.svg",
+          width: 1200,
+          height: 630,
+          alt: settings.siteName,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [settings.heroImage || "/bihuba-hero-generated.svg"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -29,6 +79,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const settings = await getSiteSettings();
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: settings.siteName,
+    alternateName: settings.shortName,
+    url: siteUrl,
+    logo: new URL(settings.logoUrl || "/bihuba-mark.svg", siteUrl).toString(),
+    email: settings.contact.email,
+    telephone: settings.contact.phone,
+    address: settings.contact.address,
+    sameAs: Object.values(settings.socialLinks || {}).filter(Boolean),
+  };
 
   return (
     <html lang="vi" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
@@ -45,6 +107,10 @@ export default async function RootLayout({
         }
       >
         {settings ? <SiteHeader settings={settings} /> : null}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <main>{children}</main>
         {settings ? <FloatingContactButtons actions={settings.floatingActions} /> : null}
         {settings ? <SiteFooter settings={settings} /> : null}

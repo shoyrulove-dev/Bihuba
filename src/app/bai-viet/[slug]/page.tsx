@@ -1,12 +1,58 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import sanitizeHtml from "sanitize-html";
 import { getPostBySlug } from "@/lib/content";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bihuba.vercel.app";
+
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    return {};
+  }
+
+  const description = post.excerpt || post.title;
+  const image = post.featuredImage || "/bihuba-hero-generated.svg";
+
+  return {
+    title: post.title,
+    description,
+    alternates: {
+      canonical: `/bai-viet/${post.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      url: new URL(`/bai-viet/${post.slug}`, siteUrl).toString(),
+      title: post.title,
+      description,
+      publishedTime: post.publishedAt,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      images: [image],
+    },
+  };
+}
+
 export default async function PostDetailPage({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+}: PageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
@@ -50,9 +96,31 @@ export default async function PostDetailPage({
     allowedSchemes: ["http", "https", "mailto", "data"],
   });
   const displayDate = post.displayDate || post.publishedAt;
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt || post.title,
+    image: post.featuredImage ? [new URL(post.featuredImage, siteUrl).toString()] : undefined,
+    datePublished: post.publishedAt,
+    dateModified: post.displayDate || post.publishedAt,
+    mainEntityOfPage: new URL(`/bai-viet/${post.slug}`, siteUrl).toString(),
+    publisher: {
+      "@type": "Organization",
+      name: "BIHUBA",
+      logo: {
+        "@type": "ImageObject",
+        url: new URL("/bihuba-mark.svg", siteUrl).toString(),
+      },
+    },
+  };
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <p className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-700">
         {post.category}
       </p>

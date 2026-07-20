@@ -1432,6 +1432,8 @@ export function CollectionManager({
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const initialMode = searchParams.get("mode");
+  const initialEditId = searchParams.get("edit");
   const baseState = useMemo(() => buildInitialState(fields), [fields]);
   const [items, setItems] = useState(initialItems);
   const [form, setForm] = useState<FormState>(() => {
@@ -1451,9 +1453,12 @@ export function CollectionManager({
   const [activeFilter, setActiveFilter] = useState("");
   const [page, setPage] = useState(1);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
-  const mode = searchParams.get("mode");
-  const editId = searchParams.get("edit");
-  const isPanelOpen = singleton ? mode === "edit" : mode === "new" || Boolean(editId);
+  const [panelMode, setPanelMode] = useState<"closed" | "new" | "edit">(
+    singleton && initialMode === "edit" ? "edit" : initialEditId ? "edit" : initialMode === "new" ? "new" : "closed"
+  );
+  const [activeEditId, setActiveEditId] = useState<string | null>(initialEditId);
+  const editId = activeEditId;
+  const isPanelOpen = singleton ? panelMode === "edit" : panelMode === "new" || panelMode === "edit";
   const returnPath = closeHref || pathname;
   const pageSize = 9;
   const isComposeForm = fields.some((field) => field.type === "richtext");
@@ -1501,6 +1506,11 @@ export function CollectionManager({
       fields: groupedFields,
     }));
   }, [fields]);
+
+  function replaceLocalUrl(url: string) {
+    if (typeof window === "undefined") return;
+    window.history.replaceState(null, "", url);
+  }
 
   useEffect(() => {
     if (singleton && hideSingletonEditButton && closeHref && !isPanelOpen) {
@@ -1557,23 +1567,33 @@ export function CollectionManager({
   function openNewPanel() {
     setForm(baseState);
     setEditingId(null);
+    setActiveEditId(null);
+    setPanelMode("new");
     setStatus("");
     setOpenSections({});
-    router.replace(`${pathname}?mode=new`, { scroll: false });
+    replaceLocalUrl(`${pathname}?mode=new`);
   }
 
   function openEditPanel(item: Record<string, unknown>) {
     const nextId = String(item._id);
     setForm(buildFormFromRecord(fields, baseState, item));
     setEditingId(nextId);
+    setActiveEditId(nextId);
+    setPanelMode("edit");
     setStatus("");
     setOpenSections({});
-    router.replace(`${pathname}?mode=edit&edit=${nextId}`, { scroll: false });
+    replaceLocalUrl(`${pathname}?mode=edit&edit=${nextId}`);
   }
 
   function closePanel() {
     setStatus("");
     setOpenSections({});
+    setPanelMode("closed");
+    setActiveEditId(null);
+    if (returnPath === pathname) {
+      replaceLocalUrl(returnPath);
+      return;
+    }
     router.replace(returnPath, { scroll: false });
   }
 
@@ -1678,7 +1698,10 @@ export function CollectionManager({
             hideSingletonEditButton ? null : (
             <button
               type="button"
-              onClick={() => router.replace(`${pathname}?mode=edit`, { scroll: false })}
+              onClick={() => {
+                setPanelMode("edit");
+                replaceLocalUrl(`${pathname}?mode=edit`);
+              }}
               className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-cyan-400 text-slate-950"
               title="Chỉnh sửa"
               aria-label="Chỉnh sửa"

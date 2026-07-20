@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 function DashboardIcon() {
   return (
@@ -105,7 +105,9 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [allowedNav, setAllowedNav] = useState<string[] | null>(null);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -126,10 +128,26 @@ export function AdminShell({
     };
   }, []);
 
-  const visibleNav = allowedNav ? nav.filter((item) => allowedNav.includes(item.key)) : [];
+  useEffect(() => {
+    nav.forEach((item) => router.prefetch(item.href));
+    router.prefetch("/admin/profile");
+    router.prefetch("/");
+  }, [router]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIsNavigating(false), 80);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
+
+  const visibleNav = allowedNav ? nav.filter((item) => allowedNav.includes(item.key)) : nav;
 
   return (
     <div className="admin-root min-h-screen overflow-x-hidden bg-slate-950 text-white">
+      <div
+        className={`fixed left-0 top-0 z-[80] h-0.5 bg-cyan-300 transition-all duration-300 ${
+          isNavigating ? "w-full opacity-100" : "w-0 opacity-0"
+        }`}
+      />
       <div className="mx-auto grid max-w-7xl gap-6 px-5 py-6 lg:grid-cols-[96px_1fr]">
         <aside className="rounded-[2rem] border border-white/10 bg-white/5 p-4">
           <div className="flex h-full flex-col items-center justify-between gap-4">
@@ -142,6 +160,12 @@ export function AdminShell({
                   <Link
                     key={item.href}
                     href={item.href}
+                    prefetch
+                    onClick={() => {
+                      if (item.href !== pathname) {
+                        setIsNavigating(true);
+                      }
+                    }}
                     className={`flex h-12 w-12 items-center justify-center rounded-2xl transition ${
                       isActive
                         ? "bg-cyan-400 text-slate-950 shadow-[0_14px_40px_rgba(34,211,238,0.35)]"
@@ -178,6 +202,7 @@ export function AdminShell({
 
             <Link
               href="/"
+              prefetch
               className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
             >
               <HomeIcon />
@@ -185,6 +210,7 @@ export function AdminShell({
             </Link>
             <Link
               href="/admin/profile"
+              prefetch
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white transition hover:bg-white/10"
               title="Hồ sơ"
               aria-label="Hồ sơ"
