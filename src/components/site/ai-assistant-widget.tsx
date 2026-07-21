@@ -101,7 +101,7 @@ export function AiAssistantWidget({ settings }: { settings?: AiAssistantSettings
   }
 
   return (
-    <div className="ai-assistant-widget fixed bottom-[13rem] right-3 z-40">
+    <div className="ai-assistant-widget fixed bottom-4 right-3 z-40">
       {isOpen ? (
         <div className="mb-3 w-[min(92vw,390px)] overflow-hidden rounded-[1.4rem] border border-slate-200 bg-white text-slate-950 shadow-[0_24px_70px_rgba(2,6,23,0.26)]">
           <div className="flex items-center justify-between gap-3 bg-slate-950 px-4 py-3 text-white">

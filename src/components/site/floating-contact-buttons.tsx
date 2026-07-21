@@ -125,7 +125,7 @@ export function FloatingContactButtons({ actions }: { actions: FloatingActions }
   const hasAnyAction = actions.zaloUrl || actions.facebookUrl || actions.callNumber;
 
   return (
-    <div className="floating-contact-buttons fixed bottom-4 right-3 z-40 flex flex-col gap-2">
+    <div className="floating-contact-buttons fixed bottom-[4.5rem] right-3 z-40 flex flex-col gap-2">
       <div className="relative">
         {isAuthOpen ? <AuthPanel mode={mode} setMode={setMode} /> : null}
         <button

@@ -41,7 +41,7 @@ export function MemberCard({
             href={`/hoi-vien/${member.slug}`}
             className="inline-flex h-10 items-center justify-center rounded-full border border-slate-300 px-4 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
           >
-            {"Xem hồ sơ"}
+            Xem hồ sơ
           </Link>
         </div>
       </article>
@@ -51,60 +51,24 @@ export function MemberCard({
   if (variant === "banner") {
     return (
       <article className="overflow-hidden rounded-[1.6rem] border border-slate-200 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-        <div className="grid gap-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
+        <Link
+          href={`/hoi-vien/${member.slug}`}
+          className="flex aspect-[16/7] w-full items-center justify-center bg-slate-100 p-2"
+        >
+          {bannerImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={bannerImage} alt={member.name} className="max-h-full max-w-full object-contain" loading="lazy" />
+          ) : (
+            <div className="px-8 text-center text-3xl font-black text-[var(--theme-primary)]">{member.name}</div>
+          )}
+        </Link>
+        <div className="border-t border-slate-100 p-4">
           <Link
             href={`/hoi-vien/${member.slug}`}
-            className="flex aspect-[16/7] min-h-[220px] items-center justify-center bg-slate-100 p-2"
+            className="inline-flex w-full items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-500 hover:text-slate-950"
           >
-            {bannerImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={bannerImage} alt={member.name} className="max-h-full max-w-full object-contain" loading="lazy" />
-            ) : (
-              <div className="px-8 text-center text-3xl font-black text-[var(--theme-primary)]">{member.name}</div>
-            )}
+            Xem hồ sơ
           </Link>
-
-          <div className="flex flex-col justify-between gap-6 p-6">
-            <div>
-              <div className="flex items-start gap-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-slate-50 text-xs font-bold text-[var(--theme-primary)] ring-1 ring-slate-200">
-                  {member.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={member.logo} alt={member.name} className="h-14 w-14 rounded-xl object-contain" />
-                  ) : (
-                    member.name.slice(0, 2).toUpperCase()
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
-                    {member.groupType || member.industry || "Hội viên BIHUBA"}
-                  </p>
-                  <h3 className="mt-2 line-clamp-2 text-2xl font-semibold tracking-tight text-slate-950">
-                    {member.name}
-                  </h3>
-                </div>
-              </div>
-              <p className="mt-4 line-clamp-3 text-sm leading-7 text-slate-600">
-                {member.companyTagline || member.description}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {member.industry ? (
-                  <span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-800">
-                    {member.industry}
-                  </span>
-                ) : null}
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                  {member.memberType}
-                </span>
-              </div>
-            </div>
-            <Link
-              href={`/hoi-vien/${member.slug}`}
-              className="inline-flex w-fit rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-500 hover:text-slate-950"
-            >
-              Xem hồ sơ
-            </Link>
-          </div>
         </div>
       </article>
     );
@@ -144,7 +108,7 @@ export function MemberCard({
         href={`/hoi-vien/${member.slug}`}
         className="mt-5 inline-flex rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-cyan-500 hover:text-cyan-700"
       >
-        {"Xem h\u1ed3 s\u01a1"}
+        Xem hồ sơ
       </Link>
     </article>
   );
