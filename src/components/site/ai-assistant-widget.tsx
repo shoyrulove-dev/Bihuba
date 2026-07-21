@@ -27,6 +27,15 @@ function SendIcon() {
   );
 }
 
+function ChatBubbleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4.5 w-4.5" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M5 19.5v-3.2A7.8 7.8 0 0 1 3.5 12C3.5 7.6 7.3 4 12 4s8.5 3.6 8.5 8-3.8 8-8.5 8a9 9 0 0 1-3.7-.8L5 19.5Z" />
+      <path d="M8.5 11.5h7M8.5 14h4.5" />
+    </svg>
+  );
+}
+
 const suggestions = [
   "BIHUBA hỗ trợ doanh nghiệp những gì?",
   "Muốn tham gia hội viên cần chuẩn bị gì?",
@@ -92,7 +101,7 @@ export function AiAssistantWidget({ settings }: { settings?: AiAssistantSettings
   }
 
   return (
-    <div className="ai-assistant-widget fixed bottom-[15.5rem] right-3 z-40">
+    <div className="ai-assistant-widget fixed bottom-[13rem] right-3 z-40">
       {isOpen ? (
         <div className="mb-3 w-[min(92vw,390px)] overflow-hidden rounded-[1.4rem] border border-slate-200 bg-white text-slate-950 shadow-[0_24px_70px_rgba(2,6,23,0.26)]">
           <div className="flex items-center justify-between gap-3 bg-slate-950 px-4 py-3 text-white">
@@ -174,10 +183,11 @@ export function AiAssistantWidget({ settings }: { settings?: AiAssistantSettings
           setIsOpen((current) => !current);
           setTimeout(() => inputRef.current?.focus(), 80);
         }}
-        className="ml-auto flex h-11 items-center gap-2 rounded-full bg-slate-950 px-4 text-sm font-bold text-white shadow-[0_14px_24px_rgba(2,6,23,0.26)] transition hover:scale-105"
+        className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-white shadow-[0_14px_24px_rgba(2,6,23,0.26)] transition hover:scale-105"
+        aria-label="Mở Trợ Lý BIHUBA"
+        title="Trợ Lý BIHUBA"
       >
-        <BotIcon />
-        <span>Trợ Lý BIHUBA</span>
+        <ChatBubbleIcon />
       </button>
     </div>
   );
