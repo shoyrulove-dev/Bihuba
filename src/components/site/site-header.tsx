@@ -53,17 +53,17 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
           </span>
 
           <span className="min-w-0 overflow-hidden">
-            <span className="brand-line-bihuba block truncate text-[22px] font-black leading-[1] tracking-[0.02em] xl:text-[27px]">
+            <span className="brand-line-bihuba block truncate text-[24px] font-black leading-[1] tracking-[0.02em] xl:text-[28px]">
               {settings.shortName || "BIHUBA"}
             </span>
-            <span className="brand-line-silver mt-1 block truncate text-[13px] font-extrabold leading-[1.12] xl:text-[15px]">
+            <span className="brand-line-silver mt-1 block truncate text-[14px] font-black leading-[1.12] xl:text-[16px]">
               {nameLines.lineOne}
             </span>
-            <span className="brand-line-silver mt-1 block truncate text-[13px] font-extrabold leading-[1.12] xl:text-[15px]">
+            <span className="brand-line-silver mt-1 block truncate text-[14px] font-black leading-[1.12] xl:text-[16px]">
               {nameLines.lineTwo}
             </span>
             {settings.slogan ? (
-              <span className="brand-line-cyan mt-1.5 block truncate text-[11px] font-black uppercase leading-[1.1] tracking-[0.12em] xl:text-[12px]">
+              <span className="brand-line-cyan mt-1.5 block truncate text-[12px] font-black uppercase leading-[1.1] tracking-[0.12em] xl:text-[13px]">
                 {settings.slogan}
               </span>
             ) : null}
