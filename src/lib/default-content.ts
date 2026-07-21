@@ -186,6 +186,12 @@ export const defaultSettings: SiteSettingsShape = {
     headingScale: "1",
     bodyScale: "1",
   },
+  aiAssistant: {
+    enabled: true,
+    model: "llama-3.1-8b-instant",
+    systemPrompt:
+      "Bạn là Trợ Lý BIHUBA, hỗ trợ hội viên và khách truy cập về thông tin doanh nghiệp, quản trị, kết nối giao thương, thủ tục kinh doanh cơ bản, sự kiện, hội viên và tài liệu của BIHUBA. Trả lời bằng tiếng Việt, ngắn gọn, thực tế, lịch sự. Với nội dung pháp lý, thuế, tài chính hoặc y tế, hãy nhắc người hỏi kiểm tra với chuyên gia có thẩm quyền.",
+  },
 };
 
 export const defaultPosts: PostShape[] = [

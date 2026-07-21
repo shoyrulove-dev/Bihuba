@@ -128,3 +128,14 @@ export const themeFields: FieldConfig[] = [
     section: "Màu sắc",
   },
 ];
+
+export const aiFields: FieldConfig[] = [
+  {
+    name: "aiAssistant",
+    label: "Trợ Lý BIHUBA",
+    type: "ai",
+    fullWidth: true,
+    helpText: "API key Groq không lưu trong admin. Cần cấu hình biến môi trường GROQ_API_KEY trên Vercel/server.",
+    section: "AI",
+  },
+];

@@ -22,6 +22,7 @@ const SiteSettingsSchema = new Schema(
     featureBanners: { type: Array, default: [] },
     supporterCompanies: { type: Array, default: [] },
     theme: { type: Object, default: {} },
+    aiAssistant: { type: Object, default: {} },
   },
   { timestamps: true }
 );

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
+  AiAssistantSettings,
   FeatureBannerItem,
   FloatingActions,
   ProductItem,
@@ -44,7 +45,8 @@ type FieldType =
   | "supporters"
   | "banners"
   | "products"
-  | "theme";
+  | "theme"
+  | "ai";
 
 export type FieldConfig = {
   name: string;
@@ -88,6 +90,16 @@ type FormState = Record<string, unknown>;
 type FieldSection = {
   title: string;
   fields: FieldConfig[];
+};
+
+const IMAGEKIT_UPLOAD_NOTE =
+  "ImageKit Free: ảnh/audio/raw tối đa 25MB/file, video 100MB. Lite: 40MB/300MB video. Pro: 50MB/2GB video. File quá lớn nên upload Google Drive rồi dán link chia sẻ vào ô URL.";
+
+const defaultAiAssistantSettings: AiAssistantSettings = {
+  enabled: true,
+  model: "llama-3.1-8b-instant",
+  systemPrompt:
+    "Bạn là Trợ Lý BIHUBA, hỗ trợ hội viên và khách truy cập về thông tin doanh nghiệp, quản trị, kết nối giao thương, thủ tục kinh doanh cơ bản, sự kiện, hội viên và tài liệu của BIHUBA. Trả lời bằng tiếng Việt, ngắn gọn, thực tế, lịch sự. Với nội dung pháp lý, thuế, tài chính hoặc y tế, hãy nhắc người hỏi kiểm tra với chuyên gia có thẩm quyền.",
 };
 
 const permissionOptions = [
@@ -216,6 +228,8 @@ function buildInitialValue(field: FieldConfig) {
         headingScale: "1",
         bodyScale: "1",
       };
+    case "ai":
+      return defaultAiAssistantSettings;
     default:
       return "";
   }
@@ -266,6 +280,15 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
       headingScale: "1",
       bodyScale: "1",
     };
+  }
+  if (field.type === "ai") {
+    if (rawValue && typeof rawValue === "object") {
+      return {
+        ...defaultAiAssistantSettings,
+        ...(rawValue as Partial<AiAssistantSettings>),
+      };
+    }
+    return defaultAiAssistantSettings;
   }
   return String(rawValue ?? "");
 }
@@ -1316,6 +1339,70 @@ function ProductsField({
   );
 }
 
+function AiSettingsField({
+  value,
+  onChange,
+}: {
+  value: unknown;
+  onChange: (nextValue: AiAssistantSettings) => void;
+}) {
+  const settings = {
+    ...defaultAiAssistantSettings,
+    ...((value && typeof value === "object" ? value : {}) as Partial<AiAssistantSettings>),
+  };
+
+  function update<K extends keyof AiAssistantSettings>(key: K, nextValue: AiAssistantSettings[K]) {
+    onChange({
+      ...settings,
+      [key]: nextValue,
+    });
+  }
+
+  return (
+    <div className="space-y-4 rounded-[1.5rem] border border-slate-200 bg-white p-4">
+      <label className="flex items-start gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+        <input
+          type="checkbox"
+          checked={Boolean(settings.enabled)}
+          onChange={(event) => update("enabled", event.target.checked)}
+          className="mt-1 h-5 w-5"
+        />
+        <span>
+          <span className="block text-sm font-semibold text-slate-950">Bật Trợ Lý BIHUBA ngoài website</span>
+          <span className="mt-1 block text-xs leading-5 text-slate-500">
+            Nút trợ lý sẽ hiển thị bên phải, phía trên nút đăng nhập/đăng ký.
+          </span>
+        </span>
+      </label>
+
+      <label className="block">
+        <span className="mb-2 block text-sm font-medium">Model Groq</span>
+        <input
+          type="text"
+          value={settings.model}
+          onChange={(event) => update("model", event.target.value)}
+          placeholder="llama-3.1-8b-instant"
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        />
+      </label>
+
+      <label className="block">
+        <span className="mb-2 block text-sm font-medium">Prompt hệ thống</span>
+        <textarea
+          value={settings.systemPrompt}
+          onChange={(event) => update("systemPrompt", event.target.value)}
+          rows={7}
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        />
+      </label>
+
+      <p className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
+        Không dán API key vào đây. Key Groq cần đặt trong biến môi trường GROQ_API_KEY trên Vercel hoặc server.
+      </p>
+    </div>
+  );
+}
+
 function ThemeField({
   value,
   onChange,
@@ -2037,6 +2124,9 @@ export function CollectionManager({
                                   />
                                 ) : null}
                               </div>
+                              <p className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-xs leading-5 text-slate-600">
+                                {IMAGEKIT_UPLOAD_NOTE}
+                              </p>
                             </div>
                           ) : field.type === "stats" ? (
                             <StatListField
@@ -2087,6 +2177,11 @@ export function CollectionManager({
                             />
                           ) : field.type === "theme" ? (
                             <ThemeField
+                              value={form[field.name]}
+                              onChange={(value) => updateField(field.name, value)}
+                            />
+                          ) : field.type === "ai" ? (
+                            <AiSettingsField
                               value={form[field.name]}
                               onChange={(value) => updateField(field.name, value)}
                             />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AiAssistantWidget } from "@/components/site/ai-assistant-widget";
 import { FloatingContactButtons } from "@/components/site/floating-contact-buttons";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -112,6 +113,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <main>{children}</main>
+        {settings ? <AiAssistantWidget settings={settings.aiAssistant} /> : null}
         {settings ? <FloatingContactButtons actions={settings.floatingActions} /> : null}
         {settings ? <SiteFooter settings={settings} /> : null}
       </body>

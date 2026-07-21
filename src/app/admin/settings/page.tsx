@@ -18,6 +18,7 @@ const sections = [
   { href: "/admin/settings/contact?mode=edit", title: "Menu và liên hệ", permission: "settings" },
   { href: "/admin/settings/supporters?mode=edit", title: "Doanh nghiệp đồng hành", permission: "supporters" },
   { href: "/admin/settings/theme?mode=edit", title: "Giao diện", permission: "settings" },
+  { href: "/admin/settings/ai?mode=edit", title: "Trợ Lý BIHUBA AI", permission: "settings" },
 ];
 
 export default async function AdminSettingsPage() {

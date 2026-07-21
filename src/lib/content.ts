@@ -113,6 +113,10 @@ export async function getSiteSettings(): Promise<SiteSettingsShape> {
       ...defaultSettings.theme,
       ...(normalized.theme || {}),
     },
+    aiAssistant: {
+      ...defaultSettings.aiAssistant,
+      ...(normalized.aiAssistant || {}),
+    },
     memberStats: normalized.memberStats?.length ? normalized.memberStats : defaultSettings.memberStats,
     nav: normalized.nav?.length ? normalized.nav : defaultSettings.nav,
     supporterCompanies: normalized.supporterCompanies?.length

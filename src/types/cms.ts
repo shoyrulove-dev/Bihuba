@@ -55,6 +55,12 @@ export interface ThemeSettings {
   bodyScale: string;
 }
 
+export interface AiAssistantSettings {
+  enabled: boolean;
+  model: string;
+  systemPrompt: string;
+}
+
 export interface SiteSettingsShape {
   siteName: string;
   shortName: string;
@@ -76,6 +82,7 @@ export interface SiteSettingsShape {
   featureBanners: FeatureBannerItem[];
   supporterCompanies: SupporterItem[];
   theme: ThemeSettings;
+  aiAssistant: AiAssistantSettings;
 }
 
 export interface ProductItem {
