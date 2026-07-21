@@ -98,6 +98,7 @@ const IMAGEKIT_UPLOAD_NOTE =
 const defaultAiAssistantSettings: AiAssistantSettings = {
   enabled: true,
   model: "llama-3.1-8b-instant",
+  apiToken: "",
   systemPrompt:
     "Bạn là Trợ Lý BIHUBA, hỗ trợ hội viên và khách truy cập về thông tin doanh nghiệp, quản trị, kết nối giao thương, thủ tục kinh doanh cơ bản, sự kiện, hội viên và tài liệu của BIHUBA. Trả lời bằng tiếng Việt, ngắn gọn, thực tế, lịch sự. Với nội dung pháp lý, thuế, tài chính hoặc y tế, hãy nhắc người hỏi kiểm tra với chuyên gia có thẩm quyền.",
 };
@@ -1387,6 +1388,21 @@ function AiSettingsField({
       </label>
 
       <label className="block">
+        <span className="mb-2 block text-sm font-medium">API token Groq</span>
+        <input
+          type="password"
+          value={settings.apiToken || ""}
+          onChange={(event) => update("apiToken", event.target.value)}
+          placeholder="Nhập API token Groq"
+          autoComplete="new-password"
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        />
+        <span className="mt-2 block text-xs leading-5 text-slate-500">
+          Token được che dạng mật khẩu trong admin. Có thể để trống nếu đã cấu hình GROQ_API_KEY trên Vercel/server.
+        </span>
+      </label>
+
+      <label className="block">
         <span className="mb-2 block text-sm font-medium">Prompt hệ thống</span>
         <textarea
           value={settings.systemPrompt}
@@ -1397,7 +1413,7 @@ function AiSettingsField({
       </label>
 
       <p className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
-        Không dán API key vào đây. Key Groq cần đặt trong biến môi trường GROQ_API_KEY trên Vercel hoặc server.
+        Ưu tiên dùng biến môi trường GROQ_API_KEY nếu có. Nếu nhập token ở đây, token chỉ dùng server-side cho API trợ lý.
       </p>
     </div>
   );

@@ -503,7 +503,7 @@ export const defaultMembers: MemberShape[] = [
     email: "info@bihuba.vn",
     website: "https://bihuba.vercel.app",
     industry: "Hiệp hội - Tổ chức xã hội",
-    coverImage: "https://huba.vn/wp-content/uploads/2026/07/soket-3.webp",
+    coverImage: "/member-banners/manufacturing-trade.png",
     introImage: "",
     companyTagline: "Kết nối cộng đồng doanh nghiệp và mở rộng cơ hội hợp tác.",
     products: [
@@ -530,7 +530,7 @@ export const defaultMembers: MemberShape[] = [
     email: "contact@thuongmaibinhhung.vn",
     website: "https://example.vn",
     industry: "Thương mại - Dịch vụ",
-    coverImage: "",
+    coverImage: "/member-banners/finance-partner.png",
     introImage: "",
     companyTagline: "Nhà cung cấp hàng hóa và dịch vụ thương mại cho khu vực Bình Hưng.",
     products: [
@@ -557,7 +557,7 @@ export const defaultMembers: MemberShape[] = [
     email: "hello@namsaigontech.vn",
     website: "https://example.org",
     industry: "Kỹ thuật - Hạ tầng",
-    coverImage: "",
+    coverImage: "/member-banners/presmile-dental-center.png",
     introImage: "",
     companyTagline: "Tư vấn, thi công và bảo trì các hạng mục kỹ thuật cho doanh nghiệp.",
     products: [

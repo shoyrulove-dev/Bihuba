@@ -2,6 +2,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getMemberBySlug } from "@/lib/content";
 
+function getMemberFallbackBanner(member: Awaited<ReturnType<typeof getMemberBySlug>>) {
+  if (!member) return "/member-banners/manufacturing-trade.png";
+  const text = `${member.name} ${member.industry} ${member.groupType}`.toLowerCase();
+  if (text.includes("tài") || text.includes("bank") || text.includes("finance")) return "/member-banners/finance-partner.png";
+  if (text.includes("nha") || text.includes("dental") || text.includes("presmile")) {
+    return "/member-banners/presmile-dental-center.png";
+  }
+  return "/member-banners/manufacturing-trade.png";
+}
+
 export default async function MemberDetailPage({
   params,
 }: {
@@ -17,29 +27,39 @@ export default async function MemberDetailPage({
   const heroImage =
     member.coverImage ||
     member.introImage ||
-    member.logo ||
-    "https://huba.vn/wp-content/uploads/2026/07/soket-3.webp";
+    getMemberFallbackBanner(member);
 
   return (
     <div className="pb-16">
-      <section className="relative overflow-hidden bg-[#031634] text-white">
-        <div
-          className="min-h-[340px] bg-cover bg-center"
-          style={{
-            backgroundImage: `linear-gradient(180deg, rgba(2,6,23,0.28), rgba(2,6,23,0.86)), url('${heroImage}')`,
-          }}
-        >
-          <div className="mx-auto max-w-7xl px-6 py-18">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300">
-              {member.groupType}
-            </p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight md:text-5xl">
-              {member.name}
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-blue-50/90">
-              {member.companyTagline || member.description}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+      <section className="bg-[#031634] px-6 py-10 text-white">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_24px_70px_rgba(2,6,23,0.28)]">
+          <div className="flex aspect-[16/7] min-h-[260px] items-center justify-center bg-slate-950 p-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={heroImage} alt={member.name} className="max-h-full max-w-full object-contain" />
+          </div>
+          <div className="grid gap-6 border-t border-white/10 bg-slate-950/70 p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
+            <div className="flex h-24 w-24 items-center justify-center rounded-[1.4rem] bg-white p-2">
+              {member.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={member.logo} alt={member.name} className="h-full w-full object-contain" />
+              ) : (
+                <span className="text-xl font-black text-[var(--theme-primary)]">
+                  {member.name.slice(0, 2).toUpperCase()}
+                </span>
+              )}
+            </div>
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-cyan-300">
+                {member.groupType || member.industry || "Hội viên BIHUBA"}
+              </p>
+              <h1 className="mt-3 max-w-4xl text-3xl font-semibold tracking-tight md:text-5xl">
+                {member.name}
+              </h1>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-blue-50/90">
+                {member.companyTagline || member.description}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 lg:justify-end">
               {member.website ? (
                 <Link
                   href={member.website}
@@ -68,63 +88,38 @@ export default async function MemberDetailPage({
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--theme-primary)]">
             Giới thiệu
           </p>
-          <h2 className="mt-3 text-2xl font-semibold text-slate-950">
-            Hồ sơ doanh nghiệp
-          </h2>
+          <h2 className="mt-3 text-2xl font-semibold text-slate-950">Hồ sơ doanh nghiệp</h2>
           <p className="mt-4 text-base leading-8 text-slate-600">{member.description}</p>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
-            <div className="rounded-[1.4rem] bg-slate-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Lĩnh vực
-              </p>
-              <p className="mt-2 text-sm font-medium text-slate-900">{member.industry}</p>
-            </div>
-            <div className="rounded-[1.4rem] bg-slate-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Loại hội viên
-              </p>
-              <p className="mt-2 text-sm font-medium text-slate-900">{member.memberType}</p>
-            </div>
-            <div className="rounded-[1.4rem] bg-slate-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Địa chỉ
-              </p>
-              <p className="mt-2 text-sm font-medium text-slate-900">{member.address}</p>
-            </div>
-            <div className="rounded-[1.4rem] bg-slate-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Điện thoại
-              </p>
-              <p className="mt-2 text-sm font-medium text-slate-900">{member.phone}</p>
-            </div>
-            <div className="rounded-[1.4rem] bg-slate-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Email
-              </p>
-              <p className="mt-2 text-sm font-medium text-slate-900">{member.email}</p>
-            </div>
-            <div className="rounded-[1.4rem] bg-slate-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Website
-              </p>
-              <p className="mt-2 text-sm font-medium text-slate-900">{member.website || "Đang cập nhật"}</p>
-            </div>
+            {[
+              ["Lĩnh vực", member.industry],
+              ["Loại hội viên", member.memberType],
+              ["Địa chỉ", member.address],
+              ["Điện thoại", member.phone],
+              ["Email", member.email],
+              ["Website", member.website || "Đang cập nhật"],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-[1.4rem] bg-slate-50 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">{label}</p>
+                <p className="mt-2 break-words text-sm font-medium text-slate-900">{value}</p>
+              </div>
+            ))}
           </div>
         </section>
 
         <aside className="space-y-6">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-            <div className="overflow-hidden rounded-[1.6rem] bg-slate-100">
+            <div className="flex h-[280px] items-center justify-center overflow-hidden rounded-[1.6rem] bg-slate-100 p-4">
               {member.introImage || member.logo ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={member.introImage || member.logo}
                   alt={member.name}
-                  className="h-[280px] w-full object-cover"
+                  className="max-h-full max-w-full object-contain"
                 />
               ) : (
-                <div className="flex h-[280px] items-center justify-center px-8 text-center text-3xl font-black text-[var(--theme-primary)]">
+                <div className="px-8 text-center text-3xl font-black text-[var(--theme-primary)]">
                   {member.name}
                 </div>
               )}
@@ -186,11 +181,7 @@ export default async function MemberDetailPage({
                 <div className="flex h-44 items-center justify-center bg-slate-100">
                   {product.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={product.imageUrl}
-                      alt={product.title}
-                      className="h-full w-full object-cover"
-                    />
+                    <img src={product.imageUrl} alt={product.title} className="h-full w-full object-cover" />
                   ) : (
                     <div className="px-6 text-center text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
                       {product.type === "product" ? "Sản phẩm" : "Dịch vụ"}
@@ -203,9 +194,7 @@ export default async function MemberDetailPage({
                   </p>
                   <h3 className="text-lg font-semibold text-slate-950">{product.title}</h3>
                   <p className="text-sm leading-7 text-slate-600">{product.summary}</p>
-                  {product.price ? (
-                    <p className="text-sm font-semibold text-slate-900">{product.price}</p>
-                  ) : null}
+                  {product.price ? <p className="text-sm font-semibold text-slate-900">{product.price}</p> : null}
                   {product.link ? (
                     <a
                       href={product.link}

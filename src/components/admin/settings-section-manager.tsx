@@ -15,7 +15,7 @@ export async function SettingsSectionManager({
   panelMaxWidthClass?: string;
   defaultSectionsOpen?: boolean;
 }) {
-  const settings = await getSiteSettings();
+  const settings = await getSiteSettings({ includeSecrets: true });
 
   return (
     <AdminShell title={title} description={description}>

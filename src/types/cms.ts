@@ -59,6 +59,7 @@ export interface AiAssistantSettings {
   enabled: boolean;
   model: string;
   systemPrompt: string;
+  apiToken?: string;
 }
 
 export interface SiteSettingsShape {

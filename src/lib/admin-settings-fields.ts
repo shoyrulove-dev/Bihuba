@@ -135,7 +135,7 @@ export const aiFields: FieldConfig[] = [
     label: "Trợ Lý BIHUBA",
     type: "ai",
     fullWidth: true,
-    helpText: "API key Groq không lưu trong admin. Cần cấu hình biến môi trường GROQ_API_KEY trên Vercel/server.",
+    helpText: "Có thể nhập token Groq tại đây hoặc dùng biến môi trường GROQ_API_KEY trên Vercel/server.",
     section: "AI",
   },
 ];

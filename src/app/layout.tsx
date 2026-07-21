@@ -113,7 +113,15 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <main>{children}</main>
-        {settings ? <AiAssistantWidget settings={settings.aiAssistant} /> : null}
+        {settings ? (
+          <AiAssistantWidget
+            settings={{
+              enabled: settings.aiAssistant.enabled,
+              model: settings.aiAssistant.model,
+              systemPrompt: "",
+            }}
+          />
+        ) : null}
         {settings ? <FloatingContactButtons actions={settings.floatingActions} /> : null}
         {settings ? <SiteFooter settings={settings} /> : null}
       </body>

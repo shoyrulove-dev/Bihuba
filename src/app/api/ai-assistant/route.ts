@@ -26,14 +26,14 @@ function normalizeMessages(input: unknown): ChatMessage[] {
 }
 
 export async function POST(request: Request) {
-  const settings = await getSiteSettings();
+  const settings = await getSiteSettings({ includeSecrets: true });
   const aiSettings = settings.aiAssistant;
 
   if (!aiSettings?.enabled) {
     return NextResponse.json({ message: "Trợ lý BIHUBA đang tạm tắt." }, { status: 403 });
   }
 
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY || aiSettings.apiToken;
   if (!apiKey) {
     return NextResponse.json(
       { message: "Trợ lý BIHUBA chưa được cấu hình API key Groq." },

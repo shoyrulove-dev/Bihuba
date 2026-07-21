@@ -80,7 +80,7 @@ function normalizeDownloadCategory<T extends Partial<DownloadShape>>(item: T): T
   };
 }
 
-export async function getSiteSettings(): Promise<SiteSettingsShape> {
+export async function getSiteSettings(options: { includeSecrets?: boolean } = {}): Promise<SiteSettingsShape> {
   const connection = await connectToDatabase();
 
   if (!process.env.MONGODB_URI || !connection) {
@@ -94,7 +94,7 @@ export async function getSiteSettings(): Promise<SiteSettingsShape> {
 
   const normalized = serialize(settings) as Partial<SiteSettingsShape>;
 
-  return repairDeepText({
+  const mergedSettings = {
     ...defaultSettings,
     ...normalized,
     contact: {
@@ -123,7 +123,16 @@ export async function getSiteSettings(): Promise<SiteSettingsShape> {
       ? normalized.supporterCompanies
       : defaultSettings.supporterCompanies,
     featureBanners: normalized.featureBanners?.length ? normalized.featureBanners : defaultSettings.featureBanners,
-  });
+  };
+
+  if (!options.includeSecrets) {
+    mergedSettings.aiAssistant = {
+      ...mergedSettings.aiAssistant,
+      apiToken: "",
+    };
+  }
+
+  return repairDeepText(mergedSettings);
 }
 
 export async function getPosts(
