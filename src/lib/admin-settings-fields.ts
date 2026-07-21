@@ -18,7 +18,7 @@ export const brandingFields: FieldConfig[] = [
     label: "Logo BIHUBA",
     type: "image",
     helpText:
-      "Chỉ upload 1 logo này. Logo nằm ngang với 4 hàng chữ trên header. Kích thước chuẩn: 1024 x 1024 px, tỷ lệ 1:1, PNG/WebP nền trong hoặc nền trắng.",
+      "Logo header đang dùng bản BIHUBA glow rõ nét. Nếu cần thay, upload logo vuông 1024 x 1024 px, tỷ lệ 1:1, PNG/WebP.",
     section: "Nhận diện",
   },
   {

@@ -25,37 +25,45 @@ function splitSiteName(siteName?: string) {
 
 export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
   const nameLines = splitSiteName(settings.siteName);
+  const configuredLogo = settings.logoUrl || "";
+  const headerLogo =
+    !configuredLogo ||
+    configuredLogo.includes("bihuba-mark.svg") ||
+    configuredLogo.includes("BIHUBA_Logo_Blue") ||
+    configuredLogo.includes("BIHUBA_Logo_Navy")
+      ? "/bihuba-logo-glow.png"
+      : configuredLogo;
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061934]/96 shadow-[0_18px_55px_rgba(2,12,27,0.18)] backdrop-blur">
       <div className="flex flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between lg:gap-5 xl:px-7 2xl:px-9">
         <Link
           href="/"
-          className="group flex min-h-[86px] w-full min-w-0 items-center gap-3 rounded-[1.15rem] border border-cyan-200/15 bg-gradient-to-r from-white/[0.10] via-cyan-300/[0.05] to-transparent px-4 py-3 shadow-[0_14px_34px_rgba(2,12,27,0.2)] lg:w-[560px] lg:max-w-[560px] lg:shrink-0 xl:w-[620px] xl:max-w-[620px]"
+          className="group flex min-h-[96px] w-full min-w-0 items-center gap-4 rounded-[1.15rem] border border-cyan-200/18 bg-[linear-gradient(110deg,rgba(255,255,255,0.13),rgba(31,111,189,0.10)_58%,rgba(86,214,255,0.03))] px-4 py-3 shadow-[0_14px_34px_rgba(2,12,27,0.2)] lg:w-[590px] lg:max-w-[590px] lg:shrink-0 xl:w-[660px] xl:max-w-[660px]"
         >
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-cyan-200/20 bg-[#09254d] p-2 shadow-[0_0_24px_rgba(86,214,255,0.16)]">
+          <span className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[1.2rem] border border-cyan-200/25 bg-[#061934] p-0 shadow-[0_0_30px_rgba(86,214,255,0.26)]">
             <Image
-              src={settings.logoUrl || "/bihuba-mark.svg"}
+              src={headerLogo}
               alt={settings.shortName || "BIHUBA"}
               width={96}
               height={96}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-cover"
               priority
             />
           </span>
 
           <span className="min-w-0 overflow-hidden">
-            <span className="block truncate text-[20px] font-black leading-[1] tracking-[0.02em] text-white drop-shadow-[0_2px_10px_rgba(86,214,255,0.22)] xl:text-[24px]">
+            <span className="block truncate text-[22px] font-black leading-[1] tracking-[0.02em] text-white drop-shadow-[0_2px_10px_rgba(86,214,255,0.35)] xl:text-[27px]">
               {settings.shortName || "BIHUBA"}
             </span>
-            <span className="mt-1 block truncate text-[12px] font-bold leading-[1.1] text-white/95 xl:text-[14px]">
+            <span className="mt-1 block truncate text-[13px] font-extrabold leading-[1.12] text-white drop-shadow-[0_1px_8px_rgba(255,255,255,0.18)] xl:text-[15px]">
               {nameLines.lineOne}
             </span>
-            <span className="mt-1 block truncate text-[12px] font-bold leading-[1.1] text-blue-100/90 xl:text-[14px]">
+            <span className="mt-1 block truncate text-[13px] font-extrabold leading-[1.12] text-slate-200 drop-shadow-[0_1px_8px_rgba(255,255,255,0.14)] xl:text-[15px]">
               {nameLines.lineTwo}
             </span>
             {settings.slogan ? (
-              <span className="mt-1 block truncate text-[10px] font-black uppercase leading-[1.1] tracking-[0.1em] text-cyan-300 xl:text-[11px]">
+              <span className="mt-1.5 block truncate text-[11px] font-black uppercase leading-[1.1] tracking-[0.12em] text-cyan-300 drop-shadow-[0_0_12px_rgba(86,214,255,0.72)] xl:text-[12px]">
                 {settings.slogan}
               </span>
             ) : null}
@@ -63,7 +71,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
         </Link>
 
         <nav className="hidden min-w-0 flex-1 overflow-visible lg:flex lg:justify-end">
-          <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2 pr-0">
+          <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2.5 pr-0">
             {settings.nav.map((item) => {
               const isContact = item.href === "/lien-he";
 
