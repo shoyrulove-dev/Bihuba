@@ -120,13 +120,12 @@ a {
 
 .google-translate-control {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 38px;
   align-items: center;
-  gap: 8px;
   border: 1px solid rgb(255 255 255 / 0.16);
   border-radius: 999px;
   background: rgb(255 255 255 / 0.08);
-  padding: 0 12px;
+  padding: 0 10px;
   color: white;
   font-size: 12px;
   font-weight: 800;
@@ -139,19 +138,14 @@ a {
   background: rgb(255 255 255 / 0.13);
 }
 
-.google-translate-control span {
-  color: rgb(103 232 249);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-}
-
 .google-translate-control select {
   border: 0;
   background: transparent;
   color: white;
   outline: none;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
+  min-width: 118px;
 }
 
 .google-translate-control select option {

@@ -73,7 +73,7 @@ export default async function AdminDownloadsPage() {
             label: "Ảnh bìa",
             type: "image",
             helpText:
-              "Khuyến nghị 1200x1600px hoặc 900x1200px, tỷ lệ 3:4. Ảnh này dùng cho trang chi tiết tài liệu, thumbnail danh sách sẽ tự rút gọn theo mẫu văn bản.",
+              "Dùng làm thumbnail ngoài danh sách và banner gọn trong trang chi tiết. Khuyến nghị ảnh ngang 1600x900px hoặc 1200x675px, JPG/WebP nhẹ.",
           },
           {
             name: "fileUrl",

@@ -15,25 +15,30 @@ function CompactDocumentThumb({ item, format }: { item: DownloadShape; format: s
 
   return (
     <div className="relative h-[88px] w-[66px] shrink-0 overflow-hidden rounded-[1rem] bg-[linear-gradient(135deg,_#0b2c5c,_#1d4ed8)] p-[3px] shadow-[0_10px_24px_rgba(15,23,42,0.12)]">
-      <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[0.85rem] bg-white">
-        <div className="h-[8px] w-full bg-[linear-gradient(90deg,_#22d3ee,_#2563eb)]" />
-        <div className="flex-1 px-[6px] py-[5px]">
-          <div className="inline-flex rounded-full bg-slate-100 px-[5px] py-[1px] text-[7px] font-black uppercase tracking-[0.22em] text-slate-600">
-            {format}
+      {item.coverImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={item.coverImage} alt={item.title} className="h-full w-full rounded-[0.85rem] object-cover" />
+      ) : (
+        <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[0.85rem] bg-white">
+          <div className="h-[8px] w-full bg-[linear-gradient(90deg,_#22d3ee,_#2563eb)]" />
+          <div className="flex-1 px-[6px] py-[5px]">
+            <div className="inline-flex rounded-full bg-slate-100 px-[5px] py-[1px] text-[7px] font-black uppercase tracking-[0.22em] text-slate-600">
+              {format}
+            </div>
+            <div className="mt-[5px] space-y-[3px] text-[6px] leading-[1.25] text-slate-700">
+              {lines.map((line, index) => (
+                <p
+                  key={`${item.slug}-${index}`}
+                  className={`truncate ${index === 0 ? "font-bold text-slate-900" : "text-slate-500"}`}
+                >
+                  {line}
+                </p>
+              ))}
+            </div>
           </div>
-          <div className="mt-[5px] space-y-[3px] text-[6px] leading-[1.25] text-slate-700">
-            {lines.map((line, index) => (
-              <p
-                key={`${item.slug}-${index}`}
-                className={`truncate ${index === 0 ? "font-bold text-slate-900" : "text-slate-500"}`}
-              >
-                {line}
-              </p>
-            ))}
-          </div>
+          <div className="absolute right-0 top-0 h-0 w-0 border-l-[11px] border-t-[11px] border-l-transparent border-t-cyan-100/80" />
         </div>
-        <div className="absolute right-0 top-0 h-0 w-0 border-l-[11px] border-t-[11px] border-l-transparent border-t-cyan-100/80" />
-      </div>
+      )}
     </div>
   );
 }

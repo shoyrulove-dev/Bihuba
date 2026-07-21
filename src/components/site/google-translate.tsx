@@ -40,7 +40,6 @@ export function GoogleTranslate() {
   return (
     <div className="google-translate-shell">
       <label className="google-translate-control">
-        <span>Ngôn ngữ</span>
         <select
           defaultValue=""
           aria-label="Chọn ngôn ngữ"
