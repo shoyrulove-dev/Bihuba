@@ -53,17 +53,17 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
           </span>
 
           <span className="min-w-0 overflow-hidden">
-            <span className="block truncate text-[22px] font-black leading-[1] tracking-[0.02em] text-white drop-shadow-[0_2px_10px_rgba(86,214,255,0.35)] xl:text-[27px]">
+            <span className="brand-line-bihuba block truncate text-[22px] font-black leading-[1] tracking-[0.02em] xl:text-[27px]">
               {settings.shortName || "BIHUBA"}
             </span>
-            <span className="mt-1 block truncate text-[13px] font-extrabold leading-[1.12] text-white drop-shadow-[0_1px_8px_rgba(255,255,255,0.18)] xl:text-[15px]">
+            <span className="brand-line-silver mt-1 block truncate text-[13px] font-extrabold leading-[1.12] xl:text-[15px]">
               {nameLines.lineOne}
             </span>
-            <span className="mt-1 block truncate text-[13px] font-extrabold leading-[1.12] text-slate-200 drop-shadow-[0_1px_8px_rgba(255,255,255,0.14)] xl:text-[15px]">
+            <span className="brand-line-silver mt-1 block truncate text-[13px] font-extrabold leading-[1.12] xl:text-[15px]">
               {nameLines.lineTwo}
             </span>
             {settings.slogan ? (
-              <span className="mt-1.5 block truncate text-[11px] font-black uppercase leading-[1.1] tracking-[0.12em] text-cyan-300 drop-shadow-[0_0_12px_rgba(86,214,255,0.72)] xl:text-[12px]">
+              <span className="brand-line-cyan mt-1.5 block truncate text-[11px] font-black uppercase leading-[1.1] tracking-[0.12em] xl:text-[12px]">
                 {settings.slogan}
               </span>
             ) : null}

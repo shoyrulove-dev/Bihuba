@@ -114,6 +114,27 @@ a {
   animation: marquee-scroll 28s linear infinite;
 }
 
+.brand-line-bihuba {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7ff 42%, #b8c6df 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 16px rgb(77 166 255 / 0.4), 0 2px 0 rgb(10 42 90 / 0.55);
+}
+
+.brand-line-silver {
+  background: linear-gradient(180deg, #ffffff 0%, #e8eef8 48%, #aab7cd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 12px rgb(255 255 255 / 0.16), 0 1px 0 rgb(4 16 38 / 0.6);
+}
+
+.brand-line-cyan {
+  color: #56dfff;
+  text-shadow: 0 0 14px rgb(86 214 255 / 0.82), 0 2px 0 rgb(3 22 52 / 0.6);
+}
+
 .google-translate-shell {
   min-height: 40px;
 }

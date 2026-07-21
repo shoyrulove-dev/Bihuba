@@ -6,7 +6,12 @@ export function PostCard({ post }: { post: PostShape }) {
 
   return (
     <article className="overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
-      <div className="h-44 bg-slate-200 bg-cover bg-center" style={{ backgroundImage: `url(${post.featuredImage})` }} />
+      <div className="flex h-44 items-center justify-center overflow-hidden bg-slate-100">
+        {post.featuredImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={post.featuredImage} alt={post.title} className="h-full w-full object-contain" loading="lazy" />
+        ) : null}
+      </div>
       <div className="space-y-3 p-5">
         <div className="flex items-center justify-between gap-4 text-xs uppercase tracking-[0.22em] text-slate-500">
           <span>{post.category}</span>

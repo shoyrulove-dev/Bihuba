@@ -128,10 +128,12 @@ export default async function PostDetailPage({
         {post.title}
       </h1>
       <p className="mt-3 text-sm text-slate-500">{displayDate}</p>
-      <div
-        className="mt-8 h-80 rounded-[2rem] bg-slate-200 bg-cover bg-center"
-        style={{ backgroundImage: `url(${post.featuredImage})` }}
-      />
+      {post.featuredImage ? (
+        <div className="mt-8 flex max-h-[620px] min-h-[260px] items-center justify-center overflow-hidden rounded-[2rem] bg-slate-100 p-2 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={post.featuredImage} alt={post.title} className="max-h-[600px] w-full object-contain" />
+        </div>
+      ) : null}
       <div
         className="prose prose-slate mt-8 max-w-none prose-headings:text-slate-950 prose-a:text-cyan-700 prose-img:rounded-3xl"
         dangerouslySetInnerHTML={{ __html: safeHtml }}
