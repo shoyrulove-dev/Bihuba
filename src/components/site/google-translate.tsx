@@ -42,7 +42,7 @@ export function GoogleTranslate() {
       <label className="google-translate-control">
         <select
           defaultValue=""
-          aria-label="Chọn ngôn ngữ"
+          aria-label="Language"
           onChange={(event) => {
             setTranslateCookie(event.target.value);
             window.location.reload();
