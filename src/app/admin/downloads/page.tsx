@@ -52,12 +52,6 @@ export default async function AdminDownloadsPage() {
             type: "select",
             options: categories.map((item) => ({ label: item.name, value: item.name })),
           },
-          {
-            name: "categorySlug",
-            label: "Slug danh mục",
-            type: "select",
-            options: categories.map((item) => ({ label: item.slug, value: item.slug })),
-          },
           { name: "publishedAt", label: "Ngày đăng", type: "date" },
           {
             name: "fileFormat",

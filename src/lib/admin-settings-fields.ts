@@ -4,13 +4,13 @@ export const brandingFields: FieldConfig[] = [
   {
     name: "siteName",
     label: "Tên đầy đủ",
-    helpText: "Dòng chữ dài hiển thị trên banner/header, ví dụ: Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh.",
+    helpText: "Header tự tách thành 2 hàng: Hội Doanh nghiệp Xã Bình Hưng / Thành phố Hồ Chí Minh.",
     section: "Nhận diện",
   },
   {
     name: "shortName",
     label: "Tên ngắn",
-    helpText: "Chữ ngắn đứng trước tên hội trên banner/header, ví dụ: BIHUBA.",
+    helpText: "Hàng 1 trên header, ví dụ: BIHUBA.",
     section: "Nhận diện",
   },
   {
@@ -18,10 +18,15 @@ export const brandingFields: FieldConfig[] = [
     label: "Logo BIHUBA",
     type: "image",
     helpText:
-      "Chỉ upload 1 logo này. Chữ trên banner lấy từ Tên ngắn và Tên đầy đủ phía trên. Kích thước chuẩn: 1024 x 1024 px, tỷ lệ 1:1, PNG/WebP nền trong hoặc nền trắng.",
+      "Chỉ upload 1 logo này. Logo nằm ngang với 4 hàng chữ trên header. Kích thước chuẩn: 1024 x 1024 px, tỷ lệ 1:1, PNG/WebP nền trong hoặc nền trắng.",
     section: "Nhận diện",
   },
-  { name: "slogan", label: "Slogan", section: "Nhận diện" },
+  {
+    name: "slogan",
+    label: "Slogan",
+    helpText: "Hàng 4 trên header, ví dụ: Đoàn kết - Đổi mới - Hội nhập - Phát triển.",
+    section: "Nhận diện",
+  },
 ];
 
 export const homepageFields: FieldConfig[] = [

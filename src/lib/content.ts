@@ -53,6 +53,33 @@ function sortPostsByDisplayDate(posts: PostShape[]) {
   });
 }
 
+function normalizeDownloadCategory<T extends Partial<DownloadShape>>(item: T): T {
+  const values = [item.category, item.categorySlug, item.documentType].map((value) =>
+    String(value || "").toLowerCase()
+  );
+  const isFormSample = values.some(
+    (value) =>
+      value.includes("form") ||
+      value.includes("bieu-mau") ||
+      value.includes("biểu mẫu") ||
+      value.includes("mẫu")
+  );
+
+  if (!isFormSample) {
+    return {
+      ...item,
+      categorySlug: item.categorySlug || slugify(item.category || "khac"),
+    };
+  }
+
+  return {
+    ...item,
+    category: "Form mẫu",
+    categorySlug: "form-mau",
+    documentType: item.documentType === "Biểu mẫu" ? "Form mẫu" : item.documentType,
+  };
+}
+
 export async function getSiteSettings(): Promise<SiteSettingsShape> {
   const connection = await connectToDatabase();
 
@@ -192,10 +219,7 @@ export async function getDownloads(): Promise<DownloadShape[]> {
     return repairDeepText(defaultDownloads);
   }
 
-  return repairDeepText(serialize(downloads).map((item) => ({
-    ...item,
-    categorySlug: item.categorySlug || slugify(item.category || "khac"),
-  })));
+  return repairDeepText(serialize(downloads).map((item) => normalizeDownloadCategory(item)));
 }
 
 export async function getDownloadCategories(): Promise<DownloadCategoryShape[]> {
@@ -235,5 +259,5 @@ export async function getDownloadBySlug(
   }
 
   const download = await DownloadModel.findOne({ slug }).lean();
-  return repairDeepText(download ? serialize(download) : null);
+  return repairDeepText(download ? normalizeDownloadCategory(serialize(download)) : null);
 }

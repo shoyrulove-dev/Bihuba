@@ -56,7 +56,22 @@ export function DownloadBrowser({
   items: DownloadShape[];
 }) {
   const downloads = normalizeDownloads(items);
-  const sortedCategories = [...categories].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  const categoryMap = new Map<string, DownloadCategoryShape>();
+  categories.forEach((category) => {
+    categoryMap.set(category.slug, category);
+  });
+  downloads.forEach((item) => {
+    const slug = item.categorySlug || slugify(item.category || "khac");
+    if (!categoryMap.has(slug)) {
+      categoryMap.set(slug, {
+        name: item.category || "Tài liệu khác",
+        slug,
+        description: "Tài liệu được tự động gom từ file đã đăng.",
+        order: 999,
+      });
+    }
+  });
+  const sortedCategories = Array.from(categoryMap.values()).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
   return (
     <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">

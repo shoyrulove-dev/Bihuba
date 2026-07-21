@@ -113,3 +113,41 @@ a {
 .marquee-track {
   animation: marquee-scroll 28s linear infinite;
 }
+
+.google-translate-shell {
+  min-height: 36px;
+}
+
+.google-translate-shell .goog-te-gadget {
+  color: transparent;
+  font-size: 0;
+}
+
+.google-translate-shell .goog-te-gadget span {
+  display: none;
+}
+
+.google-translate-shell select.goog-te-combo {
+  min-height: 36px;
+  max-width: 150px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+  color: white;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.google-translate-shell select.goog-te-combo option {
+  color: #0f172a;
+}
+
+body > .skiptranslate,
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}

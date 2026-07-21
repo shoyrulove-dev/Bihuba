@@ -193,7 +193,7 @@ export async function POST(request: NextRequest, context: Context) {
     payload.slug = slugify(String(payload.name ?? ""));
   }
 
-  if (key === "downloads" && payload.category && !payload.categorySlug) {
+  if (key === "downloads" && payload.category) {
     payload.categorySlug = slugify(String(payload.category));
   }
 
