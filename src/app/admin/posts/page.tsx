@@ -77,7 +77,8 @@ export default async function AdminPostsPage() {
       type: "image" as const,
       section: "Media",
       fullWidth: true,
-      helpText: "Dán link hoặc upload ảnh. Gợi ý: 1600 x 900 px, JPG/WebP dưới 1 MB.",
+      helpText:
+        "Chuẩn bắt buộc cho mọi bảng tin: ảnh ngang 16:9 như banner Blissbio. Khuyến nghị 1600 x 900 px hoặc 1200 x 675 px, JPG/WebP nhẹ dưới 1 MB. Nội dung chính nên nằm giữa ảnh để hiển thị đẹp ở Tin tức, Sự kiện, Kết nối giao thương và Lịch làm việc.",
     },
     ...(isAdmin
       ? [
