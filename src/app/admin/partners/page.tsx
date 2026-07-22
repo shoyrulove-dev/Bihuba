@@ -23,7 +23,13 @@ export default async function AdminPartnersPage() {
           { name: "slug", label: "Slug", section: "Thông tin" },
           { name: "partnerType", label: "Loại đối tác", section: "Thông tin" },
           { name: "website", label: "Website", type: "url" as const, section: "Thông tin" },
-          { name: "description", label: "Dòng tin hợp tác", type: "textarea" as const, section: "Nội dung", fullWidth: true },
+          {
+            name: "description",
+            label: "Dòng tin hợp tác",
+            type: "textarea" as const,
+            section: "Nội dung",
+            fullWidth: true,
+          },
           {
             name: "logo",
             label: "Logo",
@@ -37,7 +43,8 @@ export default async function AdminPartnersPage() {
             type: "image" as const,
             section: "Media",
             fullWidth: true,
-            helpText: "Mỗi đối tác nên có 1 banner thiết kế riêng. Gợi ý: 1920 x 760 px hoặc 1600 x 640 px.",
+            helpText:
+              "Chuẩn đồng bộ 16:9 cho banner đối tác. Khuyến nghị 1600 x 900 px hoặc 1200 x 675 px, JPG/WebP nhẹ dưới 1 MB. Ảnh quá lớn sẽ tự co vừa khung, không crop; nội dung chính nên nằm giữa ảnh.",
           },
           {
             name: "activityImages",
@@ -45,7 +52,8 @@ export default async function AdminPartnersPage() {
             type: "banners" as const,
             section: "Hoạt động hợp tác",
             fullWidth: true,
-            helpText: "Thêm hình BIHUBA làm việc, poster chương trình, banner ký kết hoặc hoạt động chung với đối tác.",
+            helpText:
+              "Dùng cùng chuẩn 16:9, khuyến nghị 1600 x 900 px hoặc 1200 x 675 px. Thêm hình BIHUBA làm việc, poster chương trình, banner ký kết hoặc hoạt động chung với đối tác.",
           },
         ]}
       />

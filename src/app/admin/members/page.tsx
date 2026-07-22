@@ -41,10 +41,10 @@ export default async function AdminMembersPage() {
           },
           {
             name: "coverImage",
-            label: "Banner doanh nghiệp",
+            label: "Banner hội viên",
             type: "image",
             helpText:
-              "Dùng làm banner ngoài danh sách hội viên và đầu trang hồ sơ. Khuyến nghị 1920 x 840 px hoặc 1600 x 700 px, tỷ lệ 16:7, JPG/WebP nhẹ.",
+              "Chuẩn đồng bộ 16:9 cho banner hội viên. Khuyến nghị 1600 x 900 px hoặc 1200 x 675 px, JPG/WebP nhẹ dưới 1 MB. Ảnh quá lớn sẽ tự co vừa khung, không crop; nội dung chính nên nằm giữa ảnh.",
           },
           {
             name: "introImage",

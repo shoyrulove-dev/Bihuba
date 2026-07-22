@@ -19,12 +19,12 @@ export default async function PartnerDetailPage({
     <div className="pb-16">
       <section className="relative overflow-hidden bg-[#061a39] text-white">
         <div className="mx-auto max-w-7xl px-6 py-8">
-          <div className="relative overflow-hidden rounded-[1.6rem] border border-white/12 bg-slate-950">
+          <div className="overflow-hidden rounded-[1.6rem] border border-white/12 bg-slate-950">
             {partner.bannerImage ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={partner.bannerImage} alt={partner.name} className="aspect-[16/6] w-full object-cover" />
+              <img src={partner.bannerImage} alt={partner.name} className="aspect-video w-full object-contain" />
             ) : (
-              <div className="flex aspect-[16/6] w-full items-center justify-center bg-[radial-gradient(circle_at_20%_20%,rgba(86,214,255,0.24),transparent_34%),linear-gradient(135deg,#061a39,#0f2f61)] px-8 text-center">
+              <div className="flex aspect-video w-full items-center justify-center bg-[radial-gradient(circle_at_20%_20%,rgba(86,214,255,0.24),transparent_34%),linear-gradient(135deg,#061a39,#0f2f61)] px-8 text-center">
                 {partner.logo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={partner.logo} alt={partner.name} className="h-32 w-32 rounded-3xl bg-white object-contain p-4" />
@@ -33,8 +33,7 @@ export default async function PartnerDetailPage({
                 )}
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/86 via-slate-950/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+            <div className="border-t border-white/10 bg-slate-950/82 p-6 md:p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-200">
                 {partner.partnerType || "Đối tác chiến lược"}
               </p>
@@ -93,7 +92,7 @@ export default async function PartnerDetailPage({
                     >
                       {item.imageUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={item.imageUrl} alt={item.title || partner.name} className="aspect-[16/9] w-full object-cover" />
+                        <img src={item.imageUrl} alt={item.title || partner.name} className="aspect-video w-full object-contain" />
                       ) : null}
                       <div className="p-5">
                         <h3 className="line-clamp-2 text-lg font-semibold text-slate-950">

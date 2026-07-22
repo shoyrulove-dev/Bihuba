@@ -53,11 +53,11 @@ export function MemberCard({
       <article className="overflow-hidden rounded-[1.6rem] border border-slate-200 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
         <Link
           href={`/hoi-vien/${member.slug}`}
-          className="flex aspect-[16/7] w-full items-center justify-center bg-slate-100 p-2"
+          className="flex aspect-video w-full items-center justify-center overflow-hidden bg-slate-100"
         >
           {bannerImage ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={bannerImage} alt={member.name} className="max-h-full max-w-full object-contain" loading="lazy" />
+            <img src={bannerImage} alt={member.name} className="h-full w-full object-contain" loading="lazy" />
           ) : (
             <div className="px-8 text-center text-3xl font-black text-[var(--theme-primary)]">{member.name}</div>
           )}

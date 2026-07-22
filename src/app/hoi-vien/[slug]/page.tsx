@@ -33,9 +33,9 @@ export default async function MemberDetailPage({
     <div className="pb-16">
       <section className="bg-[#031634] px-6 py-10 text-white">
         <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_24px_70px_rgba(2,6,23,0.28)]">
-          <div className="flex aspect-[16/7] min-h-[260px] items-center justify-center bg-slate-950 p-2">
+          <div className="flex aspect-video min-h-[260px] items-center justify-center overflow-hidden bg-slate-950">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={heroImage} alt={member.name} className="max-h-full max-w-full object-contain" />
+            <img src={heroImage} alt={member.name} className="h-full w-full object-contain" />
           </div>
           <div className="grid gap-6 border-t border-white/10 bg-slate-950/70 p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
             <div className="flex h-24 w-24 items-center justify-center rounded-[1.4rem] bg-white p-2">
