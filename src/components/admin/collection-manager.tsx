@@ -97,6 +97,8 @@ const IMAGEKIT_UPLOAD_NOTE =
 
 const defaultAiAssistantSettings: AiAssistantSettings = {
   enabled: true,
+  deepseekModel: "deepseek-chat",
+  deepseekApiToken: "",
   model: "llama-3.1-8b-instant",
   apiToken: "",
   systemPrompt:
@@ -1377,7 +1379,33 @@ function AiSettingsField({
       </label>
 
       <label className="block">
-        <span className="mb-2 block text-sm font-medium">Model Groq</span>
+        <span className="mb-2 block text-sm font-medium">Model DeepSeek (ưu tiên)</span>
+        <input
+          type="text"
+          value={settings.deepseekModel || "deepseek-chat"}
+          onChange={(event) => update("deepseekModel", event.target.value)}
+          placeholder="deepseek-chat"
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        />
+      </label>
+
+      <label className="block">
+        <span className="mb-2 block text-sm font-medium">API token DeepSeek</span>
+        <input
+          type="password"
+          value={settings.deepseekApiToken || ""}
+          onChange={(event) => update("deepseekApiToken", event.target.value)}
+          placeholder="Nhập API token DeepSeek"
+          autoComplete="new-password"
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        />
+        <span className="mt-2 block text-xs leading-5 text-slate-500">
+          DeepSeek được dùng trước. Token được che và chỉ gửi từ server; có thể để trống khi đã đặt DEEPSEEK_API_KEY trên Vercel.
+        </span>
+      </label>
+
+      <label className="block">
+        <span className="mb-2 block text-sm font-medium">Model Groq (dự phòng)</span>
         <input
           type="text"
           value={settings.model}
@@ -1388,7 +1416,7 @@ function AiSettingsField({
       </label>
 
       <label className="block">
-        <span className="mb-2 block text-sm font-medium">API token Groq</span>
+        <span className="mb-2 block text-sm font-medium">API token Groq (dự phòng)</span>
         <input
           type="password"
           value={settings.apiToken || ""}
@@ -1398,7 +1426,7 @@ function AiSettingsField({
           className="w-full rounded-2xl border border-slate-200 px-4 py-3"
         />
         <span className="mt-2 block text-xs leading-5 text-slate-500">
-          Token được che dạng mật khẩu trong admin. Có thể để trống nếu đã cấu hình GROQ_API_KEY trên Vercel/server.
+          Groq chỉ được dùng khi DeepSeek chưa có token hoặc DeepSeek đang lỗi. Có thể để trống nếu đã cấu hình GROQ_API_KEY trên Vercel/server.
         </span>
       </label>
 
@@ -1413,7 +1441,7 @@ function AiSettingsField({
       </label>
 
       <p className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
-        Ưu tiên dùng biến môi trường GROQ_API_KEY nếu có. Nếu nhập token ở đây, token chỉ dùng server-side cho API trợ lý.
+        Thứ tự sử dụng: DEEPSEEK_API_KEY hoặc token DeepSeek trong admin, sau đó GROQ_API_KEY hoặc token Groq dự phòng. Không token nào được gửi ra trình duyệt.
       </p>
     </div>
   );

@@ -27,6 +27,7 @@ import { ensureAdminUser } from "@/lib/auth";
 import { UserModel } from "@/models/user";
 import { slugify } from "@/lib/slug";
 import { repairDeepText } from "@/lib/text";
+import { cache } from "react";
 function serialize<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
 }
@@ -80,7 +81,7 @@ function normalizeDownloadCategory<T extends Partial<DownloadShape>>(item: T): T
   };
 }
 
-export async function getSiteSettings(options: { includeSecrets?: boolean } = {}): Promise<SiteSettingsShape> {
+export const getSiteSettings = cache(async (options: { includeSecrets?: boolean } = {}): Promise<SiteSettingsShape> => {
   const connection = await connectToDatabase();
 
   if (!process.env.MONGODB_URI || !connection) {
@@ -129,11 +130,12 @@ export async function getSiteSettings(options: { includeSecrets?: boolean } = {}
     mergedSettings.aiAssistant = {
       ...mergedSettings.aiAssistant,
       apiToken: "",
+      deepseekApiToken: "",
     };
   }
 
   return repairDeepText(mergedSettings);
-}
+});
 
 export async function getPosts(
   type?: PostType,

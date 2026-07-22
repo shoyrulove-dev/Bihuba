@@ -16,28 +16,28 @@ const QUESTION_MARK_REPAIRS: Array<[RegExp, string]> = [
   [/doanh nghi\?p/g, "doanh nghiệp"],
 ];
 
+const replacementCharacter = "\uFFFD";
 const REPLACEMENT_CHAR_REPAIRS: Array<[RegExp, string]> = [
-  [/H�nh tr�nh li�n k�t/g, "Hành trình liên kết"],
-  [/��ng h�nh ph�t tri�n/g, "đồng hành phát triển"],
-  [/c�a H�i Doanh Nghi�p/g, "của Hội Doanh Nghiệp"],
-  [/x� B�nh H�ng/g, "xã Bình Hưng"],
-  [/c�c Doanh nghi�p h�i vi�n/g, "các Doanh nghiệp hội viên"],
-  [/c�ng Tr��ng �?i h�?c V?n Hi?n/g, "cùng Trường Đại học Văn Hiến"],
-  [/�ng Nguy?n V?n C�m/g, "Ông Nguyễn Văn Cẩm"],
-  [/ch� t�?ch H�i Doanh Nghi�p/g, "chủ tịch Hội Doanh Nghiệp"],
-  [/gi�m ��c C�ng ty/g, "giám đốc Công ty"],
-  [/B� Nguy?n Th?y D��ng/g, "Bà Nguyễn Thùy Dương"],
-  [/gi�m ��c C�ng ty/g, "giám đốc Công ty"],
-  [/�ng V� Quang Ph�c/g, "Ông Võ Quang Phúc"],
-  [/t�ng gi�m ��c/g, "tổng giám đốc"],
-  [/c� ph�n ph�t tri�n th��ng/g, "cổ phần phát triển thương"],
-  [/�ng Nguy?n V?n M�t/g, "Ông Nguyễn Văn Một"],
-  [/th�c ph�m/g, "thực phẩm"],
-  [/�ng Tr?n Thanh Vi/g, "Ông Trần Thanh Vi"],
-  [/du l�?ch Qu�?c T�?/g, "du lịch Quốc Tế"],
-  [/L�? K�? K�?T & TRI �?N DOANH NGHI�?P/g, "LỄ KÝ KẾT & TRI ÂN DOANH NGHIỆP"],
-  [/M�? R�?NG H�?P T�?C DOANH NGHI�?P/g, "MỞ RỘNG HỢP TÁC DOANH NGHIỆP"],
-  [/N�NG T�?M C� H�?I NGH�? NGHI�?P/g, "NÂNG TẦM CƠ HỘI NGHỀ NGHIỆP"],
+  [new RegExp(`H${replacementCharacter}nh tr${replacementCharacter}nh li${replacementCharacter}n k${replacementCharacter}t`, "g"), "Hành trình liên kết"],
+  [new RegExp(`${replacementCharacter}${replacementCharacter}ng h${replacementCharacter}nh ph${replacementCharacter}t tri${replacementCharacter}n`, "g"), "đồng hành phát triển"],
+  [new RegExp(`c${replacementCharacter}a H${replacementCharacter}i Doanh Nghi${replacementCharacter}p`, "g"), "của Hội Doanh Nghiệp"],
+  [new RegExp(`x${replacementCharacter} B${replacementCharacter}nh H${replacementCharacter}ng`, "g"), "xã Bình Hưng"],
+  [new RegExp(`c${replacementCharacter}c Doanh nghi${replacementCharacter}p h${replacementCharacter}i vi${replacementCharacter}n`, "g"), "các Doanh nghiệp hội viên"],
+  [new RegExp(`c${replacementCharacter}ng Tr${replacementCharacter}${replacementCharacter}ng ${replacementCharacter}?i h${replacementCharacter}?c V?n Hi?n`, "g"), "cùng Trường Đại học Văn Hiến"],
+  [new RegExp(`${replacementCharacter}ng Nguy?n V?n C${replacementCharacter}m`, "g"), "Ông Nguyễn Văn Cẩm"],
+  [new RegExp(`ch${replacementCharacter} t${replacementCharacter}?ch H${replacementCharacter}i Doanh Nghi${replacementCharacter}p`, "g"), "chủ tịch Hội Doanh Nghiệp"],
+  [new RegExp(`gi${replacementCharacter}m ${replacementCharacter}${replacementCharacter}c C${replacementCharacter}ng ty`, "g"), "giám đốc Công ty"],
+  [new RegExp(`B${replacementCharacter} Nguy?n Th?y D${replacementCharacter}${replacementCharacter}ng`, "g"), "Bà Nguyễn Thùy Dương"],
+  [new RegExp(`${replacementCharacter}ng V${replacementCharacter} Quang Ph${replacementCharacter}c`, "g"), "Ông Võ Quang Phúc"],
+  [new RegExp(`t${replacementCharacter}ng gi${replacementCharacter}m ${replacementCharacter}${replacementCharacter}c`, "g"), "tổng giám đốc"],
+  [new RegExp(`c${replacementCharacter} ph${replacementCharacter}n ph${replacementCharacter}t tri${replacementCharacter}n th${replacementCharacter}${replacementCharacter}ng`, "g"), "cổ phần phát triển thương"],
+  [new RegExp(`${replacementCharacter}ng Nguy?n V?n M${replacementCharacter}t`, "g"), "Ông Nguyễn Văn Một"],
+  [new RegExp(`th${replacementCharacter}c ph${replacementCharacter}m`, "g"), "thực phẩm"],
+  [new RegExp(`${replacementCharacter}ng Tr?n Thanh Vi`, "g"), "Ông Trần Thanh Vi"],
+  [new RegExp(`du l${replacementCharacter}?ch Qu${replacementCharacter}?c T${replacementCharacter}?`, "g"), "du lịch Quốc Tế"],
+  [new RegExp(`L${replacementCharacter}? K${replacementCharacter}? K${replacementCharacter}?T & TRI ${replacementCharacter}?N DOANH NGHI${replacementCharacter}?P`, "g"), "LỄ KÝ KẾT & TRI ÂN DOANH NGHIỆP"],
+  [new RegExp(`M${replacementCharacter}? R${replacementCharacter}?NG H${replacementCharacter}?P T${replacementCharacter}?C DOANH NGHI${replacementCharacter}?P`, "g"), "MỞ RỘNG HỢP TÁC DOANH NGHIỆP"],
+  [new RegExp(`N${replacementCharacter}NG T${replacementCharacter}?M C${replacementCharacter} H${replacementCharacter}?I NGH${replacementCharacter}? NGHI${replacementCharacter}?P`, "g"), "NÂNG TẦM CƠ HỘI NGHỀ NGHIỆP"],
 ];
 
 function repairString(value: string) {
@@ -57,7 +57,7 @@ function repairString(value: string) {
     });
   }
 
-  if (repaired.includes("�")) {
+  if (repaired.includes(replacementCharacter)) {
     REPLACEMENT_CHAR_REPAIRS.forEach(([pattern, replacement]) => {
       repaired = repaired.replace(pattern, replacement);
     });

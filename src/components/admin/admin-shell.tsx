@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 function DashboardIcon() {
   return (
@@ -105,7 +105,6 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [allowedNav, setAllowedNav] = useState<string[] | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
 
@@ -127,12 +126,6 @@ export function AdminShell({
       isMounted = false;
     };
   }, []);
-
-  useEffect(() => {
-    nav.forEach((item) => router.prefetch(item.href));
-    router.prefetch("/admin/profile");
-    router.prefetch("/");
-  }, [router]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsNavigating(false), 80);
@@ -160,7 +153,7 @@ export function AdminShell({
                   <Link
                     key={item.href}
                     href={item.href}
-                    prefetch
+                    prefetch={false}
                     onClick={() => {
                       if (item.href !== pathname) {
                         setIsNavigating(true);
@@ -202,7 +195,7 @@ export function AdminShell({
 
             <Link
               href="/"
-              prefetch
+              prefetch={false}
               className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
             >
               <HomeIcon />
@@ -210,7 +203,7 @@ export function AdminShell({
             </Link>
             <Link
               href="/admin/profile"
-              prefetch
+              prefetch={false}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-white/5 text-white transition hover:bg-white/10"
               title="Hồ sơ"
               aria-label="Hồ sơ"

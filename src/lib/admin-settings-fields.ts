@@ -135,7 +135,7 @@ export const aiFields: FieldConfig[] = [
     label: "Trợ Lý BIHUBA",
     type: "ai",
     fullWidth: true,
-    helpText: "Có thể nhập token Groq tại đây hoặc dùng biến môi trường GROQ_API_KEY trên Vercel/server.",
+    helpText: "DeepSeek được ưu tiên; Groq là phương án dự phòng. API token luôn chỉ dùng ở server.",
     section: "AI",
   },
 ];

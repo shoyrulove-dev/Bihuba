@@ -6,6 +6,13 @@ type ChatMessage = {
   content: string;
 };
 
+type AiProvider = {
+  name: "DeepSeek" | "Groq";
+  apiKey?: string;
+  endpoint: string;
+  model: string;
+};
+
 const fallbackPrompt =
   "Bạn là Trợ Lý BIHUBA, hỗ trợ hội viên và khách truy cập về thông tin doanh nghiệp, quản trị, kết nối giao thương, thủ tục kinh doanh cơ bản, sự kiện, hội viên và tài liệu của BIHUBA. Trả lời bằng tiếng Việt, ngắn gọn, thực tế, lịch sự. Với nội dung pháp lý, thuế, tài chính hoặc y tế, hãy nhắc người hỏi kiểm tra với chuyên gia có thẩm quyền.";
 
@@ -18,11 +25,39 @@ function normalizeMessages(input: unknown): ChatMessage[] {
       const record = message as Record<string, unknown>;
       const role = record.role === "assistant" ? "assistant" : record.role === "user" ? "user" : null;
       const content = String(record.content || "").trim();
-      if (!role || !content) return null;
-      return { role, content };
+      return role && content ? { role, content } : null;
     })
-    .filter(Boolean)
-    .slice(-10) as ChatMessage[];
+    .filter((message): message is ChatMessage => Boolean(message))
+    .slice(-10);
+}
+
+async function requestCompletion(provider: AiProvider, messages: ChatMessage[], systemPrompt: string) {
+  const response = await fetch(provider.endpoint, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${provider.apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: provider.model,
+      temperature: 0.35,
+      max_tokens: 700,
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+    }),
+    signal: AbortSignal.timeout(20_000),
+  });
+
+  const result = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new Error(result?.error?.message || `${provider.name} không thể phản hồi lúc này.`);
+  }
+
+  const content = result?.choices?.[0]?.message?.content;
+  if (typeof content !== "string" || !content.trim()) {
+    throw new Error(`${provider.name} chưa trả về nội dung hợp lệ.`);
+  }
+
+  return content.trim();
 }
 
 export async function POST(request: Request) {
@@ -30,15 +65,7 @@ export async function POST(request: Request) {
   const aiSettings = settings.aiAssistant;
 
   if (!aiSettings?.enabled) {
-    return NextResponse.json({ message: "Trợ lý BIHUBA đang tạm tắt." }, { status: 403 });
-  }
-
-  const apiKey = process.env.GROQ_API_KEY || aiSettings.apiToken;
-  if (!apiKey) {
-    return NextResponse.json(
-      { message: "Trợ lý BIHUBA chưa được cấu hình API key Groq." },
-      { status: 503 }
-    );
+    return NextResponse.json({ message: "Trợ Lý BIHUBA đang tạm tắt." }, { status: 403 });
   }
 
   const body = await request.json().catch(() => ({}));
@@ -49,40 +76,38 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Bạn vui lòng nhập câu hỏi." }, { status: 400 });
   }
 
-  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
+  const providerCandidates: AiProvider[] = [
+    {
+      name: "DeepSeek",
+      apiKey: process.env.DEEPSEEK_API_KEY || aiSettings.deepseekApiToken,
+      endpoint: "https://api.deepseek.com/chat/completions",
+      model: aiSettings.deepseekModel || "deepseek-chat",
     },
-    body: JSON.stringify({
+    {
+      name: "Groq",
+      apiKey: process.env.GROQ_API_KEY || aiSettings.apiToken,
+      endpoint: "https://api.groq.com/openai/v1/chat/completions",
       model: aiSettings.model || "llama-3.1-8b-instant",
-      temperature: 0.35,
-      max_tokens: 700,
-      messages: [
-        {
-          role: "system",
-          content: aiSettings.systemPrompt || fallbackPrompt,
-        },
-        ...messages,
-      ],
-    }),
-  });
+    },
+  ];
+  const providers = providerCandidates.filter((provider) => Boolean(provider.apiKey));
 
-  const result = await response.json().catch(() => null);
-  if (!response.ok) {
+  if (!providers.length) {
     return NextResponse.json(
-      {
-        message:
-          result?.error?.message ||
-          "Trợ lý BIHUBA đang bận. Bạn thử lại sau ít phút.",
-      },
-      { status: response.status }
+      { message: "Trợ Lý BIHUBA chưa được cấu hình API token DeepSeek hoặc Groq." },
+      { status: 503 }
     );
   }
 
-  const content = result?.choices?.[0]?.message?.content;
-  return NextResponse.json({
-    message: typeof content === "string" ? content.trim() : "Mình chưa có câu trả lời phù hợp, bạn hỏi lại rõ hơn giúp mình nhé.",
-  });
+  let lastError = "Trợ Lý BIHUBA đang bận. Bạn thử lại sau ít phút.";
+  for (const provider of providers) {
+    try {
+      const message = await requestCompletion(provider, messages, aiSettings.systemPrompt || fallbackPrompt);
+      return NextResponse.json({ message });
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : lastError;
+    }
+  }
+
+  return NextResponse.json({ message: lastError }, { status: 503 });
 }

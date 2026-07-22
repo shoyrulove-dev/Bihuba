@@ -57,6 +57,8 @@ export interface ThemeSettings {
 
 export interface AiAssistantSettings {
   enabled: boolean;
+  deepseekModel?: string;
+  deepseekApiToken?: string;
   model: string;
   systemPrompt: string;
   apiToken?: string;
