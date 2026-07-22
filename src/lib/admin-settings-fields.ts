@@ -86,7 +86,7 @@ export const contactFields: FieldConfig[] = [
     label: "Thông tin liên hệ",
     type: "contact",
     fullWidth: true,
-    helpText: "Có thể thêm banner văn phòng 1600 x 720 px và link nhúng Google Map.",
+    helpText: "Banner văn phòng chuẩn 16:9: 1600 x 900 hoặc 1200 x 675 px. Ảnh luôn hiện đủ, không crop; Google Map tự theo địa chỉ đã nhập.",
     section: "Liên hệ",
   },
   {

@@ -32,8 +32,8 @@ export default async function MemberDetailPage({
   return (
     <div className="pb-16">
       <section className="bg-[#031634] px-6 py-10 text-white">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_24px_70px_rgba(2,6,23,0.28)]">
-          <div className="flex aspect-video min-h-[260px] items-center justify-center overflow-hidden bg-slate-950">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_24px_70px_rgba(2,6,23,0.28)]">
+          <div className="flex aspect-[16/9] items-center justify-center overflow-hidden bg-slate-950">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={heroImage} alt={member.name} className="h-full w-full object-contain" />
           </div>
@@ -181,7 +181,7 @@ export default async function MemberDetailPage({
                 <div className="flex h-44 items-center justify-center bg-slate-100">
                   {product.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={product.imageUrl} alt={product.title} className="h-full w-full object-cover" />
+                    <img src={product.imageUrl} alt={product.title} className="h-full w-full object-contain" />
                   ) : (
                     <div className="px-6 text-center text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
                       {product.type === "product" ? "Sản phẩm" : "Dịch vụ"}

@@ -493,7 +493,7 @@ function ContactField({
           type="url"
           value={contact.officeImageUrl ?? ""}
           onChange={(event) => onChange({ ...contact, officeImageUrl: event.target.value })}
-          placeholder="Ảnh/banner giới thiệu văn phòng (khuyến nghị 1600 x 720 px)"
+          placeholder="Ảnh/banner giới thiệu văn phòng (chuẩn 16:9, 1600 x 900 px)"
           className="w-full rounded-2xl border border-slate-200 px-4 py-3"
         />
         <div className="flex flex-wrap items-center gap-3">
@@ -517,18 +517,14 @@ function ContactField({
             <img
               src={contact.officeImageUrl}
               alt="Banner văn phòng"
-              className="h-16 w-28 rounded-2xl border border-slate-200 object-cover"
+              className="h-16 w-28 rounded-2xl border border-slate-200 bg-slate-100 object-contain"
             />
           ) : null}
         </div>
       </div>
-      <input
-        type="url"
-        value={contact.googleMapUrl ?? ""}
-        onChange={(event) => onChange({ ...contact, googleMapUrl: event.target.value })}
-        placeholder="Link nhúng Google Map"
-        className="w-full rounded-2xl border border-slate-200 px-4 py-3 md:col-span-2"
-      />
+      <p className="rounded-2xl bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900 md:col-span-2">
+        Google Map tự cập nhật theo trường Địa chỉ ở trên. Hãy nhập địa chỉ đầy đủ để vị trí hiển thị chính xác.
+      </p>
     </div>
   );
 }

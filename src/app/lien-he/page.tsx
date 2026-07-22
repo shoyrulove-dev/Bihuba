@@ -3,18 +3,13 @@ import { getSiteSettings } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
-function getMapSrc(mapUrl?: string, address?: string) {
-  if (mapUrl?.trim()) {
-    const iframeSrc = mapUrl.match(/src=["']([^"']+)["']/)?.[1];
-    return iframeSrc || mapUrl.trim();
-  }
-
+function getMapSrc(address?: string) {
   return `https://www.google.com/maps?q=${encodeURIComponent(address || "Binh Hung, Ho Chi Minh City")}&output=embed`;
 }
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();
-  const mapSrc = getMapSrc(settings.contact.googleMapUrl, settings.contact.address);
+  const mapSrc = getMapSrc(settings.contact.address);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-14">
@@ -24,16 +19,16 @@ export default async function ContactPage() {
         body="Thông tin liên hệ chính thức của BIHUBA dành cho hội viên, đối tác và khách mời cần kết nối."
       />
 
-      <div className="mt-8 overflow-hidden rounded-[1.5rem] border border-slate-200 bg-slate-100">
+      <div className="mx-auto mt-8 max-w-6xl overflow-hidden rounded-[1.5rem] border border-slate-200 bg-slate-100">
         {settings.contact.officeImageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={settings.contact.officeImageUrl}
             alt="Văn phòng BIHUBA"
-            className="aspect-[16/7] w-full object-cover"
+            className="aspect-[16/9] w-full object-contain"
           />
         ) : (
-          <div className="flex aspect-[16/7] w-full items-center justify-center bg-[#061a39] px-6 text-center text-xl font-bold text-white">
+          <div className="flex aspect-[16/9] w-full items-center justify-center bg-[#061a39] px-6 text-center text-xl font-bold text-white">
             {settings.siteName}
           </div>
         )}
@@ -67,7 +62,7 @@ export default async function ContactPage() {
           <iframe
             src={mapSrc}
             title="Bản đồ văn phòng BIHUBA"
-            className="h-[360px] w-full lg:h-full"
+            className="aspect-[16/9] w-full"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />

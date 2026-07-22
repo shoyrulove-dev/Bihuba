@@ -10,7 +10,7 @@ function MemberLogoBadge({ member }: { member: MemberShape }) {
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-[var(--theme-primary)]">
         {member.logo ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={member.logo} alt={member.name} className="h-10 w-10 rounded-full object-cover" />
+          <img src={member.logo} alt={member.name} className="h-10 w-10 rounded-full object-contain" />
         ) : (
           member.name.slice(0, 2).toUpperCase()
         )}

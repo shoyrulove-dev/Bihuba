@@ -81,7 +81,7 @@ export function MemberCard({
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.2rem] bg-slate-100 text-xs font-bold text-[var(--theme-primary)]">
             {member.logo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={member.logo} alt={member.name} className="h-12 w-12 rounded-[1rem] object-cover" />
+              <img src={member.logo} alt={member.name} className="h-12 w-12 rounded-[1rem] object-contain" />
             ) : (
               member.name.slice(0, 2).toUpperCase()
             )}

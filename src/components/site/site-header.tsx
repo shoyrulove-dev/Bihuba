@@ -47,7 +47,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
               alt={settings.shortName || "BIHUBA"}
               width={96}
               height={96}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain"
               priority
             />
           </span>

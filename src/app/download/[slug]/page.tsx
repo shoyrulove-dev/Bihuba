@@ -24,12 +24,12 @@ export default async function DownloadDetailPage({
     <div className="mx-auto max-w-6xl px-6 py-12">
       <section className="overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
         {item.coverImage ? (
-          <div className="relative h-[220px] bg-slate-100 md:h-[280px]">
+          <div className="relative aspect-[16/9] bg-slate-100">
             <Image
               src={item.coverImage}
               alt={item.title}
               fill
-              className="object-cover"
+              className="object-contain"
               sizes="(min-width: 1024px) 1152px, 100vw"
               priority
             />
