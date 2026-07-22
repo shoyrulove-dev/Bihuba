@@ -97,7 +97,7 @@ const IMAGEKIT_UPLOAD_NOTE =
 
 const defaultAiAssistantSettings: AiAssistantSettings = {
   enabled: true,
-  deepseekModel: "deepseek-chat",
+  deepseekModel: "deepseek-v4-flash",
   deepseekApiToken: "",
   model: "llama-3.1-8b-instant",
   apiToken: "",
@@ -1382,9 +1382,9 @@ function AiSettingsField({
         <span className="mb-2 block text-sm font-medium">Model DeepSeek (ưu tiên)</span>
         <input
           type="text"
-          value={settings.deepseekModel || "deepseek-chat"}
+          value={settings.deepseekModel || "deepseek-v4-flash"}
           onChange={(event) => update("deepseekModel", event.target.value)}
-          placeholder="deepseek-chat"
+          placeholder="deepseek-v4-flash"
           className="w-full rounded-2xl border border-slate-200 px-4 py-3"
         />
       </label>

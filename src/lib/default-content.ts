@@ -188,7 +188,7 @@ export const defaultSettings: SiteSettingsShape = {
   },
   aiAssistant: {
     enabled: true,
-    deepseekModel: "deepseek-chat",
+    deepseekModel: "deepseek-v4-flash",
     deepseekApiToken: "",
     model: "llama-3.1-8b-instant",
     systemPrompt:

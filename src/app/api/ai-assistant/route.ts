@@ -81,7 +81,7 @@ export async function POST(request: Request) {
       name: "DeepSeek",
       apiKey: process.env.DEEPSEEK_API_KEY || aiSettings.deepseekApiToken,
       endpoint: "https://api.deepseek.com/chat/completions",
-      model: aiSettings.deepseekModel || "deepseek-chat",
+      model: aiSettings.deepseekModel || "deepseek-v4-flash",
     },
     {
       name: "Groq",
