@@ -1732,29 +1732,63 @@ export function CollectionManager({
   }
 
   async function uploadAsset(file: File) {
-    setIsUploading(true);
-    setStatus("Đang tải media...");
-
-    const payload = new FormData();
-    payload.append("file", file);
-    payload.append("folder", collection);
-    payload.append("fileName", file.name);
-
-    const response = await fetch("/api/admin/upload", {
-      method: "POST",
-      body: payload,
-    });
-
-    const result = await response.json();
-    setIsUploading(false);
-
-    if (!response.ok) {
-      setStatus(result.message || "Tải lên thất bại.");
-      throw new Error(result.message || "Tải lên thất bại.");
+    const maxFileSize = 25 * 1024 * 1024;
+    if (file.size > maxFileSize) {
+      const message =
+        "File vượt quá giới hạn 25MB. Hãy tải lên Google Drive rồi dán link chia sẻ vào ô URL.";
+      setStatus(message);
+      throw new Error(message);
     }
 
-    setStatus("Tải lên thành công.");
-    return String(result.url);
+    setIsUploading(true);
+    setStatus(`Đang tải ${file.name} (${(file.size / 1024 / 1024).toFixed(1)}MB)...`);
+
+    try {
+      const authResponse = await fetch(
+        `/api/admin/upload?folder=${encodeURIComponent(collection)}`,
+        { cache: "no-store", signal: AbortSignal.timeout(30_000) }
+      );
+      const authResult = (await authResponse.json().catch(() => ({}))) as Record<string, unknown>;
+
+      if (!authResponse.ok) {
+        throw new Error(String(authResult.message || "Không thể xác thực phiên tải file."));
+      }
+
+      const payload = new FormData();
+      payload.append("file", file);
+      payload.append("fileName", file.name);
+      payload.append("folder", String(authResult.folder || collection));
+      payload.append("useUniqueFileName", "true");
+      payload.append("publicKey", String(authResult.publicKey || ""));
+      payload.append("token", String(authResult.token || ""));
+      payload.append("expire", String(authResult.expire || ""));
+      payload.append("signature", String(authResult.signature || ""));
+
+      const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+        method: "POST",
+        body: payload,
+        signal: AbortSignal.timeout(120_000),
+      });
+      const result = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+
+      if (!response.ok || !result.url) {
+        throw new Error(String(result.message || "Tải lên ImageKit thất bại."));
+      }
+
+      setStatus("Tải lên thành công. Bạn có thể lưu tài liệu.");
+      return String(result.url);
+    } catch (error) {
+      const timedOut = error instanceof Error && error.name === "TimeoutError";
+      const message = timedOut
+        ? "Tải file quá thời gian. Vui lòng kiểm tra mạng và thử lại."
+        : error instanceof Error
+          ? error.message
+          : "Tải lên thất bại. Vui lòng thử lại.";
+      setStatus(message);
+      throw error;
+    } finally {
+      setIsUploading(false);
+    }
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -1767,22 +1801,24 @@ export function CollectionManager({
       return accumulator;
     }, {});
 
-    const response = await fetch(
-      editingId ? `/api/admin/${collection}/${editingId}` : `/api/admin/${collection}`,
-      {
-        method: editingId ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
+    try {
+      const response = await fetch(
+        editingId ? `/api/admin/${collection}/${editingId}` : `/api/admin/${collection}`,
+        {
+          method: editingId ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(30_000),
+        }
+      );
 
-    const result = await response.json();
-    setIsSaving(false);
-    setStatus(result.message ?? "Đã lưu dữ liệu.");
+      const result = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+      setStatus(String(result.message || (response.ok ? "Đã lưu dữ liệu." : "Không thể lưu dữ liệu.")));
 
-    if (response.ok) {
+      if (!response.ok) return;
+
       const savedItem =
         result.item && typeof result.item === "object"
           ? (result.item as Record<string, unknown>)
@@ -1805,6 +1841,15 @@ export function CollectionManager({
         return;
       }
       closePanel();
+    } catch (error) {
+      const timedOut = error instanceof Error && error.name === "TimeoutError";
+      setStatus(
+        timedOut
+          ? "Lưu dữ liệu quá thời gian. Vui lòng thử lại."
+          : "Mất kết nối khi lưu dữ liệu. Vui lòng kiểm tra mạng và thử lại."
+      );
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -2160,14 +2205,22 @@ export function CollectionManager({
                                   Tải từ máy
                                   <input
                                     type="file"
-                                    accept={field.type === "image" ? "image/*" : "*"}
+                                    accept={
+                                      field.type === "image"
+                                        ? "image/*"
+                                        : ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,application/pdf"
+                                    }
                                     className="hidden"
                                     onChange={async (event) => {
                                       const file = event.target.files?.[0];
                                       event.currentTarget.value = "";
                                       if (!file) return;
-                                      const url = await uploadAsset(file);
-                                      updateField(field.name, url);
+                                      try {
+                                        const url = await uploadAsset(file);
+                                        updateField(field.name, url);
+                                      } catch {
+                                        // uploadAsset already reports a useful message to the admin.
+                                      }
                                     }}
                                   />
                                 </label>
