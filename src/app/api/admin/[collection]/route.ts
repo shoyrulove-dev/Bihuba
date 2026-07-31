@@ -17,6 +17,15 @@ type Context = {
   }>;
 };
 
+function serializeClientItem(item: unknown, key: CollectionKey) {
+  const serialized = JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
+  if (key === "users") {
+    delete serialized.passwordHash;
+    delete serialized.password;
+  }
+  return repairDeepText(serialized);
+}
+
 function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number, canApprove: boolean) {
   payload.submittedBy = Number(payload.submittedBy ?? userId);
   const today = new Date().toISOString().slice(0, 10);
@@ -205,8 +214,14 @@ export async function POST(request: NextRequest, context: Context) {
   if ("siteName" in payload) {
     const existing = await Model.findOne();
     if (existing) {
-      await Model.findByIdAndUpdate(existing._id, payload, { runValidators: true });
-      return NextResponse.json({ message: "Đã cập nhật cấu hình website." });
+      const updated = await Model.findByIdAndUpdate(existing._id, payload, {
+        new: true,
+        runValidators: true,
+      }).lean();
+      return NextResponse.json({
+        message: "Đã cập nhật cấu hình website.",
+        item: serializeClientItem(updated, key),
+      });
     }
   }
 
@@ -224,8 +239,9 @@ export async function POST(request: NextRequest, context: Context) {
     delete payload.password;
   }
 
-  await Model.create(payload);
+  const created = await Model.create(payload);
   return NextResponse.json({
     message: key === "posts" && session.role !== "admin" ? "Đã gửi bài viết chờ admin duyệt." : "Đã tạo mới thành công.",
+    item: serializeClientItem(created, key),
   });
 }

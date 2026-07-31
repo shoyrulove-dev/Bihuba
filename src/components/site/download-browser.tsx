@@ -27,7 +27,13 @@ function Thumbnail({ item, format }: { item: DownloadShape; format: string }) {
     >
       {item.coverImage ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={item.coverImage} alt={item.title} className="h-full w-full rounded-[0.85rem] bg-slate-100 object-contain transition group-hover:scale-[1.03]" />
+        <img
+          src={item.coverImage}
+          alt={item.title}
+          className="h-full w-full rounded-[0.85rem] bg-slate-100 object-contain transition group-hover:scale-[1.03]"
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[0.85rem] bg-white">
           <div className="h-[7px] w-full bg-[linear-gradient(90deg,_#22d3ee,_#2563eb)]" />

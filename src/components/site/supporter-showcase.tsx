@@ -47,6 +47,8 @@ export function SupporterShowcase({ items }: { items: SupporterItem[] }) {
                         src={item.logoUrl}
                         alt={item.name}
                         className="h-14 w-full object-contain"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-cyan-100 text-sm font-bold text-cyan-800">

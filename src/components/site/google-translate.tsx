@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useSyncExternalStore } from "react";
 import Script from "next/script";
 
 declare global {
@@ -25,6 +26,17 @@ const languageOptions = [
   { label: "ไทย", value: "th" },
 ];
 
+const LANGUAGE_STORAGE_KEY = "bihuba-language";
+
+function subscribeToLanguage() {
+  return () => undefined;
+}
+
+function getStoredLanguage() {
+  const savedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY) || "";
+  return languageOptions.some((option) => option.value === savedLanguage) ? savedLanguage : "";
+}
+
 function setTranslateCookie(language: string) {
   const value = language ? `/vi/${language}` : "";
   const expires = language ? "Fri, 31 Dec 9999 23:59:59 GMT" : "Thu, 01 Jan 1970 00:00:00 GMT";
@@ -37,14 +49,41 @@ function setTranslateCookie(language: string) {
 }
 
 export function GoogleTranslate() {
+  const language = useSyncExternalStore(subscribeToLanguage, getStoredLanguage, () => "");
+
+  useEffect(() => {
+    const savedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY) || "";
+    const isSupported = languageOptions.some((option) => option.value === savedLanguage);
+    const hasLegacyTranslation = document.cookie
+      .split(";")
+      .some((cookie) => cookie.trim().startsWith("googtrans=/vi/"));
+
+    if (!isSupported) {
+      window.localStorage.removeItem(LANGUAGE_STORAGE_KEY);
+      setTranslateCookie("");
+      return;
+    }
+
+    if (!savedLanguage && hasLegacyTranslation) {
+      setTranslateCookie("");
+      window.location.reload();
+    }
+  }, []);
+
   return (
-    <div className="google-translate-shell">
+    <div className="google-translate-shell notranslate" translate="no">
       <label className="google-translate-control">
         <select
-          defaultValue=""
-          aria-label="Language"
+          value={language}
+          aria-label="Chọn ngôn ngữ"
           onChange={(event) => {
-            setTranslateCookie(event.target.value);
+            const nextLanguage = event.target.value;
+            if (nextLanguage) {
+              window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+            } else {
+              window.localStorage.removeItem(LANGUAGE_STORAGE_KEY);
+            }
+            setTranslateCookie(nextLanguage);
             window.location.reload();
           }}
         >
@@ -56,21 +95,25 @@ export function GoogleTranslate() {
         </select>
       </label>
       <div id="google_translate_element" aria-hidden="true" />
-      <Script id="google-translate-init" strategy="afterInteractive">
-        {`
-          window.googleTranslateElementInit = function() {
-            new window.google.translate.TranslateElement({
-              pageLanguage: 'vi',
-              includedLanguages: 'vi,en,ja,ko,zh-CN,th',
-              autoDisplay: false
-            }, 'google_translate_element');
-          };
-        `}
-      </Script>
-      <Script
-        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-        strategy="afterInteractive"
-      />
+      {language ? (
+        <>
+          <Script id="google-translate-init" strategy="afterInteractive">
+            {`
+              window.googleTranslateElementInit = function() {
+                new window.google.translate.TranslateElement({
+                  pageLanguage: 'vi',
+                  includedLanguages: 'vi,en,ja,ko,zh-CN,th',
+                  autoDisplay: false
+                }, 'google_translate_element');
+              };
+            `}
+          </Script>
+          <Script
+            src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+            strategy="afterInteractive"
+          />
+        </>
+      ) : null}
     </div>
   );
 }

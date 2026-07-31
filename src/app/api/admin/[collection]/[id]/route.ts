@@ -14,6 +14,15 @@ type Context = {
   }>;
 };
 
+function serializeClientItem(item: unknown, key: CollectionKey) {
+  const serialized = JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
+  if (key === "users") {
+    delete serialized.passwordHash;
+    delete serialized.password;
+  }
+  return repairDeepText(serialized);
+}
+
 function applyPostWorkflow(payload: Record<string, unknown>, role: string, userId: number, canApprove: boolean) {
   payload.submittedBy = Number(payload.submittedBy ?? userId);
   const today = new Date().toISOString().slice(0, 10);
@@ -180,10 +189,14 @@ export async function PUT(request: NextRequest, context: Context) {
     }
   }
 
-  await Model.findByIdAndUpdate(id, payload, { runValidators: true });
+  const updated = await Model.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  }).lean();
 
   return NextResponse.json({
     message: key === "posts" && session.role !== "admin" ? "Đã cập nhật bài viết và gửi chờ duyệt." : "Đã cập nhật thành công.",
+    item: serializeClientItem(updated, key),
   });
 }
 

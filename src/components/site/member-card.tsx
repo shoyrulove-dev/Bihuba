@@ -26,7 +26,13 @@ export function MemberCard({
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[0.9rem] bg-slate-100 text-xs font-bold text-[var(--theme-primary)]">
             {member.logo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={member.logo} alt={member.name} className="h-11 w-11 rounded-[0.75rem] object-contain" />
+              <img
+                src={member.logo}
+                alt={member.name}
+                className="h-11 w-11 rounded-[0.75rem] object-contain"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               member.name.slice(0, 2).toUpperCase()
             )}
@@ -57,7 +63,13 @@ export function MemberCard({
         >
           {bannerImage ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={bannerImage} alt={member.name} className="h-full w-full object-contain" loading="lazy" />
+            <img
+              src={bannerImage}
+              alt={member.name}
+              className="h-full w-full object-contain"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div className="px-8 text-center text-3xl font-black text-[var(--theme-primary)]">{member.name}</div>
           )}
@@ -81,7 +93,13 @@ export function MemberCard({
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.2rem] bg-slate-100 text-xs font-bold text-[var(--theme-primary)]">
             {member.logo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={member.logo} alt={member.name} className="h-12 w-12 rounded-[1rem] object-contain" />
+              <img
+                src={member.logo}
+                alt={member.name}
+                className="h-12 w-12 rounded-[1rem] object-contain"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               member.name.slice(0, 2).toUpperCase()
             )}

@@ -1783,7 +1783,23 @@ export function CollectionManager({
     setStatus(result.message ?? "Đã lưu dữ liệu.");
 
     if (response.ok) {
-      await refresh();
+      const savedItem =
+        result.item && typeof result.item === "object"
+          ? (result.item as Record<string, unknown>)
+          : null;
+
+      if (savedItem) {
+        setItems((currentItems) => {
+          if (singleton) return [savedItem];
+          const savedId = String(savedItem._id ?? "");
+          const exists = currentItems.some((item) => String(item._id ?? "") === savedId);
+          return exists
+            ? currentItems.map((item) => (String(item._id ?? "") === savedId ? savedItem : item))
+            : [savedItem, ...currentItems];
+        });
+      } else {
+        await refresh();
+      }
       if (singleton) {
         closePanel();
         return;
@@ -1804,7 +1820,7 @@ export function CollectionManager({
     setStatus(result.message ?? "Đã xóa dữ liệu.");
 
     if (response.ok) {
-      await refresh();
+      setItems((currentItems) => currentItems.filter((item) => String(item._id ?? "") !== id));
       if (editingId === id) {
         closePanel();
       }

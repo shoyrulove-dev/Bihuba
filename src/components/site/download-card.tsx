@@ -17,7 +17,13 @@ function CompactDocumentThumb({ item, format }: { item: DownloadShape; format: s
     <div className="relative h-[88px] w-[66px] shrink-0 overflow-hidden rounded-[1rem] bg-[linear-gradient(135deg,_#0b2c5c,_#1d4ed8)] p-[3px] shadow-[0_10px_24px_rgba(15,23,42,0.12)]">
       {item.coverImage ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={item.coverImage} alt={item.title} className="h-full w-full rounded-[0.85rem] bg-slate-100 object-contain" />
+        <img
+          src={item.coverImage}
+          alt={item.title}
+          className="h-full w-full rounded-[0.85rem] bg-slate-100 object-contain"
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[0.85rem] bg-white">
           <div className="h-[8px] w-full bg-[linear-gradient(90deg,_#22d3ee,_#2563eb)]" />
