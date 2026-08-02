@@ -9,7 +9,7 @@ function getExtensionFromUrl(url?: string) {
 }
 
 export function getDownloadFormat(item: DownloadShape) {
-  return (item.fileFormat || getExtensionFromUrl(item.fileUrl) || "file").toUpperCase();
+  return (getExtensionFromUrl(item.fileUrl) || item.fileFormat || "file").toUpperCase();
 }
 
 export function isPdfDownload(item: DownloadShape) {

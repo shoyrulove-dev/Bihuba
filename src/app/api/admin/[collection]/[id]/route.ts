@@ -157,6 +157,13 @@ export async function PUT(request: NextRequest, context: Context) {
     payload.categorySlug = slugify(String(payload.category));
   }
 
+  if (key === "downloads" && !String(payload.fileUrl ?? "").trim()) {
+    return NextResponse.json(
+      { message: "Vui lòng tải file tài liệu lên hoặc dán đường dẫn file trước khi lưu." },
+      { status: 400 }
+    );
+  }
+
   if (key === "posts") {
     normalizePostCategory(payload);
     payload.submittedBy = Number(existingPost?.submittedBy ?? session.userId);

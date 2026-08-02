@@ -95,6 +95,49 @@ type FieldSection = {
 const IMAGEKIT_UPLOAD_NOTE =
   "ImageKit Free: ảnh/audio/raw tối đa 25MB/file, video 100MB. Lite: 40MB/300MB video. Pro: 50MB/2GB video. File quá lớn nên upload Google Drive rồi dán link chia sẻ vào ô URL.";
 
+const MAX_IMAGEKIT_FILE_SIZE = 25 * 1024 * 1024;
+
+async function uploadAdminAsset(file: File, folder: string) {
+  if (file.size > MAX_IMAGEKIT_FILE_SIZE) {
+    throw new Error(
+      "File vượt quá giới hạn 25MB. Hãy tải lên Google Drive rồi dán link chia sẻ vào ô URL."
+    );
+  }
+
+  const authResponse = await fetch(
+    `/api/admin/upload?folder=${encodeURIComponent(folder)}`,
+    { cache: "no-store", signal: AbortSignal.timeout(30_000) }
+  );
+  const authResult = (await authResponse.json().catch(() => ({}))) as Record<string, unknown>;
+
+  if (!authResponse.ok) {
+    throw new Error(String(authResult.message || "Không thể xác thực phiên tải file."));
+  }
+
+  const payload = new FormData();
+  payload.append("file", file);
+  payload.append("fileName", file.name);
+  payload.append("folder", String(authResult.folder || folder));
+  payload.append("useUniqueFileName", "true");
+  payload.append("publicKey", String(authResult.publicKey || ""));
+  payload.append("token", String(authResult.token || ""));
+  payload.append("expire", String(authResult.expire || ""));
+  payload.append("signature", String(authResult.signature || ""));
+
+  const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+    method: "POST",
+    body: payload,
+    signal: AbortSignal.timeout(120_000),
+  });
+  const result = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+
+  if (!response.ok || !result.url) {
+    throw new Error(String(result.message || "Tải lên ImageKit thất bại."));
+  }
+
+  return String(result.url);
+}
+
 const defaultAiAssistantSettings: AiAssistantSettings = {
   enabled: true,
   deepseekModel: "deepseek-v4-flash",
@@ -628,9 +671,11 @@ function LinksField({
 function BannerListField({
   value,
   onChange,
+  onUploadImage,
 }: {
   value: unknown;
   onChange: (nextValue: FeatureBannerItem[]) => void;
+  onUploadImage: (file: File, folder: string) => Promise<string>;
 }) {
   const items = (Array.isArray(value) ? value : []) as FeatureBannerItem[];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -738,16 +783,14 @@ function BannerListField({
                   const file = event.target.files?.[0];
                   event.currentTarget.value = "";
                   if (!file) return;
-                  const body = new FormData();
-                  body.append("file", file);
-                  body.append("folder", "banners");
-                  body.append("fileName", file.name);
-                  const response = await fetch("/api/admin/upload", { method: "POST", body });
-                  const result = await response.json();
-                  if (!response.ok) return;
-                  const next = [...items];
-                  next[index] = { ...next[index], imageUrl: String(result.url) };
-                  onChange(next);
+                  try {
+                    const imageUrl = await onUploadImage(file, "banners");
+                    const next = [...items];
+                    next[index] = { ...next[index], imageUrl };
+                    onChange(next);
+                  } catch {
+                    // The parent upload handler displays the error status.
+                  }
                 }}
               />
             </label>
@@ -938,9 +981,11 @@ function PermissionsField({
 function SupportersField({
   value,
   onChange,
+  onUploadImage,
 }: {
   value: unknown;
   onChange: (nextValue: SupporterItem[]) => void;
+  onUploadImage: (file: File, folder: string) => Promise<string>;
 }) {
   const items = (Array.isArray(value) ? value : []) as SupporterItem[];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -1115,14 +1160,12 @@ function SupportersField({
                   const file = event.target.files?.[0];
                   event.currentTarget.value = "";
                   if (!file) return;
-                  const body = new FormData();
-                  body.append("file", file);
-                  body.append("folder", "supporters");
-                  body.append("fileName", file.name);
-                  const response = await fetch("/api/admin/upload", { method: "POST", body });
-                  const result = await response.json();
-                  if (!response.ok) return;
-                  updateItem(index, { logoUrl: String(result.url) });
+                  try {
+                    const logoUrl = await onUploadImage(file, "supporters");
+                    updateItem(index, { logoUrl });
+                  } catch {
+                    // The parent upload handler displays the error status.
+                  }
                 }}
               />
             </label>
@@ -1204,9 +1247,11 @@ function SupportersField({
 function ProductsField({
   value,
   onChange,
+  onUploadImage,
 }: {
   value: unknown;
   onChange: (nextValue: ProductItem[]) => void;
+  onUploadImage: (file: File, folder: string) => Promise<string>;
 }) {
   const items = (Array.isArray(value) ? value : []) as ProductItem[];
 
@@ -1299,16 +1344,14 @@ function ProductsField({
                   const file = event.target.files?.[0];
                   event.currentTarget.value = "";
                   if (!file) return;
-                  const body = new FormData();
-                  body.append("file", file);
-                  body.append("folder", "products");
-                  body.append("fileName", file.name);
-                  const response = await fetch("/api/admin/upload", { method: "POST", body });
-                  const result = await response.json();
-                  if (!response.ok) return;
-                  const next = [...items];
-                  next[index] = { ...next[index], imageUrl: String(result.url) };
-                  onChange(next);
+                  try {
+                    const imageUrl = await onUploadImage(file, "products");
+                    const next = [...items];
+                    next[index] = { ...next[index], imageUrl };
+                    onChange(next);
+                  } catch {
+                    // The parent upload handler displays the error status.
+                  }
                 }}
               />
             </label>
@@ -1731,52 +1774,14 @@ export function CollectionManager({
     }));
   }
 
-  async function uploadAsset(file: File) {
-    const maxFileSize = 25 * 1024 * 1024;
-    if (file.size > maxFileSize) {
-      const message =
-        "File vượt quá giới hạn 25MB. Hãy tải lên Google Drive rồi dán link chia sẻ vào ô URL.";
-      setStatus(message);
-      throw new Error(message);
-    }
-
+  async function uploadAsset(file: File, folder = collection) {
     setIsUploading(true);
     setStatus(`Đang tải ${file.name} (${(file.size / 1024 / 1024).toFixed(1)}MB)...`);
 
     try {
-      const authResponse = await fetch(
-        `/api/admin/upload?folder=${encodeURIComponent(collection)}`,
-        { cache: "no-store", signal: AbortSignal.timeout(30_000) }
-      );
-      const authResult = (await authResponse.json().catch(() => ({}))) as Record<string, unknown>;
-
-      if (!authResponse.ok) {
-        throw new Error(String(authResult.message || "Không thể xác thực phiên tải file."));
-      }
-
-      const payload = new FormData();
-      payload.append("file", file);
-      payload.append("fileName", file.name);
-      payload.append("folder", String(authResult.folder || collection));
-      payload.append("useUniqueFileName", "true");
-      payload.append("publicKey", String(authResult.publicKey || ""));
-      payload.append("token", String(authResult.token || ""));
-      payload.append("expire", String(authResult.expire || ""));
-      payload.append("signature", String(authResult.signature || ""));
-
-      const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
-        method: "POST",
-        body: payload,
-        signal: AbortSignal.timeout(120_000),
-      });
-      const result = (await response.json().catch(() => ({}))) as Record<string, unknown>;
-
-      if (!response.ok || !result.url) {
-        throw new Error(String(result.message || "Tải lên ImageKit thất bại."));
-      }
-
+      const url = await uploadAdminAsset(file, folder);
       setStatus("Tải lên thành công. Bạn có thể lưu tài liệu.");
-      return String(result.url);
+      return url;
     } catch (error) {
       const timedOut = error instanceof Error && error.name === "TimeoutError";
       const message = timedOut
@@ -2218,6 +2223,21 @@ export function CollectionManager({
                                       try {
                                         const url = await uploadAsset(file);
                                         updateField(field.name, url);
+                                        if (field.name === "fileUrl") {
+                                          const extension = file.name.split(".").pop()?.toLowerCase();
+                                          const supportedFormats = new Set([
+                                            "pdf",
+                                            "doc",
+                                            "docx",
+                                            "xls",
+                                            "xlsx",
+                                            "ppt",
+                                            "pptx",
+                                          ]);
+                                          if (extension && supportedFormats.has(extension)) {
+                                            updateField("fileFormat", extension);
+                                          }
+                                        }
                                       } catch {
                                         // uploadAsset already reports a useful message to the admin.
                                       }
@@ -2273,16 +2293,19 @@ export function CollectionManager({
                             <SupportersField
                               value={form[field.name]}
                               onChange={(value) => updateField(field.name, value)}
+                              onUploadImage={uploadAsset}
                             />
                           ) : field.type === "banners" ? (
                             <BannerListField
                               value={form[field.name]}
                               onChange={(value) => updateField(field.name, value)}
+                              onUploadImage={uploadAsset}
                             />
                           ) : field.type === "products" ? (
                             <ProductsField
                               value={form[field.name]}
                               onChange={(value) => updateField(field.name, value)}
+                              onUploadImage={uploadAsset}
                             />
                           ) : field.type === "theme" ? (
                             <ThemeField

@@ -64,6 +64,7 @@ export default async function AdminDownloadsPage() {
               { label: "XLS", value: "xls" },
               { label: "XLSX", value: "xlsx" },
               { label: "PPT", value: "ppt" },
+              { label: "PPTX", value: "pptx" },
               { label: "Khác", value: "other" },
             ],
           },
