@@ -15,9 +15,64 @@ export function MemberCard({
   variant = "card",
 }: {
   member: MemberShape;
-  variant?: "card" | "list" | "banner";
+  variant?: "card" | "list" | "banner" | "showcase";
 }) {
   const bannerImage = member.coverImage || member.introImage || getMemberFallbackBanner(member);
+
+  if (variant === "showcase") {
+    return (
+      <article className="group flex h-full min-w-[300px] snap-start flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_20px_55px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:border-cyan-300 hover:shadow-[0_28px_70px_rgba(14,79,175,0.14)] sm:min-w-[360px] lg:min-w-0">
+        <Link
+          href={`/hoi-vien/${member.slug}`}
+          className="relative flex aspect-video w-full items-center justify-center overflow-hidden bg-[linear-gradient(135deg,#edf7ff,#f8fafc)]"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={bannerImage}
+            alt={`Banner ${member.name}`}
+            className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]"
+            loading="lazy"
+            decoding="async"
+          />
+          <span className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-slate-950/45 to-transparent" />
+          <span className="absolute bottom-3 left-4 rounded-full border border-white/40 bg-slate-950/72 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur">
+            {member.memberType === "business" ? "Doanh nghiệp hội viên" : member.groupType}
+          </span>
+        </Link>
+
+        <div className="flex flex-1 flex-col p-5">
+          <div className="flex items-start gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white text-xs font-black text-[var(--theme-primary)] shadow-sm">
+              {member.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={member.logo} alt="" className="h-full w-full object-contain p-1" loading="lazy" />
+              ) : (
+                member.name.slice(0, 2).toUpperCase()
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-cyan-700">
+                {member.industry || "Cộng đồng BIHUBA"}
+              </p>
+              <h3 className="mt-1 line-clamp-2 text-lg font-black leading-6 text-slate-950">{member.name}</h3>
+            </div>
+          </div>
+
+          <p className="mt-4 line-clamp-2 text-sm leading-6 text-slate-600">
+            {member.companyTagline || member.description}
+          </p>
+
+          <Link
+            href={`/hoi-vien/${member.slug}`}
+            className="mt-5 inline-flex items-center justify-between border-t border-slate-100 pt-4 text-sm font-bold text-[var(--theme-primary)] transition group-hover:text-cyan-700"
+          >
+            Xem hồ sơ doanh nghiệp
+            <span aria-hidden className="text-lg">→</span>
+          </Link>
+        </div>
+      </article>
+    );
+  }
 
   if (variant === "list") {
     return (

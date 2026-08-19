@@ -47,12 +47,12 @@ export function FeatureBannerCarousel({ items }: { items: FeatureBannerItem[] })
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-[#04162E] shadow-[0_28px_90px_rgba(2,12,27,0.2)]">
       <div
-        className="relative min-h-[420px] bg-cover bg-center sm:min-h-[520px]"
+        className="relative min-h-[360px] bg-cover bg-center sm:min-h-[500px] lg:min-h-[600px]"
         style={{
           backgroundImage: `linear-gradient(180deg, rgba(2,9,24,0.12) 0%, rgba(2,9,24,0.08) 62%, rgba(2,9,24,0.34) 100%), url('${active.imageUrl}')`,
         }}
       >
-        <div className="grid min-h-[420px] gap-8 px-6 py-8 sm:min-h-[520px] sm:px-10 sm:py-10 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="grid min-h-[360px] gap-8 px-6 py-8 sm:min-h-[500px] sm:px-10 sm:py-10 lg:min-h-[600px] lg:grid-cols-[1fr_auto] lg:items-end">
           <div />
 
           {banners.length > 1 ? (

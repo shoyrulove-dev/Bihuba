@@ -31,24 +31,26 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: calc(1em * var(--theme-heading-scale));
-}
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: calc(1em * var(--theme-heading-scale));
+  }
 
-p,
-li,
-span,
-input,
-textarea,
-select,
-button,
-a {
-  font-size: calc(1em * var(--theme-body-scale));
+  p,
+  li,
+  span,
+  input,
+  textarea,
+  select,
+  button,
+  a {
+    font-size: calc(1em * var(--theme-body-scale));
+  }
 }
 
 body:has(.admin-root) > header,
