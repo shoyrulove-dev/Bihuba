@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1754" viewBox="0 0 1240 1754">
+  <rect width="1240" height="1754" fill="#f8fafc"/>
+  <rect x="56" y="56" width="1128" height="1642" rx="20" fill="#fff" stroke="#0e4faf" stroke-width="7"/>
+  <text x="620" y="180" text-anchor="middle" fill="#0e4faf" font-family="Arial, sans-serif" font-size="31" font-weight="700">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</text>
+  <text x="620" y="228" text-anchor="middle" fill="#172554" font-family="Arial, sans-serif" font-size="24">Độc lập - Tự do - Hạnh phúc</text>
+  <line x1="455" y1="246" x2="785" y2="246" stroke="#172554" stroke-width="2"/>
+  <text x="620" y="372" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="40" font-weight="700">GIẤY CHỨNG NHẬN ĐĂNG KÝ DOANH NGHIỆP</text>
+  <text x="620" y="424" text-anchor="middle" fill="#475569" font-family="Arial, sans-serif" font-size="22">BẢN MINH HỌA DÙNG ĐỂ KIỂM TRA HỆ THỐNG</text>
+  <g font-family="Arial, sans-serif" fill="#1e293b" font-size="28">
+    <text x="150" y="570">Tên doanh nghiệp: CÔNG TY CỔ PHẦN GIẢI PHÁP SỐ BÌNH HƯNG</text>
+    <text x="150" y="650">Mã số doanh nghiệp: 0312345678</text>
+    <text x="150" y="730">Địa chỉ trụ sở: Xã Bình Hưng, TP. Hồ Chí Minh</text>
+    <text x="150" y="810">Người đại diện: Nguyễn Minh An</text>
+    <text x="150" y="890">Ngành nghề: Công nghệ số và giải pháp doanh nghiệp</text>
+  </g>
+  <rect x="150" y="1010" width="300" height="300" rx="150" fill="none" stroke="#0e4faf" stroke-width="10"/>
+  <text x="300" y="1160" text-anchor="middle" fill="#0e4faf" font-family="Arial, sans-serif" font-size="33" font-weight="700">DEMO</text>
+  <text x="880" y="1230" text-anchor="middle" fill="#334155" font-family="Arial, sans-serif" font-size="25">Đại diện doanh nghiệp</text>
+  <line x1="690" y1="1270" x2="1070" y2="1270" stroke="#64748b" stroke-width="2"/>
+  <text x="620" y="1560" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="20">Tài liệu mẫu - không có giá trị pháp lý</text>
+</svg>
