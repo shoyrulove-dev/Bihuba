@@ -46,8 +46,9 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: settings.shortName || "BIHUBA",
     keywords: settings.seoKeywords?.split(",").map((item) => item.trim()).filter(Boolean),
     icons: {
-      icon: "/icon-options/05-digital-city.png",
-      apple: "/icon-options/05-digital-city.png",
+      icon: [{ url: "/icon-options/05-digital-city.png?v=2", type: "image/png", sizes: "512x512" }],
+      shortcut: ["/icon-options/05-digital-city.png?v=2"],
+      apple: [{ url: "/icon-options/05-digital-city.png?v=2", sizes: "512x512" }],
     },
     alternates: {
       canonical: "/",
