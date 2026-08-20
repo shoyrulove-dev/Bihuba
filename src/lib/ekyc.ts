@@ -1,4 +1,5 @@
 import { EkycApplicationModel } from "@/models/ekyc-application";
+import { connectToDatabase } from "@/lib/db";
 
 export const E_KYC_REQUIRED_FIELDS = ["companyName", "taxCode", "industry", "address", "representativeName", "email", "phone", "logoUrl", "certificateUrl"] as const;
 
@@ -16,5 +17,6 @@ export function assessEkyc(payload: EkycPayload) {
 }
 
 export async function getEkycByUserId(userId: number) {
+  if (!(await connectToDatabase())) return null;
   return EkycApplicationModel.findOne({ userId }).lean();
 }
