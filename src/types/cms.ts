@@ -68,6 +68,9 @@ export interface AiAssistantSettings {
 export interface SiteSettingsShape {
   siteName: string;
   shortName: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
   logoUrl?: string;
   wordmarkUrl?: string;
   slogan: string;

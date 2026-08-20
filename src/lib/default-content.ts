@@ -31,6 +31,9 @@ export const defaultDownloadCategories: DownloadCategoryShape[] = [
 export const defaultSettings: SiteSettingsShape = {
   siteName: "Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh",
   shortName: "BIHUBA",
+  seoTitle: "BIHUBA | Hội Doanh nghiệp Xã Bình Hưng",
+  seoDescription: "Cổng thông tin và kết nối giao thương dành cho cộng đồng doanh nghiệp Xã Bình Hưng, Thành phố Hồ Chí Minh.",
+  seoKeywords: "BIHUBA, Hội Doanh nghiệp Xã Bình Hưng, doanh nghiệp Bình Hưng, kết nối giao thương B2B",
   logoUrl: "/bihuba-logo-glow.png",
   wordmarkUrl: "/bihuba-wordmark.svg",
   slogan: "Đoàn kết - Đổi mới - Hội nhập - Phát triển",

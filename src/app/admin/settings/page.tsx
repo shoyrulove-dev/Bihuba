@@ -14,6 +14,7 @@ function EditIcon() {
 
 const sections = [
   { href: "/admin/settings/branding?mode=edit", title: "Nhận diện website", permission: "settings" },
+  { href: "/admin/settings/seo?mode=edit", title: "SEO & Google", permission: "settings" },
   { href: "/admin/settings/homepage?mode=edit", title: "Nội dung trang chủ", permission: "settings" },
   { href: "/admin/settings/contact?mode=edit", title: "Menu và liên hệ", permission: "settings" },
   { href: "/admin/settings/supporters?mode=edit", title: "Doanh nghiệp đồng hành", permission: "supporters" },

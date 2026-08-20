@@ -29,6 +29,12 @@ export const brandingFields: FieldConfig[] = [
   },
 ];
 
+export const seoFields: FieldConfig[] = [
+  { name: "seoTitle", label: "SEO title", helpText: "Tiêu đề Google, nên dài khoảng 50–60 ký tự.", section: "Google & mạng xã hội", fullWidth: true },
+  { name: "seoDescription", label: "Meta description", type: "textarea", helpText: "Mô tả hiển thị trên Google, nên dài khoảng 140–160 ký tự.", section: "Google & mạng xã hội", fullWidth: true },
+  { name: "seoKeywords", label: "Từ khóa", helpText: "Ngăn cách từng cụm từ khóa bằng dấu phẩy.", section: "Google & mạng xã hội", fullWidth: true },
+];
+
 export const homepageFields: FieldConfig[] = [
   { name: "heroTitle", label: "Tiêu đề hero", fullWidth: true, section: "Khối mở đầu" },
   {

@@ -31,9 +31,9 @@ const fontFamilies = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
-  const title = `${settings.shortName || "BIHUBA"} - ${settings.siteName}`;
+  const title = settings.seoTitle || `${settings.shortName || "BIHUBA"} - ${settings.siteName}`;
   const description =
-    settings.heroSubtitle ||
+    settings.seoDescription || settings.heroSubtitle ||
     "Cổng thông tin của Hội Doanh nghiệp Xã Bình Hưng Thành phố Hồ Chí Minh.";
 
   return {
@@ -44,6 +44,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     applicationName: settings.shortName || "BIHUBA",
+    keywords: settings.seoKeywords?.split(",").map((item) => item.trim()).filter(Boolean),
+    icons: { icon: "/icon", apple: "/icon" },
     alternates: {
       canonical: "/",
     },
