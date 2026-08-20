@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Be_Vietnam_Pro, Noto_Sans } from "next/font/google";
 import { AiAssistantWidget } from "@/components/site/ai-assistant-widget";
 import { FloatingContactButtons } from "@/components/site/floating-contact-buttons";
@@ -7,7 +8,6 @@ import { SiteHeader } from "@/components/site/site-header";
 import { getSiteSettings } from "@/lib/content";
 import "./globals.css";
 
-export const dynamic = "force-dynamic";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bihuba.vercel.app";
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -30,6 +30,17 @@ const fontFamilies = {
 } as const;
 
 export async function generateMetadata(): Promise<Metadata> {
+  const requestHeaders = await headers();
+  const isAdmin = requestHeaders.get("x-bihuba-pathname")?.startsWith("/admin");
+
+  if (isAdmin) {
+    return {
+      title: "Admin BIHUBA",
+      robots: { index: false, follow: false },
+      icons: { icon: [{ url: "/favicon.ico", type: "image/x-icon", sizes: "64x64" }] },
+    };
+  }
+
   const settings = await getSiteSettings();
   const title = settings.seoTitle || `${settings.shortName || "BIHUBA"} - ${settings.siteName}`;
   const description =
@@ -94,6 +105,22 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const requestHeaders = await headers();
+  const isAdmin = requestHeaders.get("x-bihuba-pathname")?.startsWith("/admin");
+
+  if (isAdmin) {
+    return (
+      <html lang="vi" className={`${beVietnamPro.variable} ${notoSans.variable} h-full antialiased`}>
+        <body
+          className="min-h-full bg-[#f4f7fb] text-slate-950"
+          style={{ "--theme-font-family": fontFamilies["source-sans-pro"] } as React.CSSProperties}
+        >
+          <main>{children}</main>
+        </body>
+      </html>
+    );
+  }
+
   const settings = await getSiteSettings();
   const organizationJsonLd = {
     "@context": "https://schema.org",
