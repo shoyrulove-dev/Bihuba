@@ -63,7 +63,7 @@ function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mo
 
       {mode === "login" ? (
         <form action="/api/auth/login" method="post" className="space-y-3 p-4">
-          <input type="hidden" name="next" value="/admin/posts" />
+          <input type="hidden" name="next" value="/hoi-vien/dashboard" />
           <input
             name="username"
             type="email"
@@ -87,7 +87,12 @@ function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mo
           </button>
         </form>
       ) : (
-        <form action="/api/auth/register" method="post" className="space-y-3 p-4">
+        <>
+        <div className="border-b border-slate-100 p-4">
+          <p className="text-sm leading-6 text-slate-600">Đăng ký hội viên chính thức được thực hiện qua Cổng E-KYC.</p>
+          <Link href="/dang-ky-hoi-vien" className="mt-3 flex w-full items-center justify-center rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950">Bắt đầu đăng ký E-KYC</Link>
+        </div>
+        <form action="/api/auth/register" method="post" className="hidden space-y-3 p-4">
           <input type="hidden" name="next" value="/admin/posts" />
           <input
             name="email"
@@ -114,6 +119,7 @@ function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mo
             Tạo tài khoản
           </button>
         </form>
+        </>
       )}
     </div>
   );

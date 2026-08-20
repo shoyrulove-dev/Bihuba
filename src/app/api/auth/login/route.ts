@@ -23,7 +23,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(loginUrl, { status: 303 });
   }
 
-  const targetPath = nextPath === "/admin" && user.role !== "admin" ? await getDefaultAdminPath(user) : nextPath;
+  const targetPath =
+    user.role === "business"
+      ? "/hoi-vien/dashboard"
+      : nextPath === "/hoi-vien/dashboard"
+        ? "/admin"
+        : nextPath === "/admin" && user.role !== "admin"
+          ? await getDefaultAdminPath(user)
+          : nextPath;
 
   const response = NextResponse.redirect(new URL(targetPath, request.url), {
     status: 303,

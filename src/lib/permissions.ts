@@ -29,7 +29,7 @@ export type AdminNavKey =
 const DEFAULT_MANAGER_PERMISSIONS: ManagerPermission[] = ["posts"];
 
 function normalizePermissions(value: unknown, role?: SessionUser["role"]): ManagerPermission[] {
-  if (role === "business") return ["posts"];
+  if (role === "business") return [];
   if (!Array.isArray(value)) return DEFAULT_MANAGER_PERMISSIONS;
   const allowed = new Set(MANAGER_PERMISSION_OPTIONS.map((item) => item.value));
   const permissions = value.filter((item): item is ManagerPermission => allowed.has(String(item) as ManagerPermission));
@@ -48,7 +48,7 @@ export async function getSessionPermissions(session: SessionUser): Promise<Manag
 
 export async function canAccessCollection(session: SessionUser, collection: AdminAccessKey) {
   if (session.role === "admin") return true;
-  if (session.role === "business") return collection === "posts";
+  if (session.role === "business") return false;
 
   const permissions = await getSessionPermissions(session);
 
@@ -85,7 +85,7 @@ export async function getAdminNavKeys(session: SessionUser): Promise<AdminNavKey
   }
 
   if (session.role === "business") {
-    return ["posts"];
+    return ["dashboard"];
   }
 
   const permissions = await getSessionPermissions(session);
@@ -102,6 +102,7 @@ export async function getAdminNavKeys(session: SessionUser): Promise<AdminNavKey
 
 export async function getDefaultAdminPath(session: SessionUser) {
   if (session.role === "admin") return "/admin";
+  if (session.role === "business") return "/hoi-vien/dashboard";
 
   const [firstNav] = await getAdminNavKeys(session);
   if (firstNav === "settings") return "/admin/settings";

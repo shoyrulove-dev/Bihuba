@@ -21,6 +21,10 @@ export async function requireAdminPage(nextPath = "/admin") {
     redirect(`/admin/login?next=${encodeURIComponent(nextPath)}`);
   }
 
+  if (session.role === "business") {
+    redirect("/hoi-vien/dashboard");
+  }
+
   if (nextPath.startsWith("/admin/ekyc") && session.role !== "admin") {
     redirect(await getDefaultAdminPath(session));
   }

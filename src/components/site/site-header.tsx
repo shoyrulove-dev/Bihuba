@@ -89,6 +89,12 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
                 </Link>
               );
             })}
+            <Link
+              href="/dang-ky-hoi-vien"
+              className="shrink-0 whitespace-nowrap rounded-full border border-cyan-200/35 bg-cyan-300 px-3 py-2 text-[11px] font-black text-slate-950 shadow-[0_10px_22px_rgba(86,214,255,0.24)] transition hover:bg-cyan-200 xl:text-[12px]"
+            >
+              Đăng ký hội viên ngay
+            </Link>
             <GoogleTranslate />
           </div>
         </nav>
