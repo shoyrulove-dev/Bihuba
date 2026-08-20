@@ -62,7 +62,7 @@ function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mo
       </div>
 
       {mode === "login" ? (
-        <form action="/api/auth/login" method="post" className="space-y-3 p-4">
+        <form action="/api/member-auth/login" method="post" className="space-y-3 p-4">
           <input type="hidden" name="next" value="/hoi-vien/dashboard" />
           <input
             name="username"

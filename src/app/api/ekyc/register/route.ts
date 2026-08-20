@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ADMIN_SESSION_COOKIE, SESSION_MAX_AGE_REMEMBER, createSessionToken, getNextUserId, hashPassword } from "@/lib/auth";
+import { MEMBER_SESSION_COOKIE, SESSION_MAX_AGE_REMEMBER, createSessionToken, getNextUserId, hashPassword } from "@/lib/auth";
 import { assessEkyc, type EkycPayload } from "@/lib/ekyc";
 import { slugify } from "@/lib/slug";
 import { connectToDatabase } from "@/lib/db";
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
   void application;
 
   const response = NextResponse.json({ status: assessment.approved ? "approved" : "needs_review", redirectTo: "/hoi-vien/dashboard" });
-  response.cookies.set(ADMIN_SESSION_COOKIE, createSessionToken({ userId, username: payload.email, role: "business", name: payload.companyName }, SESSION_MAX_AGE_REMEMBER), {
+  response.cookies.set(MEMBER_SESSION_COOKIE, createSessionToken({ userId, username: payload.email, role: "business", name: payload.companyName }, SESSION_MAX_AGE_REMEMBER), {
     httpOnly: true, sameSite: "lax", secure: request.nextUrl.protocol === "https:", path: "/", maxAge: SESSION_MAX_AGE_REMEMBER,
   });
   return response;

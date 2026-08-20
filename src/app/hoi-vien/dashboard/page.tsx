@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getCurrentAdminUser } from "@/lib/auth";
+import { getCurrentMemberUser } from "@/lib/auth";
 import { getEkycByUserId } from "@/lib/ekyc";
 
 export const dynamic = "force-dynamic";
 
 export default async function MemberDashboardPage() {
-  const session = await getCurrentAdminUser();
-  if (!session || session.role !== "business") redirect("/admin/login?next=/hoi-vien/dashboard");
+  const session = await getCurrentMemberUser();
+  if (!session) redirect("/hoi-vien/dang-nhap");
   const application = await getEkycByUserId(session.userId);
   if (!application) redirect("/dang-ky-hoi-vien");
   const approved = application.status === "approved";
@@ -17,7 +17,7 @@ export default async function MemberDashboardPage() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
           <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">Khu vực hội viên · BIHUBA</p><h1 className="mt-3 text-3xl font-semibold text-slate-950 sm:text-4xl">Xin chào, {session.name}</h1><p className="mt-3 max-w-2xl text-slate-600">Nơi Quý doanh nghiệp theo dõi hồ sơ hội viên và nhận hỗ trợ từ BIHUBA.</p></div>
-          <form action="/api/auth/logout" method="post"><button className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700">Đăng xuất</button></form>
+          <form action="/api/member-auth/logout" method="post"><button className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700">Đăng xuất</button></form>
         </div>
 
         <section className={`mt-8 rounded-[2rem] border p-6 sm:p-8 ${approved ? "border-emerald-200 bg-emerald-50" : "border-amber-200 bg-amber-50"}`}>

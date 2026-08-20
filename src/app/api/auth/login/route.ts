@@ -23,14 +23,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(loginUrl, { status: 303 });
   }
 
+  if (user.role === "business") {
+    return NextResponse.redirect(new URL("/hoi-vien/dang-nhap?error=member", request.url), { status: 303 });
+  }
+
   const targetPath =
-    user.role === "business"
-      ? "/hoi-vien/dashboard"
-      : nextPath === "/hoi-vien/dashboard"
-        ? "/admin"
-        : nextPath === "/admin" && user.role !== "admin"
-          ? await getDefaultAdminPath(user)
-          : nextPath;
+    nextPath === "/hoi-vien/dashboard"
+      ? "/admin"
+      : nextPath === "/admin" && user.role !== "admin"
+        ? await getDefaultAdminPath(user)
+        : nextPath;
 
   const response = NextResponse.redirect(new URL(targetPath, request.url), {
     status: 303,

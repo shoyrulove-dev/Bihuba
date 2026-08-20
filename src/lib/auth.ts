@@ -2,6 +2,7 @@ import { createHmac, pbkdf2Sync, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import {
   ADMIN_SESSION_COOKIE,
+  MEMBER_SESSION_COOKIE,
   type AdminRole,
   getAdminCredentials,
   SESSION_MAX_AGE_DEFAULT,
@@ -14,6 +15,7 @@ import { UserModel } from "@/models/user";
 
 export {
   ADMIN_SESSION_COOKIE,
+  MEMBER_SESSION_COOKIE,
   getAdminCredentials,
   SESSION_MAX_AGE_DEFAULT,
   SESSION_MAX_AGE_REMEMBER,
@@ -153,6 +155,12 @@ export async function getCurrentAdminUser() {
   const cookieStore = await cookies();
   const session = parseSessionToken(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
   return session;
+}
+
+export async function getCurrentMemberUser() {
+  const cookieStore = await cookies();
+  const session = parseSessionToken(cookieStore.get(MEMBER_SESSION_COOKIE)?.value);
+  return session?.role === "business" ? session : null;
 }
 
 export async function isAuthenticatedAdmin() {

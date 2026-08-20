@@ -74,7 +74,7 @@ export function MemberOnboardingForm() {
         </div>
       </div>
       {message ? <p className="mt-5 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">{message}</p> : null}
-      <div className="mt-7 flex flex-wrap items-center gap-4"><button disabled={isSubmitting || Boolean(uploading) || !uploads.logoUrl || !uploads.certificateUrl} className="rounded-full bg-[#0E4FAF] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-cyan-600 disabled:cursor-not-allowed disabled:opacity-50">{isSubmitting ? "Đang gửi hồ sơ..." : "Gửi hồ sơ E-KYC"}</button><Link href="/admin/login?next=/hoi-vien/dashboard" className="text-sm font-semibold text-[#0E4FAF]">Đã có tài khoản? Đăng nhập →</Link></div>
+      <div className="mt-7 flex flex-wrap items-center gap-4"><button disabled={isSubmitting || Boolean(uploading) || !uploads.logoUrl || !uploads.certificateUrl} className="rounded-full bg-[#0E4FAF] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-cyan-600 disabled:cursor-not-allowed disabled:opacity-50">{isSubmitting ? "Đang gửi hồ sơ..." : "Gửi hồ sơ E-KYC"}</button><Link href="/hoi-vien/dang-nhap" className="text-sm font-semibold text-[#0E4FAF]">Đã có tài khoản? Đăng nhập →</Link></div>
     </form>
   );
 }

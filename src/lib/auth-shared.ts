@@ -1,4 +1,5 @@
 export const ADMIN_SESSION_COOKIE = "bihuba_admin_session";
+export const MEMBER_SESSION_COOKIE = "bihuba_member_session";
 export const SESSION_MAX_AGE_DEFAULT = 60 * 60 * 8;
 export const SESSION_MAX_AGE_REMEMBER = 60 * 60 * 24 * 30;
 
