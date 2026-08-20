@@ -19,6 +19,9 @@ export async function POST(request: NextRequest) {
   const imageKitForm = new FormData();
   imageKitForm.set("file", file, file.name); imageKitForm.set("fileName", `ekyc-${kind}-${Date.now()}-${file.name}`);
   imageKitForm.set("folder", `${process.env.IMAGEKIT_BASE_FOLDER || "bihuba"}/ekyc/${kind}`); imageKitForm.set("useUniqueFileName", "true");
+  // Store member logos in one predictable square format. Verification files are
+  // deliberately kept untouched so the reviewer never loses legal information.
+  if (kind === "logo") imageKitForm.set("transformation", JSON.stringify({ pre: "w-640,h-640,c-maintain_ratio,q-85" }));
   imageKitForm.set("token", token); imageKitForm.set("expire", String(expire)); imageKitForm.set("signature", signature); imageKitForm.set("publicKey", publicKey);
   const result = await fetch(IMAGEKIT_UPLOAD_URL, { method: "POST", body: imageKitForm, signal: AbortSignal.timeout(120000) }).then(async (response) => ({ ok: response.ok, status: response.status, body: await response.json().catch(() => ({})) }));
   if (!result.ok) return NextResponse.json({ message: "Không thể tải tệp xác minh. Vui lòng thử lại." }, { status: result.status });
