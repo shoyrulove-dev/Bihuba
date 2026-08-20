@@ -19,8 +19,16 @@ export function MemberOnboardingForm() {
 
   async function upload(file: File, kind: "logo" | "certificate") {
     setUploading(kind); setMessage("");
-    const form = new FormData(); form.set("file", file); form.set("kind", kind);
-    const response = await fetch("/api/ekyc/upload", { method: "POST", body: form });
+    if (file.size > 10 * 1024 * 1024) { setUploading(""); setMessage("Mỗi tệp tối đa 10 MB. Vui lòng chọn tệp nhỏ hơn."); return; }
+    const authorization = await fetch(`/api/ekyc/upload?kind=${kind}`, { cache: "no-store" });
+    const auth = await authorization.json().catch(() => ({}));
+    if (!authorization.ok) { setUploading(""); setMessage(auth.message || "Chưa thể chuẩn bị tải tệp. Vui lòng thử lại."); return; }
+    const form = new FormData();
+    form.set("file", file); form.set("fileName", `ekyc-${kind}-${Date.now()}-${file.name}`);
+    form.set("folder", auth.folder); form.set("useUniqueFileName", "true");
+    form.set("publicKey", auth.publicKey); form.set("token", auth.token); form.set("expire", String(auth.expire)); form.set("signature", auth.signature);
+    if (kind === "logo") form.set("transformation", JSON.stringify({ pre: "w-640,h-640,c-maintain_ratio,q-85" }));
+    const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", { method: "POST", body: form });
     const data = await response.json().catch(() => ({}));
     setUploading("");
     if (!response.ok || !data.url) { setMessage(data.message || "Không thể tải tệp. Vui lòng thử lại."); return; }
@@ -54,7 +62,7 @@ export function MemberOnboardingForm() {
             <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-100 bg-white text-2xl text-cyan-700">
               {uploads.logoUrl ? <img src={uploads.logoUrl} alt="Xem trước logo" className="h-full w-full object-cover" /> : "⌁"}
             </div>
-            <div><p className="text-sm font-semibold text-slate-800">Logo doanh nghiệp *</p><p className="mt-1 text-xs leading-5 text-slate-500">Nên dùng logo vuông, nền sáng, tối thiểu 640 × 640 px.</p><p className="text-xs leading-5 text-slate-500">JPG, PNG hoặc WebP · tối đa 10 MB · hệ thống tự cắt về khung vuông chuẩn.</p></div>
+            <div><p className="text-sm font-semibold text-slate-800">Logo doanh nghiệp *</p><p className="mt-1 text-xs leading-5 text-slate-500">Nên dùng logo vuông, nền sáng, tối thiểu 640 × 640 px.</p><p className="text-xs leading-5 text-slate-500">JPG, PNG hoặc WebP · tối đa 10 MB · logo sẽ được đưa về khung vuông đồng nhất.</p></div>
           </div>
           <label className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-cyan-200 bg-white px-4 py-2.5 text-sm font-semibold text-cyan-800 transition hover:border-cyan-400"><span>↑</span>{uploads.logoUrl ? "Chọn logo khác" : "Chọn logo"}<input required type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file, "logo"); }} /></label>
           <p className="mt-3 text-xs font-semibold text-cyan-800">{uploading === "logo" ? "Đang tải và chuẩn hoá logo..." : uploads.logoUrl ? `Đã tải: ${fileNames.logo}` : "Gợi ý: tránh ảnh có chữ hoặc viền quá sát mép."}</p>

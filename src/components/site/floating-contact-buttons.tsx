@@ -89,8 +89,8 @@ function AuthPanel({ mode, setMode }: { mode: "login" | "register"; setMode: (mo
       ) : (
         <>
         <div className="border-b border-slate-100 p-4">
-          <p className="text-sm leading-6 text-slate-600">Đăng ký hội viên chính thức được thực hiện qua Cổng E-KYC.</p>
-          <Link href="/dang-ky-hoi-vien" className="mt-3 flex w-full items-center justify-center rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950">Bắt đầu đăng ký E-KYC</Link>
+          <p className="text-sm leading-6 text-slate-600">Điền thông tin doanh nghiệp để bắt đầu đăng ký hội viên.</p>
+          <Link href="/dang-ky-hoi-vien" className="mt-3 flex w-full items-center justify-center rounded-full bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950">Đăng ký hội viên</Link>
         </div>
         <form action="/api/auth/register" method="post" className="hidden space-y-3 p-4">
           <input type="hidden" name="next" value="/admin/posts" />

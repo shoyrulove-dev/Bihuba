@@ -14,7 +14,7 @@ export function DownloadBrowser({ categories, items }: { categories: DownloadCat
   categories.forEach((category) => categoryMap.set(category.slug, category));
   downloads.forEach((item) => {
     const slug = item.categorySlug || slugify(item.category || "khac");
-    if (!categoryMap.has(slug)) categoryMap.set(slug, { name: item.category || "Tài liệu khác", slug, description: "Tài liệu được tự động gom từ file đã đăng.", order: 999 });
+    if (!categoryMap.has(slug)) categoryMap.set(slug, { name: item.category || "Tài liệu khác", slug, description: "Tài liệu được cập nhật cho hội viên tham khảo.", order: 999 });
   });
   const sortedCategories = Array.from(categoryMap.values()).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 

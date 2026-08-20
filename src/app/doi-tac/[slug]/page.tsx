@@ -114,7 +114,7 @@ export default async function PartnerDetailPage({
                   ))
                 ) : (
                   <div className="rounded-[1.3rem] border border-dashed border-slate-300 bg-white p-6 text-sm leading-7 text-slate-500 md:col-span-2">
-                    Chưa có hình ảnh hoạt động. Có thể thêm ảnh BIHUBA làm việc, poster hoặc banner hợp tác trong admin.
+                    Hình ảnh hoạt động đang được cập nhật.
                   </div>
                 )}
               </div>
