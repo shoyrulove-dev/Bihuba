@@ -3,6 +3,7 @@ import { getCurrentMemberUser } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import { EkycApplicationModel } from "@/models/ekyc-application";
 import { MemberModel } from "@/models/member";
+import { recordActivity } from "@/lib/activity-log";
 
 const editableFields = ["name", "industry", "address", "phone", "email", "website", "description", "logo", "coverImage", "introImage", "companyTagline"] as const;
 
@@ -15,5 +16,6 @@ export async function PATCH(request: NextRequest) {
   const body = (await request.json()) as Record<string, unknown>;
   const update = Object.fromEntries(editableFields.map((field) => [field, String(body[field] ?? "").trim()]));
   await MemberModel.findByIdAndUpdate(application.memberId, update, { runValidators: true });
+  await recordActivity({ action: "profile_update", actorId: session.userId, actorName: session.name, actorRole: session.role, targetType: "member", targetId: String(application.memberId), description: "Hội viên cập nhật thông tin doanh nghiệp" });
   return NextResponse.json({ message: "Đã cập nhật hồ sơ doanh nghiệp." });
 }

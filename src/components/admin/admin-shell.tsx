@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 function Icon({ children }: { children: ReactNode }) { return <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">{children}</svg>; }
 const DashboardIcon = () => <Icon><path d="M4 13h7V4H4zM13 20h7v-9h-7zM13 11h7V4h-7zM4 20h7v-5H4z" /></Icon>;
@@ -21,6 +21,11 @@ const HomeIcon = () => <Icon><path d="M4 10.5 12 4l8 6.5M6.5 9.5V20h11V9.5" /></
 
 const nav = [
   { key: "dashboard", label: "Tổng quan", href: "/admin", icon: DashboardIcon },
+  { key: "rfqs", label: "RFQ & ghép nối", href: "/admin/rfqs", icon: FileIcon },
+  { key: "transactions", label: "Giao dịch & QR", href: "/admin/transactions", icon: PartnerIcon },
+  { key: "notifications", label: "Thông báo Zalo OA", href: "/admin/notifications", icon: BellIcon },
+  { key: "reports", label: "Báo cáo", href: "/admin/reports", icon: DashboardIcon },
+  { key: "activity", label: "Nhật ký hoạt động", href: "/admin/activity", icon: ShieldIcon },
   { key: "ekyc", label: "Hồ sơ E-KYC", href: "/admin/ekyc", icon: ShieldIcon },
   { key: "members", label: "Hội viên", href: "/admin/members", icon: GroupIcon },
   { key: "partners", label: "Đối tác", href: "/admin/partners", icon: PartnerIcon },
@@ -32,6 +37,7 @@ const nav = [
 
 export function AdminShell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [allowedNav, setAllowedNav] = useState<string[] | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -45,7 +51,12 @@ export function AdminShell({ title, description, children }: { title: string; de
   }, []);
 
   useEffect(() => { const timer = window.setTimeout(() => setIsNavigating(false), 80); return () => window.clearTimeout(timer); }, [pathname]);
-  const visibleNav = allowedNav ? nav.filter((item) => allowedNav.includes(item.key)) : nav;
+  const visibleNav = useMemo(() => allowedNav ? nav.filter((item) => allowedNav.includes(item.key)) : nav, [allowedNav]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => visibleNav.forEach((item) => router.prefetch(item.href)), 120);
+    return () => window.clearTimeout(timer);
+  }, [router, visibleNav]);
 
   const menu = (
     <>
@@ -58,7 +69,7 @@ export function AdminShell({ title, description, children }: { title: string; de
         {visibleNav.map((item) => {
           const ItemIcon = item.icon;
           const isActive = item.href === "/admin" ? pathname === "/admin" : pathname?.startsWith(item.href);
-          return <Link key={item.href} href={item.href} onClick={() => { setIsMobileMenuOpen(false); if (item.href !== pathname) setIsNavigating(true); }} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${isActive ? "bg-[#1769e8] text-white shadow-[0_10px_25px_rgba(23,105,232,0.34)]" : "text-slate-300 hover:bg-white/8 hover:text-white"}`}><ItemIcon /><span>{item.label}</span></Link>;
+          return <Link key={item.href} href={item.href} prefetch onMouseEnter={() => router.prefetch(item.href)} onClick={() => { setIsMobileMenuOpen(false); if (item.href !== pathname) setIsNavigating(true); }} className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${isActive ? "bg-[#1769e8] text-white shadow-[0_10px_25px_rgba(23,105,232,0.34)]" : "text-slate-300 hover:bg-white/8 hover:text-white"}`}><ItemIcon /><span>{item.label}</span></Link>;
         })}
       </nav>
       <div className="mt-auto rounded-xl border border-cyan-200/10 bg-white/5 px-3 py-3 text-xs leading-5 text-slate-400">Khu vực điều hành nội dung, hội viên và dữ liệu giao thương BIHUBA.</div>

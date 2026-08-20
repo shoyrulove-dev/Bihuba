@@ -7,6 +7,7 @@ import {
 } from "@/lib/auth";
 import { getDefaultAdminPath } from "@/lib/permissions";
 import { NextRequest, NextResponse } from "next/server";
+import { recordActivity } from "@/lib/activity-log";
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
@@ -37,6 +38,7 @@ export async function POST(request: NextRequest) {
   const response = NextResponse.redirect(new URL(targetPath, request.url), {
     status: 303,
   });
+  await recordActivity({ action: "admin_login", actorId: user.userId, actorName: user.name, actorRole: user.role, targetType: "session", description: "Đăng nhập khu vực quản trị" });
   const maxAge = remember ? SESSION_MAX_AGE_REMEMBER : SESSION_MAX_AGE_DEFAULT;
   response.cookies.set(ADMIN_SESSION_COOKIE, createSessionToken(user, maxAge), {
     httpOnly: true,

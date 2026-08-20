@@ -157,6 +157,9 @@ const permissionOptions = [
   { label: "Danh mục tài liệu", value: "downloadCategories" },
   { label: "Doanh nghiệp đồng hành", value: "supporters" },
   { label: "Cấu hình website", value: "settings" },
+  { label: "Quản lý RFQ", value: "rfqs" },
+  { label: "Quản lý giao dịch", value: "transactions" },
+  { label: "Quản lý thông báo", value: "notifications" },
 ];
 
 function EditIcon() {

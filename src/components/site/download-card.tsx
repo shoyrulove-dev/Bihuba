@@ -27,7 +27,7 @@ export function DownloadCard({ item }: { item: DownloadShape }) {
 
       <div className="mt-5 flex items-center gap-3 border-t border-slate-100 pt-4">
         <Link href={`/download/${item.slug}`} className="text-sm font-black text-[#0E4FAF] transition hover:text-cyan-700">Xem chi tiết →</Link>
-        {item.fileUrl ? <Link href={item.fileUrl} target="_blank" rel="noreferrer" className="ml-auto rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-[#0E4FAF]">Tải file</Link> : null}
+        {item.fileUrl ? <Link href={`/api/download/${item.slug}`} target="_blank" rel="noreferrer" className="ml-auto rounded-full bg-slate-950 px-4 py-2 text-sm font-bold text-white transition hover:bg-[#0E4FAF]">Tải file</Link> : null}
       </div>
     </article>
   );

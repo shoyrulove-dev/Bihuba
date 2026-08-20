@@ -68,7 +68,7 @@ export function DownloadBrowser({ categories, items }: { categories: DownloadCat
                       </div>
                       <div className="flex shrink-0 gap-3 sm:flex-col sm:items-stretch">
                         <Link href={`/download/${item.slug}`} className="flex-1 rounded-full border border-slate-300 px-4 py-2 text-center text-sm font-bold text-slate-800 transition hover:border-cyan-500 hover:text-cyan-700">Chi tiết</Link>
-                        {item.fileUrl ? <Link href={item.fileUrl} target="_blank" rel="noreferrer" className="flex-1 rounded-full bg-slate-950 px-4 py-2 text-center text-sm font-bold text-white transition hover:bg-[#0E4FAF]">Tải file</Link> : null}
+                        {item.fileUrl ? <Link href={`/api/download/${item.slug}`} target="_blank" rel="noreferrer" className="flex-1 rounded-full bg-slate-950 px-4 py-2 text-center text-sm font-bold text-white transition hover:bg-[#0E4FAF]">Tải file</Link> : null}
                       </div>
                     </article>
                   );

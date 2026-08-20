@@ -10,6 +10,7 @@ import { connectToDatabase } from "@/lib/db";
 import { canAccessCollection, canApprovePosts, MANAGER_PERMISSION_OPTIONS } from "@/lib/permissions";
 import { slugify } from "@/lib/slug";
 import { repairDeepText } from "@/lib/text";
+import { recordActivity } from "@/lib/activity-log";
 
 type Context = {
   params: Promise<{
@@ -247,6 +248,7 @@ export async function POST(request: NextRequest, context: Context) {
   }
 
   const created = await Model.create(payload);
+  await recordActivity({ action: "create", actorId: session.userId, actorName: session.name, actorRole: session.role, targetType: key, targetId: String(created._id), description: `Tạo mới dữ liệu trong ${key}` });
   return NextResponse.json({
     message: key === "posts" && session.role !== "admin" ? "Đã gửi bài viết chờ admin duyệt." : "Đã tạo mới thành công.",
     item: serializeClientItem(created, key),

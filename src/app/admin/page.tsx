@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdminPage } from "@/lib/admin-auth";
 import { getDownloads, getMembers, getPartners, getPosts } from "@/lib/content";
+import { getOperationsSummary } from "@/lib/operations";
 
 function Badge({ demo = false }: { demo?: boolean }) {
   return <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] ${demo ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}>{demo ? "Demo" : "Dữ liệu thật"}</span>;
@@ -22,11 +23,12 @@ const activityPoints = demoActivity.map((value, index) => `${24 + index * 48},${
 
 export default async function AdminDashboardPage() {
   await requireAdminPage("/admin");
-  const [posts, members, partners, downloads] = await Promise.all([
+  const [posts, members, partners, downloads, operations] = await Promise.all([
     getPosts(undefined, { includeUnpublished: true }),
     getMembers(),
     getPartners(),
     getDownloads(),
+    getOperationsSummary(),
   ]);
 
   const businesses = members.filter((member) => member.memberType === "business");
@@ -52,7 +54,7 @@ export default async function AdminDashboardPage() {
   const kpis = [
     { label: "Hội viên", value: members.length, note: "Hồ sơ đang quản lý", href: "/admin/members", type: "members" as const, demo: false },
     { label: "Doanh nghiệp", value: businesses.length, note: `${partners.length} đối tác đồng hành`, href: "/admin/members", type: "business" as const, demo: false },
-    { label: "Yêu cầu RFQ", value: 18, note: "+5 trong tháng", href: "/admin", type: "rfq" as const, demo: true },
+    { label: "Yêu cầu RFQ", value: operations.rfqTotal, note: `${operations.rfqMatched} yêu cầu đã ghép`, href: "/admin/rfqs", type: "rfq" as const, demo: false },
     { label: "Sự kiện", value: events.length, note: `${posts.length} bài viết & sự kiện`, href: "/admin/posts", type: "events" as const, demo: false },
   ];
 
@@ -75,6 +77,6 @@ export default async function AdminDashboardPage() {
       <article className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_7px_22px_rgba(15,23,42,0.045)] sm:p-6 lg:col-span-3"><div className="flex items-center justify-between gap-2"><h2 className="text-base font-semibold text-slate-900">Ngành nổi bật</h2><Badge /></div><div className="mt-5 space-y-4">{industries.map(([industry, count]) => <div key={industry}><div className="flex justify-between gap-3 text-xs"><span className="truncate text-slate-600">{industry}</span><strong className="text-slate-900">{count}</strong></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-[#1769e8]" style={{ width: `${Math.max(10, Math.round((count / maxIndustry) * 100))}%` }} /></div></div>)}{!industries.length ? <p className="py-8 text-center text-sm text-slate-500">Chưa có dữ liệu ngành.</p> : null}</div></article>
     </section>
 
-    <section className="grid min-w-0 gap-4 md:grid-cols-3"><div className="min-w-0 rounded-2xl border border-amber-200 bg-amber-50/60 p-5"><div className="flex items-center justify-between"><p className="font-semibold text-slate-900">RFQ giao thương</p><Badge demo /></div><p className="mt-3 text-3xl font-semibold text-slate-950">18</p><p className="mt-2 text-xs leading-5 text-slate-600">Mẫu hiển thị cho module yêu cầu báo giá sẽ xây dựng.</p></div><div className="min-w-0 rounded-2xl border border-amber-200 bg-amber-50/60 p-5"><div className="flex items-center justify-between"><p className="font-semibold text-slate-900">Giao dịch B2B</p><Badge demo /></div><p className="mt-3 text-3xl font-semibold text-slate-950">24</p><p className="mt-2 text-xs leading-5 text-slate-600">Sẽ thay bằng dữ liệu đối soát giao dịch thực tế.</p></div><div className="min-w-0 rounded-2xl border border-amber-200 bg-amber-50/60 p-5"><div className="flex items-center justify-between"><p className="font-semibold text-slate-900">Thông báo Bot</p><Badge demo /></div><p className="mt-3 text-3xl font-semibold text-slate-950">91%</p><p className="mt-2 text-xs leading-5 text-slate-600">Mẫu tỷ lệ gửi thành công khi tích hợp Zalo OA.</p></div></section>
+    <section className="grid min-w-0 gap-4 md:grid-cols-3"><Link href="/admin/rfqs" className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5"><div className="flex items-center justify-between"><p className="font-semibold text-slate-900">RFQ đã ghép nối</p><Badge /></div><p className="mt-3 text-3xl font-semibold text-slate-950">{operations.rfqMatched}</p><p className="mt-2 text-xs leading-5 text-slate-600">Theo dõi yêu cầu báo giá và kết quả kết nối doanh nghiệp.</p></Link><Link href="/admin/transactions" className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5"><div className="flex items-center justify-between"><p className="font-semibold text-slate-900">Giao dịch B2B</p><Badge /></div><p className="mt-3 text-3xl font-semibold text-slate-950">{operations.transactionTotal}</p><p className="mt-2 text-xs leading-5 text-slate-600">Doanh thu ghi nhận: {operations.paidAmount.toLocaleString("vi-VN")} đ.</p></Link><Link href="/admin/notifications" className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5"><div className="flex items-center justify-between"><p className="font-semibold text-slate-900">Thông báo đã đọc</p><Badge /></div><p className="mt-3 text-3xl font-semibold text-slate-950">{operations.readNotifications}/{operations.notificationTotal}</p><p className="mt-2 text-xs leading-5 text-slate-600">Sẵn sàng nhận trạng thái từ webhook Zalo OA.</p></Link></section>
   </AdminShell>;
 }

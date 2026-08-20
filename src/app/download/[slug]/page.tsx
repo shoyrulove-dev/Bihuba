@@ -54,7 +54,7 @@ export default async function DownloadDetailPage({
               {item.fileUrl ? (
                 <>
                   <Link
-                    href={item.fileUrl}
+                    href={`/api/download/${item.slug}`}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
@@ -62,7 +62,7 @@ export default async function DownloadDetailPage({
                     {"Xem file gốc"}
                   </Link>
                   <Link
-                    href={item.fileUrl}
+                    href={`/api/download/${item.slug}`}
                     target="_blank"
                     rel="noreferrer"
                     download

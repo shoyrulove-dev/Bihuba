@@ -12,6 +12,9 @@ export const MANAGER_PERMISSION_OPTIONS = [
   { label: "Quản lý danh mục tài liệu", value: "downloadCategories" },
   { label: "Quản lý doanh nghiệp đồng hành", value: "supporters" },
   { label: "Cấu hình website", value: "settings" },
+  { label: "Quản lý RFQ", value: "rfqs" },
+  { label: "Quản lý giao dịch", value: "transactions" },
+  { label: "Quản lý thông báo", value: "notifications" },
 ] as const;
 
 export type ManagerPermission = (typeof MANAGER_PERMISSION_OPTIONS)[number]["value"];
@@ -24,6 +27,11 @@ export type AdminNavKey =
   | "downloads"
   | "users"
   | "ekyc"
+  | "rfqs"
+  | "transactions"
+  | "notifications"
+  | "reports"
+  | "activity"
   | "settings";
 
 const DEFAULT_MANAGER_PERMISSIONS: ManagerPermission[] = ["posts"];
@@ -81,7 +89,7 @@ export async function canApprovePosts(session: SessionUser) {
 
 export async function getAdminNavKeys(session: SessionUser): Promise<AdminNavKey[]> {
   if (session.role === "admin") {
-    return ["dashboard", "posts", "members", "partners", "downloads", "users", "ekyc", "settings"];
+    return ["dashboard", "rfqs", "transactions", "notifications", "reports", "activity", "posts", "members", "partners", "downloads", "users", "ekyc", "settings"];
   }
 
   if (session.role === "business") {
@@ -96,6 +104,9 @@ export async function getAdminNavKeys(session: SessionUser): Promise<AdminNavKey
   if (permissions.includes("partners")) nav.push("partners");
   if (permissions.includes("downloads") || permissions.includes("downloadCategories")) nav.push("downloads");
   if (permissions.includes("settings") || permissions.includes("supporters")) nav.push("settings");
+  if (permissions.includes("rfqs")) nav.push("rfqs");
+  if (permissions.includes("transactions")) nav.push("transactions");
+  if (permissions.includes("notifications")) nav.push("notifications");
 
   return nav.length ? nav : ["posts"];
 }

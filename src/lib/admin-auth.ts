@@ -8,6 +8,9 @@ function getAccessKeyFromPath(path: string): AdminAccessKey | "settingsIndex" | 
   if (path.startsWith("/admin/partners")) return "partners";
   if (path.startsWith("/admin/downloads")) return "downloads";
   if (path.startsWith("/admin/users")) return "users";
+  if (path.startsWith("/admin/rfqs")) return "rfqs";
+  if (path.startsWith("/admin/transactions")) return "transactions";
+  if (path.startsWith("/admin/notifications")) return "notifications";
   if (path.startsWith("/admin/settings/supporters")) return "supporters";
   if (path === "/admin/settings" || path === "/admin/settings/") return "settingsIndex";
   if (path.startsWith("/admin/settings")) return "settings";
@@ -26,6 +29,10 @@ export async function requireAdminPage(nextPath = "/admin") {
   }
 
   if (nextPath.startsWith("/admin/ekyc") && session.role !== "admin") {
+    redirect(await getDefaultAdminPath(session));
+  }
+
+  if ((nextPath.startsWith("/admin/reports") || nextPath.startsWith("/admin/activity")) && session.role !== "admin") {
     redirect(await getDefaultAdminPath(session));
   }
 
