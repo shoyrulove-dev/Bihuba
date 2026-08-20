@@ -51,6 +51,7 @@ export interface ThemeSettings {
   primaryColor: string;
   accentColor: string;
   surfaceColor: string;
+  fontFamily: "source-sans-pro" | "be-vietnam-pro" | "noto-sans" | "system";
   headingScale: string;
   bodyScale: string;
 }

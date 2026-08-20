@@ -271,6 +271,7 @@ function buildInitialValue(field: FieldConfig) {
         primaryColor: "#0E4FAF",
         accentColor: "#56D6FF",
         surfaceColor: "#F8FAFC",
+        fontFamily: "source-sans-pro",
         headingScale: "1",
         bodyScale: "1",
       };
@@ -323,6 +324,7 @@ function normalizeValue(field: FieldConfig, rawValue: unknown): unknown {
       primaryColor: "#0E4FAF",
       accentColor: "#56D6FF",
       surfaceColor: "#F8FAFC",
+      fontFamily: "source-sans-pro",
       headingScale: "1",
       bodyScale: "1",
     };
@@ -1497,6 +1499,7 @@ function ThemeField({
     primaryColor: "#0E4FAF",
     accentColor: "#56D6FF",
     surfaceColor: "#F8FAFC",
+    fontFamily: "source-sans-pro",
     headingScale: "1",
     bodyScale: "1",
   };
@@ -1555,12 +1558,26 @@ function ThemeField({
         </div>
       </label>
       <label className="block">
+        <span className="mb-2 block text-sm text-slate-600">Phông chữ toàn hệ thống</span>
+        <select
+          value={theme.fontFamily || "source-sans-pro"}
+          onChange={(event) => onChange({ ...theme, fontFamily: event.target.value as ThemeSettings["fontFamily"] })}
+          className="w-full rounded-2xl border border-slate-200 px-4 py-3"
+        >
+          <option value="source-sans-pro">Source Sans Pro — khuyến nghị</option>
+          <option value="be-vietnam-pro">Be Vietnam Pro</option>
+          <option value="noto-sans">Noto Sans</option>
+          <option value="system">Hệ thống (System UI)</option>
+        </select>
+      </label>
+      <label className="block">
         <span className="mb-2 block text-sm text-slate-600">Cỡ tiêu đề</span>
         <select
           value={theme.headingScale}
           onChange={(event) => onChange({ ...theme, headingScale: event.target.value })}
           className="w-full rounded-2xl border border-slate-200 px-4 py-3"
         >
+          <option value="0.88">Nhỏ, thanh hơn</option>
           <option value="0.95">Gọn hơn</option>
           <option value="1">Cân đối</option>
           <option value="1.08">Lớn hơn</option>

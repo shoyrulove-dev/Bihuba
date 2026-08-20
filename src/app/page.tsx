@@ -56,7 +56,7 @@ export default async function Home() {
               <span className="h-2.5 w-2.5 rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(86,214,255,0.9)]" />
               Cổng giao thương B2B của cộng đồng Bình Hưng
             </div>
-            <h1 className="mt-6 max-w-4xl text-4xl font-black leading-[1.08] tracking-[-0.03em] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-6 max-w-4xl text-3xl font-semibold leading-[1.15] tracking-[-0.03em] sm:text-4xl lg:text-5xl">
               {settings.heroTitle}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-blue-50/86 sm:text-lg">
@@ -64,7 +64,7 @@ export default async function Home() {
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link href="/hoi-vien" className="rounded-full bg-cyan-300 px-6 py-3.5 text-sm font-black text-slate-950 shadow-[0_12px_28px_rgba(86,214,255,0.2)] transition hover:bg-cyan-200">Khám phá doanh nghiệp</Link>
-              <Link href="/ket-noi-giao-thuong" className="rounded-full border border-white/30 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-white/10">Xem cơ hội giao thương</Link>
+              <Link href="/dang-ky-hoi-vien" className="rounded-full border border-white/30 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">Đăng ký hội viên</Link>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:gap-4">

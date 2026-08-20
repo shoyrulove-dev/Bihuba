@@ -23,6 +23,7 @@ export type AdminNavKey =
   | "partners"
   | "downloads"
   | "users"
+  | "ekyc"
   | "settings";
 
 const DEFAULT_MANAGER_PERMISSIONS: ManagerPermission[] = ["posts"];
@@ -80,7 +81,7 @@ export async function canApprovePosts(session: SessionUser) {
 
 export async function getAdminNavKeys(session: SessionUser): Promise<AdminNavKey[]> {
   if (session.role === "admin") {
-    return ["dashboard", "posts", "members", "partners", "downloads", "users", "settings"];
+    return ["dashboard", "posts", "members", "partners", "downloads", "users", "ekyc", "settings"];
   }
 
   if (session.role === "business") {

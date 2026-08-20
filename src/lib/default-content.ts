@@ -183,6 +183,7 @@ export const defaultSettings: SiteSettingsShape = {
     primaryColor: "#0E4FAF",
     accentColor: "#56D6FF",
     surfaceColor: "#F8FAFC",
+    fontFamily: "source-sans-pro",
     headingScale: "1",
     bodyScale: "1",
   },

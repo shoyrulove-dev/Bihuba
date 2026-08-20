@@ -21,6 +21,10 @@ export async function requireAdminPage(nextPath = "/admin") {
     redirect(`/admin/login?next=${encodeURIComponent(nextPath)}`);
   }
 
+  if (nextPath.startsWith("/admin/ekyc") && session.role !== "admin") {
+    redirect(await getDefaultAdminPath(session));
+  }
+
   if ((nextPath === "/admin" || nextPath === "/admin/") && session.role !== "admin") {
     redirect(await getDefaultAdminPath(session));
   }

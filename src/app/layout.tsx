@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Be_Vietnam_Pro, Noto_Sans } from "next/font/google";
 import { AiAssistantWidget } from "@/components/site/ai-assistant-widget";
 import { FloatingContactButtons } from "@/components/site/floating-contact-buttons";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -10,15 +10,24 @@ import "./globals.css";
 export const dynamic = "force-dynamic";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bihuba.vercel.app";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const beVietnamPro = Be_Vietnam_Pro({
+  variable: "--font-be-vietnam-pro",
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const notoSans = Noto_Sans({
+  variable: "--font-noto-sans",
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700"],
 });
+
+const fontFamilies = {
+  "source-sans-pro": '"Source Sans Pro", Arial, sans-serif',
+  "be-vietnam-pro": 'var(--font-be-vietnam-pro), Arial, sans-serif',
+  "noto-sans": 'var(--font-noto-sans), Arial, sans-serif',
+  system: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+} as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -94,7 +103,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="vi" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="vi" className={`${beVietnamPro.variable} ${notoSans.variable} h-full antialiased`}>
       <body
         className="min-h-full bg-slate-50 text-slate-950"
         style={
@@ -102,6 +111,7 @@ export default async function RootLayout({
             "--theme-primary": settings?.theme?.primaryColor || "#0E4FAF",
             "--theme-accent": settings?.theme?.accentColor || "#56D6FF",
             "--theme-surface": settings?.theme?.surfaceColor || "#F8FAFC",
+            "--theme-font-family": fontFamilies[settings?.theme?.fontFamily || "source-sans-pro"],
             "--theme-heading-scale": settings?.theme?.headingScale || "1",
             "--theme-body-scale": settings?.theme?.bodyScale || "1",
           } as React.CSSProperties
