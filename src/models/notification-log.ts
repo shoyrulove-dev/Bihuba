@@ -16,4 +16,7 @@ const NotificationLogSchema = new Schema(
   { timestamps: true }
 );
 
+NotificationLogSchema.index({ status: 1, createdAt: -1 });
+NotificationLogSchema.index({ externalId: 1 });
+
 export const NotificationLogModel = models.NotificationLog || model("NotificationLog", NotificationLogSchema);

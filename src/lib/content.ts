@@ -187,6 +187,32 @@ export async function getMembers(): Promise<MemberShape[]> {
   return repairDeepText(members.length ? serialize(members) : defaultMembers);
 }
 
+export async function getAdminMembersPage(options: { page?: number; pageSize?: number; query?: string; memberType?: string } = {}) {
+  const pageSize = Math.min(Math.max(Number(options.pageSize) || 25, 10), 100);
+  const page = Math.max(Number(options.page) || 1, 1);
+  const query = String(options.query || "").trim();
+  const memberType = String(options.memberType || "").trim();
+  const connection = await connectToDatabase();
+
+  if (!process.env.MONGODB_URI || !connection) {
+    const filtered = defaultMembers.filter((member) => {
+      const matchType = !memberType || member.memberType === memberType;
+      const searchable = `${member.name} ${member.industry} ${member.email}`.toLowerCase();
+      return matchType && (!query || searchable.includes(query.toLowerCase()));
+    });
+    return { items: repairDeepText(filtered.slice((page - 1) * pageSize, page * pageSize)), totalItems: filtered.length, page, pageSize };
+  }
+
+  const filter: Record<string, unknown> = {};
+  if (memberType) filter.memberType = memberType;
+  if (query) filter.$text = { $search: query };
+  const [items, totalItems] = await Promise.all([
+    MemberModel.find(filter).sort({ createdAt: -1 }).skip((page - 1) * pageSize).limit(pageSize).lean(),
+    MemberModel.countDocuments(filter),
+  ]);
+  return { items: repairDeepText(serialize(items) as MemberShape[]), totalItems, page, pageSize };
+}
+
 export async function getMemberBySlug(slug: string): Promise<MemberShape | null> {
   const connection = await connectToDatabase();
 

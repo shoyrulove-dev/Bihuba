@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { AdminFrame } from "@/components/admin/admin-shell";
 
 export const metadata: Metadata = {
   title: "Admin BIHUBA",
@@ -17,5 +19,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  const pathname = (await headers()).get("x-bihuba-pathname") || "";
+  if (pathname.startsWith("/admin/login")) return children;
+  return <AdminFrame>{children}</AdminFrame>;
 }

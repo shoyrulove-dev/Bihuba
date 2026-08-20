@@ -17,4 +17,7 @@ const TransactionSchema = new Schema(
   { timestamps: true }
 );
 
+TransactionSchema.index({ status: 1, createdAt: -1 });
+TransactionSchema.index({ memberName: 1, createdAt: -1 });
+
 export const TransactionModel = models.Transaction || model("Transaction", TransactionSchema);

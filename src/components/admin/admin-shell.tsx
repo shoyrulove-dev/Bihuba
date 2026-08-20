@@ -35,7 +35,7 @@ const nav = [
   { key: "settings", label: "Cấu hình hệ thống", href: "/admin/settings", icon: SettingsIcon },
 ];
 
-export function AdminShell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
+export function AdminFrame({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [allowedNav, setAllowedNav] = useState<string[] | null>(null);
@@ -84,8 +84,12 @@ export function AdminShell({ title, description, children }: { title: string; de
       <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 px-4 py-3 backdrop-blur lg:px-8">
         <div className="mx-auto flex max-w-[1560px] items-center justify-between gap-3"><div className="flex items-center gap-3"><button type="button" onClick={() => setIsMobileMenuOpen(true)} className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-700 lg:hidden"><MenuIcon /></button><div><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">BIHUBA / Quản trị</p><p className="hidden text-sm font-semibold text-slate-700 sm:block">Trung tâm điều hành B2B</p></div></div><div className="flex items-center gap-1.5"><Link href="/" className="inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#1769e8]"><HomeIcon /><span className="hidden md:inline">Xem website</span></Link><form action="/api/auth/logout" method="post"><button type="submit" className="inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-medium text-slate-600 transition hover:bg-red-50 hover:text-red-600"><LogoutIcon /><span className="hidden md:inline">Đăng xuất</span></button></form><button type="button" aria-label="Thông báo" className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-[#1769e8]"><BellIcon /></button><Link href="/admin/profile" className="flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 pr-3 text-sm font-semibold text-slate-700 shadow-sm"><span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#e6f2ff] text-[#1769e8]"><UserIcon /></span><span className="hidden sm:inline">Hồ sơ</span></Link></div></div>
       </header>
-      <main className="mx-auto min-w-0 max-w-[1560px] space-y-5 px-4 py-5 lg:px-6 lg:py-6 2xl:px-8"><section className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-5 md:flex-row md:items-end"><div><h1 className="text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">{description}</p></div><div className="hidden rounded-xl bg-blue-50 px-3 py-2 text-xs font-medium text-[#1769e8] md:block">Hệ thống vận hành BIHUBA</div></section>{children}</main>
+      <main className="mx-auto min-w-0 max-w-[1560px] px-4 py-5 lg:px-6 lg:py-6 2xl:px-8">{children}</main>
       <footer className="border-t border-slate-200 bg-white px-4 py-5 text-center text-xs text-slate-500 lg:px-8">Copyright @2026 Theme BIHUBA B2B Admin Dashboard</footer>
     </div>
   </div>;
+}
+
+export function AdminShell({ title, description, children }: { title: string; description: string; children: ReactNode }) {
+  return <div className="space-y-5"><section className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-5 md:flex-row md:items-end"><div><h1 className="text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">{description}</p></div><div className="hidden rounded-xl bg-blue-50 px-3 py-2 text-xs font-medium text-[#1769e8] md:block">Hệ thống vận hành BIHUBA</div></section>{children}</div>;
 }

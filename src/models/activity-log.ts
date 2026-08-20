@@ -16,4 +16,8 @@ const ActivityLogSchema = new Schema(
   { timestamps: true }
 );
 
+ActivityLogSchema.index({ createdAt: -1 });
+ActivityLogSchema.index({ actorId: 1, createdAt: -1 });
+ActivityLogSchema.index({ targetType: 1, createdAt: -1 });
+
 export const ActivityLogModel = models.ActivityLog || model("ActivityLog", ActivityLogSchema);

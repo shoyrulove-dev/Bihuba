@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AiAssistantSettings,
   FeatureBannerItem,
@@ -73,6 +73,7 @@ type CollectionManagerProps = {
   closeHref?: string;
   panelMaxWidthClass?: string;
   defaultSectionsOpen?: boolean;
+  serverPagination?: { page: number; pageSize: number; totalItems: number; query?: string; filter?: string };
 };
 
 type StatItem = { label: string; value: string };
@@ -1618,6 +1619,7 @@ export function CollectionManager({
   closeHref,
   panelMaxWidthClass = "max-w-4xl",
   defaultSectionsOpen = true,
+  serverPagination,
 }: CollectionManagerProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -1639,9 +1641,9 @@ export function CollectionManager({
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState("");
-  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState(serverPagination?.query || "");
+  const [activeFilter, setActiveFilter] = useState(serverPagination?.filter || "");
+  const [page, setPage] = useState(serverPagination?.page || 1);
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const [panelMode, setPanelMode] = useState<"closed" | "new" | "edit">(
     singleton && initialMode === "edit" ? "edit" : initialEditId ? "edit" : initialMode === "new" ? "new" : "closed"
@@ -1650,7 +1652,7 @@ export function CollectionManager({
   const editId = activeEditId;
   const isPanelOpen = singleton ? panelMode === "edit" : panelMode === "new" || panelMode === "edit";
   const returnPath = closeHref || pathname;
-  const pageSize = 9;
+  const pageSize = serverPagination ? Math.max(items.length, 1) : 9;
   const isComposeForm = fields.some((field) => field.type === "richtext");
 
   const filteredItems = useMemo(() => {
@@ -1675,12 +1677,9 @@ export function CollectionManager({
     });
   }, [activeFilter, filterField, items, search]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
-  const pagedItems = filteredItems.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const totalPages = serverPagination ? Math.max(1, Math.ceil(serverPagination.totalItems / serverPagination.pageSize)) : Math.max(1, Math.ceil(filteredItems.length / pageSize));
+  const currentPage = serverPagination ? Math.min(serverPagination.page, totalPages) : Math.min(page, totalPages);
+  const pagedItems = serverPagination ? filteredItems : filteredItems.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const fieldSections = useMemo<FieldSection[]>(() => {
     const sections = new Map<string, FieldConfig[]>();
     fields.forEach((field) => {
@@ -1701,6 +1700,23 @@ export function CollectionManager({
     if (typeof window === "undefined") return;
     window.history.replaceState(null, "", url);
   }
+
+  const buildServerUrl = useCallback((nextPage: number, nextQuery = search.trim(), nextFilter = activeFilter) => {
+    const params = new URLSearchParams();
+    if (nextPage > 1) params.set("page", String(nextPage));
+    if (nextQuery) params.set("q", nextQuery);
+    if (nextFilter) params.set("filter", nextFilter);
+    const value = params.toString();
+    return value ? `${pathname}?${value}` : pathname;
+  }, [activeFilter, pathname, search]);
+
+  useEffect(() => {
+    if (!serverPagination) return;
+    const nextQuery = search.trim();
+    if (nextQuery === (serverPagination.query || "") && activeFilter === (serverPagination.filter || "")) return;
+    const timer = window.setTimeout(() => router.replace(buildServerUrl(1, nextQuery, activeFilter), { scroll: false }), 350);
+    return () => window.clearTimeout(timer);
+  }, [activeFilter, buildServerUrl, router, search, serverPagination]);
 
   useEffect(() => {
     if (singleton && hideSingletonEditButton && closeHref && !isPanelOpen) {
@@ -1748,6 +1764,10 @@ export function CollectionManager({
   }, [baseState, closeHref, editId, fields, hideSingletonEditButton, isPanelOpen, items, router, singleton]);
 
   async function refresh() {
+    if (serverPagination) {
+      router.refresh();
+      return;
+    }
     const response = await fetch(`/api/admin/${collection}`, { cache: "no-store" });
     const payload = await response.json();
     setItems(payload.items ?? []);
@@ -1944,7 +1964,7 @@ export function CollectionManager({
                     type="button"
                     onClick={() => {
                       setActiveFilter("");
-                      setPage(1);
+                      if (!serverPagination) setPage(1);
                     }}
                     className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition ${
                       activeFilter
@@ -1958,9 +1978,9 @@ export function CollectionManager({
                     <button
                       key={option.value}
                       type="button"
-                      onClick={() => {
-                        setActiveFilter(option.value);
-                        setPage(1);
+                    onClick={() => {
+                      setActiveFilter(option.value);
+                      if (!serverPagination) setPage(1);
                       }}
                       className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition ${
                         activeFilter === option.value
@@ -1978,7 +1998,7 @@ export function CollectionManager({
                 value={search}
                 onChange={(event) => {
                   setSearch(event.target.value);
-                  setPage(1);
+                  if (!serverPagination) setPage(1);
                 }}
                 placeholder="Tìm theo tên, slug, danh mục..."
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none"
@@ -2076,13 +2096,13 @@ export function CollectionManager({
         {!singleton && totalPages > 1 ? (
           <div className="mt-6 flex items-center justify-between gap-4">
             <p className="text-sm text-slate-500">
-              Trang {page} / {totalPages}
+              Trang {currentPage} / {totalPages}{serverPagination ? ` · ${serverPagination.totalItems.toLocaleString("vi-VN")} hồ sơ` : ""}
             </p>
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 disabled={currentPage <= 1}
-                onClick={() => setPage((current) => Math.max(1, current - 1))}
+                onClick={() => serverPagination ? router.push(buildServerUrl(Math.max(1, currentPage - 1))) : setPage((current) => Math.max(1, current - 1))}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-blue-300 hover:text-[#1769e8] disabled:opacity-40"
                 title="Trang trước"
                 aria-label="Trang trước"
@@ -2092,7 +2112,7 @@ export function CollectionManager({
               <button
                 type="button"
                 disabled={currentPage >= totalPages}
-                onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                onClick={() => serverPagination ? router.push(buildServerUrl(Math.min(totalPages, currentPage + 1))) : setPage((current) => Math.min(totalPages, current + 1))}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-blue-300 hover:text-[#1769e8] disabled:opacity-40"
                 title="Trang sau"
                 aria-label="Trang sau"

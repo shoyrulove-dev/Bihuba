@@ -22,4 +22,7 @@ const RfqSchema = new Schema(
   { timestamps: true }
 );
 
+RfqSchema.index({ status: 1, createdAt: -1 });
+RfqSchema.index({ requester: 1, createdAt: -1 });
+
 export const RfqModel = models.Rfq || model("Rfq", RfqSchema);

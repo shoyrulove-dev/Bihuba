@@ -1,12 +1,13 @@
 import { AdminShell } from "@/components/admin/admin-shell";
 import { CollectionManager } from "@/components/admin/collection-manager";
 import { requireAdminPage } from "@/lib/admin-auth";
-import { getMembers } from "@/lib/content";
+import { getAdminMembersPage } from "@/lib/content";
 
-export default async function AdminMembersPage() {
+export default async function AdminMembersPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string; filter?: string }> }) {
   await requireAdminPage("/admin/members");
-
-  const members = await getMembers();
+  const params = await searchParams;
+  const page = Math.max(Number(params.page) || 1, 1);
+  const result = await getAdminMembersPage({ page, query: params.q, memberType: params.filter });
 
   return (
     <AdminShell
@@ -14,10 +15,12 @@ export default async function AdminMembersPage() {
       description="Quản lý hồ sơ hội viên doanh nghiệp, cá nhân, hội và câu lạc bộ thành viên."
     >
       <CollectionManager
+        key={`members-${result.page}-${params.q || ""}-${params.filter || ""}`}
         collection="members"
         title="Danh sách hội viên"
         description="Danh sách hồ sơ hội viên đang hiển thị ngoài website."
-        initialItems={members as unknown as Record<string, unknown>[]}
+        initialItems={result.items as unknown as Record<string, unknown>[]}
+        serverPagination={{ page: result.page, pageSize: result.pageSize, totalItems: result.totalItems, query: params.q || "", filter: params.filter || "" }}
         fields={[
           { name: "name", label: "Tên hội viên" },
           { name: "slug", label: "Slug" },

@@ -25,4 +25,8 @@ const MemberSchema = new Schema(
   { timestamps: true }
 );
 
+MemberSchema.index({ createdAt: -1 });
+MemberSchema.index({ memberType: 1, createdAt: -1 });
+MemberSchema.index({ name: "text", industry: "text", email: "text" });
+
 export const MemberModel = models.Member || model("Member", MemberSchema);
