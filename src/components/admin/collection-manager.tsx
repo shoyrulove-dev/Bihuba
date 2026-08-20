@@ -1896,12 +1896,12 @@ export function CollectionManager({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.045)] sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 className="text-2xl font-semibold">{title}</h2>
             {description ? (
-              <p className="mt-2 text-sm leading-7 text-slate-300">{description}</p>
+              <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
             ) : null}
           </div>
           {singleton ? (
@@ -1945,8 +1945,8 @@ export function CollectionManager({
                     }}
                     className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition ${
                       activeFilter
-                        ? "border border-white/10 bg-slate-950/35 text-slate-300 hover:bg-white/10"
-                        : "bg-cyan-400 text-slate-950"
+                        ? "border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50"
+                        : "bg-[#1769e8] text-white"
                     }`}
                   >
                     Tất cả
@@ -1961,8 +1961,8 @@ export function CollectionManager({
                       }}
                       className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition ${
                         activeFilter === option.value
-                          ? "bg-cyan-400 text-slate-950"
-                          : "border border-white/10 bg-slate-950/35 text-slate-300 hover:bg-white/10"
+                          ? "bg-[#1769e8] text-white"
+                          : "border border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50"
                       }`}
                     >
                       {option.label}
@@ -1978,11 +1978,11 @@ export function CollectionManager({
                   setPage(1);
                 }}
                 placeholder="Tìm theo tên, slug, danh mục..."
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3 text-white placeholder:text-slate-400"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-blue-400 focus:outline-none"
               />
             </div>
           ) : (
-            <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/35 px-5 py-4 text-sm text-slate-300">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-500">
               {String((items[0] as Record<string, unknown> | undefined)?.siteName ?? title)}
             </div>
           )}
@@ -2009,7 +2009,7 @@ export function CollectionManager({
             return (
               <article
                 key={String(record._id ?? headline)}
-                className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-slate-950/35 px-4 py-3"
+                className="overflow-hidden rounded-xl border border-slate-200 bg-white px-4 py-3 transition hover:border-blue-200 hover:bg-blue-50/30"
               >
                 <div className="grid min-w-0 grid-cols-[44px_minmax(0,1fr)_auto] items-center gap-3">
                   {previewImage ? (
@@ -2020,26 +2020,26 @@ export function CollectionManager({
                       className="h-11 w-11 shrink-0 rounded-xl object-cover"
                     />
                   ) : (
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/8 text-xs font-semibold uppercase text-cyan-300">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-xs font-semibold uppercase text-[#1769e8]">
                       {headline.slice(0, 1)}
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-sm font-semibold text-white">{headline}</h3>
+                    <h3 className="truncate text-sm font-semibold text-slate-900">{headline}</h3>
                     <div className="mt-1 flex min-w-0 items-center gap-2">
                       {subhead ? (
-                        <p className="truncate text-xs text-slate-400">
+                        <p className="truncate text-xs text-slate-500">
                           {subhead}
                         </p>
                       ) : null}
                       {record.status ? <StatusIcon status={record.status} /> : null}
                       {record.role ? (
-                        <span className="shrink-0 rounded-full bg-white/8 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-cyan-200">
+                        <span className="shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1769e8]">
                           {getRoleLabel(record.role)}
                         </span>
                       ) : null}
                       {permissionLabels ? (
-                        <p className="truncate text-xs text-slate-500">{permissionLabels}</p>
+                        <p className="truncate text-xs text-slate-400">{permissionLabels}</p>
                       ) : null}
                     </div>
                   </div>
@@ -2072,7 +2072,7 @@ export function CollectionManager({
         </div>
         {!singleton && totalPages > 1 ? (
           <div className="mt-6 flex items-center justify-between gap-4">
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-slate-500">
               Trang {page} / {totalPages}
             </p>
             <div className="flex items-center gap-3">
@@ -2080,7 +2080,7 @@ export function CollectionManager({
                 type="button"
                 disabled={currentPage <= 1}
                 onClick={() => setPage((current) => Math.max(1, current - 1))}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-blue-300 hover:text-[#1769e8] disabled:opacity-40"
                 title="Trang trước"
                 aria-label="Trang trước"
               >
@@ -2090,7 +2090,7 @@ export function CollectionManager({
                 type="button"
                 disabled={currentPage >= totalPages}
                 onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white disabled:opacity-40"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-blue-300 hover:text-[#1769e8] disabled:opacity-40"
                 title="Trang sau"
                 aria-label="Trang sau"
               >
