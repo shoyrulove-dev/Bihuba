@@ -49,7 +49,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
           <button type="button" onClick={() => setIsMobileMenuOpen((value) => !value)} aria-label="Mở menu điều hướng" aria-expanded={isMobileMenuOpen} className="absolute right-8 top-5 inline-flex h-7 w-7 items-center justify-center rounded-md border border-cyan-200/20 text-sm text-cyan-100 transition hover:bg-white/10 lg:hidden"><span aria-hidden="true">☰</span></button>
 
           <nav className="hidden min-w-0 flex-1 overflow-visible lg:flex lg:justify-end">
-            <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2.5 pr-4">{navigationItems}<Link href="/dang-ky-hoi-vien" className="shrink-0 whitespace-nowrap rounded-full border border-cyan-200/35 bg-cyan-300 px-3 py-2 text-[11px] font-black text-slate-950 shadow-[0_10px_22px_rgba(86,214,255,0.24)] transition hover:bg-cyan-200 xl:text-[12px]">Đăng ký hội viên ngay</Link><GoogleTranslate /></div>
+            <div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2.5">{navigationItems}<Link href="/dang-ky-hoi-vien" className="shrink-0 whitespace-nowrap rounded-full border border-cyan-200/35 bg-cyan-300 px-3 py-2 text-[11px] font-black text-slate-950 shadow-[0_10px_22px_rgba(86,214,255,0.24)] transition hover:bg-cyan-200 xl:text-[12px]">Đăng ký hội viên ngay</Link><div className="flex shrink-0 items-center gap-2"><GoogleTranslate /><button type="button" onClick={() => setIsOpen(false)} aria-label="Thu gọn header" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-cyan-200/30 bg-white/5 text-xl leading-none text-cyan-100 shadow-[0_8px_20px_rgba(2,12,27,0.25)] transition hover:border-cyan-200/60 hover:bg-white/12 hover:text-white">⌃</button></div></div>
           </nav>
 
           <nav className={`${isMobileMenuOpen ? "grid" : "hidden"} grid-cols-2 gap-2 rounded-xl border border-white/10 bg-[#0b2543] p-3 shadow-xl lg:hidden`} aria-label="Điều hướng di động">
@@ -60,7 +60,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
         </div>
       ) : <div className="h-5" />}
 
-      <button type="button" onClick={() => setIsOpen((value) => !value)} aria-label={isOpen ? "Thu gọn header" : "Mở header"} aria-expanded={isOpen} className="absolute right-1 top-0 z-10 h-3 w-3 p-0 text-[11px] leading-[11px] text-cyan-100/85 transition hover:text-white">{isOpen ? "^" : "⌄"}</button>
+      {isOpen ? <button type="button" onClick={() => setIsOpen(false)} aria-label="Thu gọn header" className="absolute right-2 top-2 z-10 inline-flex h-7 w-7 items-center justify-center rounded-md border border-cyan-200/20 text-lg leading-none text-cyan-100 transition hover:bg-white/10 lg:hidden">⌃</button> : <button type="button" onClick={() => setIsOpen(true)} aria-label="Mở header" className="absolute right-2 top-0 z-10 inline-flex h-5 w-7 items-center justify-center text-base leading-none text-cyan-100/90 transition hover:text-white">⌄</button>}
     </header>
   );
 }
