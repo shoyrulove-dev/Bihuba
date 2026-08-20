@@ -290,6 +290,40 @@ export async function getUsers(): Promise<UserShape[]> {
   }));
 }
 
+export async function getAdminUsersPage(options: { page?: number; pageSize?: number; role?: string; query?: string } = {}) {
+  const pageSize = Math.min(Math.max(Number(options.pageSize) || 25, 20), 30);
+  const page = Math.max(Number(options.page) || 1, 1);
+  const role = String(options.role || "").trim();
+  const query = String(options.query || "").trim();
+  const connection = await connectToDatabase();
+
+  if (!process.env.MONGODB_URI || !connection) {
+    return { items: [] as UserShape[], totalItems: 0, page, pageSize };
+  }
+
+  await ensureAdminUser();
+  const filter: Record<string, unknown> = {};
+  if (role) filter.role = role;
+  if (query) {
+    filter.$or = [
+      { name: { $regex: query, $options: "i" } },
+      { username: { $regex: query, $options: "i" } },
+      { email: { $regex: query, $options: "i" } },
+      { phone: { $regex: query, $options: "i" } },
+    ];
+  }
+  const [users, totalItems] = await Promise.all([
+    UserModel.find(filter).sort({ createdAt: -1, userId: 1 }).skip((page - 1) * pageSize).limit(pageSize).lean(),
+    UserModel.countDocuments(filter),
+  ]);
+  const items = serialize(users).map((user) => {
+    const { passwordHash, ...safeUser } = user as Record<string, unknown>;
+    void passwordHash;
+    return safeUser as unknown as UserShape;
+  });
+  return { items: repairDeepText(items), totalItems, page, pageSize };
+}
+
 export async function getDownloadBySlug(
   slug: string
 ): Promise<DownloadShape | null> {
