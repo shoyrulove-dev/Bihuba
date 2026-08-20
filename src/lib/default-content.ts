@@ -220,7 +220,7 @@ export const defaultPosts: PostShape[] = [
     excerpt:
       "Bài viết chuyên đề dành cho cộng đồng doanh nghiệp, giúp khu vực tin tức luôn có chiều sâu và tính cập nhật.",
     content:
-      "Chuyển đổi số đang tác động trực tiếp đến vận hành, bán hàng và quản trị doanh nghiệp. BIHUBA có thể duy trì nhóm bài chuyên đề như thế này để chia sẻ kiến thức và kết nối hội viên.",
+      "Chuyển đổi số đang tác động trực tiếp đến vận hành, bán hàng và quản trị doanh nghiệp. BIHUBA chia sẻ các góc nhìn thực tiễn để hội viên tham khảo và kết nối.",
     featuredImage:
       "https://huba.vn/wp-content/uploads/2026/07/featured-image-1.png",
     publishedAt: "2026-07-14",
@@ -234,7 +234,7 @@ export const defaultPosts: PostShape[] = [
     excerpt:
       "Sự kiện kết nối và trưng bày sản phẩm phù hợp để giới thiệu hình ảnh hoạt động của hội trên trang chủ.",
     content:
-      "Chuyên mục này có thể dùng để đăng tin về các buổi gặp gỡ doanh nghiệp, giới thiệu sản phẩm, tọa đàm chuyên đề và các phiên kết nối giao thương tại địa phương.",
+      "Chuyên mục cập nhật các buổi gặp gỡ doanh nghiệp, giới thiệu sản phẩm, tọa đàm chuyên đề và hoạt động kết nối giao thương tại địa phương.",
     featuredImage:
       "https://huba.vn/wp-content/uploads/2026/07/Trien-lam-tai-chuong-trinh-cafe-huba-scaled.webp",
     publishedAt: "2026-07-10",
@@ -262,7 +262,7 @@ export const defaultPosts: PostShape[] = [
     excerpt:
       "Nội dung dành cho khu vực kết nối giao thương, dùng để giới thiệu nhu cầu hợp tác và cơ hội mở rộng mạng lưới doanh nghiệp.",
     content:
-      "BIHUBA có thể phát triển chuyên mục này thành nơi đăng nhu cầu hợp tác, giới thiệu sản phẩm, tìm kiếm nhà cung cấp và thông tin kết nối theo từng lĩnh vực.",
+      "Chuyên mục là nơi chia sẻ nhu cầu hợp tác, giới thiệu sản phẩm, tìm kiếm nhà cung cấp và thông tin kết nối theo từng lĩnh vực.",
     featuredImage:
       "https://huba.vn/wp-content/uploads/2026/07/Ra-mat-hoi-vien-tai-chuong-trinh-cafe-doanh-nhan-huba-scaled.webp",
     publishedAt: "2026-07-09",
@@ -342,7 +342,7 @@ export const defaultPosts: PostShape[] = [
     excerpt:
       "Bộ bài tổng hợp các thay đổi đáng chú ý và gợi ý chuẩn bị nguồn lực cho giai đoạn mới.",
     content:
-      "Trang tin BIHUBA có thể sử dụng mô-típ bài phân tích ngắn như thế này để cập nhật xu hướng, dự báo thay đổi chính sách và giúp hội viên ra quyết định tốt hơn.",
+      "Trang tin BIHUBA cập nhật xu hướng và những thay đổi chính sách đáng chú ý để hội viên có thêm thông tin tham khảo.",
     featuredImage: "https://huba.vn/wp-content/uploads/2026/07/Ra-mat-hoi-vien-tai-chuong-trinh-cafe-doanh-nhan-huba-scaled.webp",
     publishedAt: "2026-07-09",
     isFeatured: false,
@@ -381,7 +381,7 @@ export const defaultPosts: PostShape[] = [
     excerpt:
       "Bản tin mở rộng cơ hội đầu tư, hợp tác vùng và kết nối thị trường cho cộng đồng doanh nghiệp.",
     content:
-      "BIHUBA có thể dùng các bài dạng cơ hội đầu tư, kết nối tỉnh thành và xúc tiến địa phương để phục vụ nhóm hội viên đang tìm hướng mở rộng kinh doanh.",
+      "Thông tin về cơ hội đầu tư, kết nối tỉnh thành và xúc tiến địa phương hỗ trợ hội viên đang tìm hướng mở rộng kinh doanh.",
     featuredImage: "https://huba.vn/wp-content/uploads/2026/07/soket-3.webp",
     publishedAt: "2026-07-06",
     isFeatured: false,
@@ -405,9 +405,9 @@ export const defaultPosts: PostShape[] = [
     type: "event",
     category: "Sự kiện",
     excerpt:
-      "Dạng bài tổng kết - triển khai nhiệm vụ phù hợp để BIHUBA tái sử dụng cho các kỳ họp, hội nghị và báo cáo thường niên.",
+      "Thông tin tổng kết hoạt động, kỳ họp, hội nghị và kế hoạch thường niên của Hội.",
     content:
-      "Nhóm nội dung tổng kết hoạt động, họp ban chấp hành và triển khai nhiệm vụ có thể được tổ chức rõ ràng trong module sự kiện để thuận tiện lưu trữ và tra cứu.",
+      "Nội dung tổng kết hoạt động, họp ban chấp hành và triển khai nhiệm vụ được cập nhật để hội viên thuận tiện theo dõi.",
     featuredImage: "https://huba.vn/wp-content/uploads/2026/07/soket-3.webp",
     publishedAt: "2026-07-04",
     isFeatured: true,
