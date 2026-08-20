@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentMemberUser } from "@/lib/auth";
 import { getEkycByUserId } from "@/lib/ekyc";
+import { MemberModel } from "@/models/member";
+import { MemberDashboardClient } from "@/components/site/member-dashboard-client";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +12,9 @@ export default async function MemberDashboardPage() {
   if (!session) redirect("/hoi-vien/dang-nhap");
   const application = await getEkycByUserId(session.userId);
   if (!application) redirect("/dang-ky-hoi-vien");
+  const member = application.memberId ? await MemberModel.findById(application.memberId).lean() : null;
   const approved = application.status === "approved";
+  const profile = member ? JSON.parse(JSON.stringify(member)) as Record<string, string> : null;
 
   return (
     <div className="min-h-[70vh] bg-[#f7f9fc] py-10 sm:py-14">
@@ -25,10 +29,11 @@ export default async function MemberDashboardPage() {
         </section>
 
         <section className="mt-7 grid gap-5 md:grid-cols-3">
-          <article className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">Hồ sơ doanh nghiệp</p><h2 className="mt-3 text-xl font-semibold text-slate-950">{application.companyName}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{application.industry} · MST {application.taxCode}</p><Link href="/hoi-vien" className="mt-5 inline-flex text-sm font-semibold text-[#0E4FAF]">Xem danh bạ →</Link></article>
-          <article className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">Quyền hội viên</p><h2 className="mt-3 text-xl font-semibold text-slate-950">Khu vực tách biệt</h2><p className="mt-2 text-sm leading-6 text-slate-600">Chỉ xem trạng thái E-KYC, thông tin hồ sơ và kênh hỗ trợ. Không truy cập hoặc chỉnh sửa dữ liệu quản trị.</p></article>
-          <article className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">Hỗ trợ vận hành</p><h2 className="mt-3 text-xl font-semibold text-slate-950">Cần cập nhật thông tin?</h2><p className="mt-2 text-sm leading-6 text-slate-600">Liên hệ văn phòng BIHUBA để cập nhật hồ sơ pháp lý, logo hoặc giấy tờ xác thực.</p><Link href="/lien-he" className="mt-5 inline-flex text-sm font-semibold text-[#0E4FAF]">Liên hệ BIHUBA →</Link></article>
+          <article className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">Hồ sơ doanh nghiệp</p><h2 className="mt-3 text-xl font-semibold text-slate-950">{member?.name || application.companyName}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{member?.industry || application.industry} · MST {application.taxCode}</p><Link href="/hoi-vien" className="mt-5 inline-flex text-sm font-semibold text-[#0E4FAF]">Xem danh bạ →</Link></article>
+          <article className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">Quyền hội viên</p><h2 className="mt-3 text-xl font-semibold text-slate-950">Tự quản lý hồ sơ</h2><p className="mt-2 text-sm leading-6 text-slate-600">Cập nhật thông tin giới thiệu, logo và hình ảnh doanh nghiệp; đổi mật khẩu riêng trong khu vực hội viên.</p></article>
+          <article className="rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-sm"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-cyan-700">Xác minh pháp lý</p><h2 className="mt-3 text-xl font-semibold text-slate-950">Cần thay đổi giấy phép?</h2><p className="mt-2 text-sm leading-6 text-slate-600">Giấy phép kinh doanh và mã số thuế cần được BIHUBA xác minh trước khi cập nhật.</p><Link href="/lien-he" className="mt-5 inline-flex text-sm font-semibold text-[#0E4FAF]">Liên hệ BIHUBA →</Link></article>
         </section>
+        {profile ? <MemberDashboardClient profile={profile} /> : null}
       </div>
     </div>
   );

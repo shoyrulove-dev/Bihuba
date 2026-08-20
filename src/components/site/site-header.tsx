@@ -27,7 +27,7 @@ function splitSiteName(siteName?: string) {
 }
 
 export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const nameLines = splitSiteName(settings.siteName);
   const configuredLogo = settings.logoUrl || "";
   const headerLogo =
