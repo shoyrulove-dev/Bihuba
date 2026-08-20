@@ -19,49 +19,49 @@ export default async function AdminProfilePage() {
       <form
         action="/api/auth/profile"
         method="post"
-        className="grid gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-6 md:grid-cols-2"
+        className="grid gap-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.045)] md:grid-cols-2 sm:p-6"
       >
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-white">Tên hiển thị</span>
+          <span className="mb-2 block text-sm font-semibold text-slate-700">Tên hiển thị</span>
           <input
             name="name"
             defaultValue={name}
-            className="w-full rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3 text-white"
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-50"
           />
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-white">Tài khoản</span>
+          <span className="mb-2 block text-sm font-semibold text-slate-700">Tài khoản</span>
           <input
             value={username}
             readOnly
-            className="w-full rounded-2xl border border-white/10 bg-slate-900/40 px-4 py-3 text-slate-400"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-500"
           />
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-white">Nhóm quyền</span>
+          <span className="mb-2 block text-sm font-semibold text-slate-700">Nhóm quyền</span>
           <input
             value={roleLabel}
             readOnly
-            className="w-full rounded-2xl border border-white/10 bg-slate-900/40 px-4 py-3 text-slate-400"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-500"
           />
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-white">Mật khẩu mới</span>
+          <span className="mb-2 block text-sm font-semibold text-slate-700">Mật khẩu mới</span>
           <input
             name="password"
             type="password"
             placeholder="Để trống nếu không đổi"
-            className="w-full rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3 text-white"
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-50"
           />
         </label>
 
         <div className="md:col-span-2">
           <button
             type="submit"
-            className="rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950"
+            className="rounded-xl bg-[#1769e8] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_18px_rgba(23,105,232,0.22)] transition hover:bg-[#0f55c6]"
           >
             Lưu thay đổi
           </button>
