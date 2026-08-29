@@ -31,6 +31,11 @@ export async function connectToDatabase() {
     cache.promise = mongoose
       .connect(MONGODB_URI, {
         dbName: process.env.MONGODB_DB ?? "bihuba",
+        maxPoolSize: 10,
+        minPoolSize: 1,
+        maxIdleTimeMS: 60000,
+        serverSelectionTimeoutMS: 5000,
+        socketTimeoutMS: 20000,
       })
       .catch((error) => {
         console.warn("MongoDB connection failed, using fallback content.", error);
