@@ -34,7 +34,7 @@ export const defaultSettings: SiteSettingsShape = {
   seoTitle: "BIHUBA | Hội Doanh nghiệp Xã Bình Hưng",
   seoDescription: "Cổng thông tin và kết nối giao thương dành cho cộng đồng doanh nghiệp Xã Bình Hưng, Thành phố Hồ Chí Minh.",
   seoKeywords: "BIHUBA, Hội Doanh nghiệp Xã Bình Hưng, doanh nghiệp Bình Hưng, kết nối giao thương B2B",
-  logoUrl: "/bihuba-logo-glow.png",
+  logoUrl: "/bihuba-logo-glow.webp",
   wordmarkUrl: "/bihuba-wordmark.svg",
   slogan: "Đoàn kết - Đổi mới - Hội nhập - Phát triển",
   heroTitle: "Cộng đồng doanh nghiệp Bình Hưng kết nối nguồn lực và mở rộng cơ hội phát triển",
@@ -69,7 +69,7 @@ export const defaultSettings: SiteSettingsShape = {
     email: "vanphong@bihuba.vn",
     phone: "0900 000 000",
     website: "https://bihuba.vercel.app",
-    officeImageUrl: "/contact-office-demo.png",
+    officeImageUrl: "/contact-office-demo.webp",
   },
   floatingActions: {
     zaloUrl: "https://zalo.me/0900000000",
@@ -509,7 +509,7 @@ export const defaultMembers: MemberShape[] = [
     email: "info@bihuba.vn",
     website: "https://bihuba.vercel.app",
     industry: "Hiệp hội - Tổ chức xã hội",
-    coverImage: "/member-banners/manufacturing-trade.png",
+    coverImage: "/member-banners/manufacturing-trade.webp",
     introImage: "",
     companyTagline: "Kết nối cộng đồng doanh nghiệp và mở rộng cơ hội hợp tác.",
     products: [
@@ -536,7 +536,7 @@ export const defaultMembers: MemberShape[] = [
     email: "contact@thuongmaibinhhung.vn",
     website: "https://example.vn",
     industry: "Thương mại - Dịch vụ",
-    coverImage: "/member-banners/finance-partner.png",
+    coverImage: "/member-banners/finance-partner.webp",
     introImage: "",
     companyTagline: "Nhà cung cấp hàng hóa và dịch vụ thương mại cho khu vực Bình Hưng.",
     products: [
@@ -563,7 +563,7 @@ export const defaultMembers: MemberShape[] = [
     email: "hello@namsaigontech.vn",
     website: "https://example.org",
     industry: "Kỹ thuật - Hạ tầng",
-    coverImage: "/member-banners/presmile-dental-center.png",
+    coverImage: "/member-banners/presmile-dental-center.webp",
     introImage: "",
     companyTagline: "Tư vấn, thi công và bảo trì các hạng mục kỹ thuật cho doanh nghiệp.",
     products: [

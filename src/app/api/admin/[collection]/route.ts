@@ -11,6 +11,7 @@ import { canAccessCollection, canApprovePosts, MANAGER_PERMISSION_OPTIONS } from
 import { slugify } from "@/lib/slug";
 import { repairDeepText } from "@/lib/text";
 import { recordActivity } from "@/lib/activity-log";
+import { invalidatePublicContent } from "@/lib/public-content";
 
 type Context = {
   params: Promise<{
@@ -226,6 +227,7 @@ export async function POST(request: NextRequest, context: Context) {
         new: true,
         runValidators: true,
       }).lean();
+      invalidatePublicContent();
       return NextResponse.json({
         message: "Đã cập nhật cấu hình website.",
         item: serializeClientItem(updated, key),
@@ -248,6 +250,7 @@ export async function POST(request: NextRequest, context: Context) {
   }
 
   const created = await Model.create(payload);
+  invalidatePublicContent();
   await recordActivity({ action: "create", actorId: session.userId, actorName: session.name, actorRole: session.role, targetType: key, targetId: String(created._id), description: `Tạo mới dữ liệu trong ${key}` });
   return NextResponse.json({
     message: key === "posts" && session.role !== "admin" ? "Đã gửi bài viết chờ admin duyệt." : "Đã tạo mới thành công.",

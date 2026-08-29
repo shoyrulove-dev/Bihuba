@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDownloadBySlug } from "@/lib/content";
+import { getPublicDownloadBySlug as getDownloadBySlug } from "@/lib/public-content";
 import { getDownloadFormat, getDownloadTypeLabel, isPdfDownload } from "@/lib/downloads";
 
 export default async function DownloadDetailPage({

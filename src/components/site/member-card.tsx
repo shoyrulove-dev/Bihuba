@@ -3,11 +3,11 @@ import { MemberShape } from "@/types/cms";
 
 function getMemberFallbackBanner(member: MemberShape) {
   const text = `${member.name} ${member.industry} ${member.groupType}`.toLowerCase();
-  if (text.includes("tài") || text.includes("bank") || text.includes("finance")) return "/member-banners/finance-partner.png";
+  if (text.includes("tài") || text.includes("bank") || text.includes("finance")) return "/member-banners/finance-partner.webp";
   if (text.includes("nha") || text.includes("dental") || text.includes("presmile")) {
-    return "/member-banners/presmile-dental-center.png";
+    return "/member-banners/presmile-dental-center.webp";
   }
-  return "/member-banners/manufacturing-trade.png";
+  return "/member-banners/manufacturing-trade.webp";
 }
 
 export function MemberCard({

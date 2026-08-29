@@ -1,8 +1,6 @@
 import { DownloadBrowser } from "@/components/site/download-browser";
 import { SectionHeading } from "@/components/site/section-heading";
-import { getDownloadCategories, getDownloads } from "@/lib/content";
-
-export const dynamic = "force-dynamic";
+import { getPublicDownloadCategories as getDownloadCategories, getPublicDownloads as getDownloads } from "@/lib/public-content";
 
 export default async function DownloadsPage() {
   const [categories, downloads] = await Promise.all([getDownloadCategories(), getDownloads()]);

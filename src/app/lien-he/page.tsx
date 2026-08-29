@@ -1,7 +1,5 @@
 import { SectionHeading } from "@/components/site/section-heading";
-import { getSiteSettings } from "@/lib/content";
-
-export const dynamic = "force-dynamic";
+import { getPublicSiteSettings as getSiteSettings } from "@/lib/public-content";
 
 function getMapSrc(address?: string) {
   return `https://www.google.com/maps?q=${encodeURIComponent(address || "Binh Hung, Ho Chi Minh City")}&output=embed`;

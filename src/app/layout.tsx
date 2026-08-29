@@ -6,21 +6,25 @@ import { FloatingContactButtons } from "@/components/site/floating-contact-butto
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { ScrollReveal } from "@/components/site/scroll-reveal";
-import { getSiteSettings } from "@/lib/content";
+import { getPublicSiteSettings as getSiteSettings } from "@/lib/public-content";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bihuba.vercel.app";
+
+export const preferredRegion = ["sin1"];
 
 const beVietnamPro = Be_Vietnam_Pro({
   variable: "--font-be-vietnam-pro",
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
+  preload: false,
 });
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
+  preload: false,
 });
 
 const fontFamilies = {
@@ -58,9 +62,9 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: settings.shortName || "BIHUBA",
     keywords: settings.seoKeywords?.split(",").map((item) => item.trim()).filter(Boolean),
     icons: {
-      icon: [{ url: "/icon-options/05-digital-city.png?v=2", type: "image/png", sizes: "512x512" }],
-      shortcut: ["/icon-options/05-digital-city.png?v=2"],
-      apple: [{ url: "/icon-options/05-digital-city.png?v=2", sizes: "512x512" }],
+      icon: [{ url: "/favicon-64.png?v=3", type: "image/png", sizes: "64x64" }],
+      shortcut: ["/favicon-64.png?v=3"],
+      apple: [{ url: "/apple-touch-icon.png?v=3", sizes: "180x180" }],
     },
     alternates: {
       canonical: "/",

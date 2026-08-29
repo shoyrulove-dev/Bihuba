@@ -1,8 +1,6 @@
 import { DownloadCard } from "@/components/site/download-card";
 import { SectionHeading } from "@/components/site/section-heading";
-import { getDownloads } from "@/lib/content";
-
-export const dynamic = "force-dynamic";
+import { getPublicDownloads as getDownloads } from "@/lib/public-content";
 
 function isFormDownload(item: { category?: string; categorySlug?: string; documentType?: string }) {
   const values = [item.category, item.categorySlug, item.documentType].map((value) =>

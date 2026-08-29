@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPartnerBySlug } from "@/lib/content";
+import { getPublicPartnerBySlug as getPartnerBySlug } from "@/lib/public-content";
 
 export default async function PartnerDetailPage({
   params,

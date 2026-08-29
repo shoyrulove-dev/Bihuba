@@ -7,6 +7,7 @@ import { slugify } from "@/lib/slug";
 import { DownloadModel } from "@/models/download";
 import { repairDeepText } from "@/lib/text";
 import { recordActivity } from "@/lib/activity-log";
+import { invalidatePublicContent } from "@/lib/public-content";
 
 type Context = {
   params: Promise<{
@@ -201,6 +202,7 @@ export async function PUT(request: NextRequest, context: Context) {
     new: true,
     runValidators: true,
   }).lean();
+  invalidatePublicContent();
 
   await recordActivity({ action: "update", actorId: session.userId, actorName: session.name, actorRole: session.role, targetType: key, targetId: id, description: `Cập nhật dữ liệu trong ${key}` });
 
@@ -264,6 +266,7 @@ export async function DELETE(_: NextRequest, context: Context) {
   }
 
   await Model.findByIdAndDelete(id);
+  invalidatePublicContent();
   await recordActivity({ action: "delete", actorId: session.userId, actorName: session.name, actorRole: session.role, targetType: key, targetId: id, description: `Xóa dữ liệu trong ${key}` });
 
   return NextResponse.json({ message: "Đã xóa thành công." });

@@ -22,7 +22,7 @@ export function SiteHeader({ settings }: { settings: SiteSettingsShape }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const nameLines = splitSiteName(settings.siteName);
   const configuredLogo = settings.logoUrl || "";
-  const headerLogo = !configuredLogo || configuredLogo.includes("bihuba-mark.svg") || configuredLogo.includes("BIHUBA_Logo_Blue") || configuredLogo.includes("BIHUBA_Logo_Navy") ? "/bihuba-logo-glow.png" : configuredLogo;
+  const headerLogo = !configuredLogo || configuredLogo.includes("bihuba-mark.svg") || configuredLogo.includes("bihuba-logo-glow.png") || configuredLogo.includes("BIHUBA_Logo_Blue") || configuredLogo.includes("BIHUBA_Logo_Navy") ? "/bihuba-logo-glow.webp" : configuredLogo;
 
   const navigationItems = settings.nav.map((item) => (
     <Link key={item.href} href={item.href} onClick={() => setIsMobileMenuOpen(false)} className={`shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-center text-[11px] font-bold transition xl:text-[12px] ${item.href === "/lien-he" ? "bg-cyan-300 text-slate-950 shadow-[0_10px_22px_rgba(86,214,255,0.2)] hover:bg-cyan-200" : "border border-white/10 bg-white/6 text-slate-100 hover:border-cyan-300/35 hover:bg-white/12 hover:text-cyan-100"}`}>

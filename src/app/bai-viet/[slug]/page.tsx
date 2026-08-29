@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import sanitizeHtml from "sanitize-html";
-import { getPostBySlug } from "@/lib/content";
+import { getPublicPostBySlug as getPostBySlug } from "@/lib/public-content";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bihuba.vercel.app";
 

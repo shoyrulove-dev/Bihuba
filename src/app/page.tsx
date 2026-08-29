@@ -4,9 +4,7 @@ import { FeatureBannerCarousel } from "@/components/site/feature-banner-carousel
 import { MemberCard } from "@/components/site/member-card";
 import { PostCard } from "@/components/site/post-card";
 import { SectionHeading } from "@/components/site/section-heading";
-import { getDownloads, getMembers, getPosts, getSiteSettings } from "@/lib/content";
-
-export const dynamic = "force-dynamic";
+import { getPublicDownloads as getDownloads, getPublicMembers as getMembers, getPublicPosts as getPosts, getPublicSiteSettings as getSiteSettings } from "@/lib/public-content";
 
 const marketplaceSteps = [
   { number: "01", title: "Tìm đúng đối tác", body: "Tra cứu doanh nghiệp, ngành nghề, sản phẩm và năng lực cung ứng trong cộng đồng." },

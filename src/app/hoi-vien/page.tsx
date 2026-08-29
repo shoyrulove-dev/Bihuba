@@ -1,9 +1,7 @@
 import { MemberLogoMarquee } from "@/components/site/member-logo-marquee";
 import { MemberCard } from "@/components/site/member-card";
 import { SectionHeading } from "@/components/site/section-heading";
-import { getMembers } from "@/lib/content";
-
-export const dynamic = "force-dynamic";
+import { getPublicMembers as getMembers } from "@/lib/public-content";
 
 export default async function MembersPage() {
   const members = await getMembers();

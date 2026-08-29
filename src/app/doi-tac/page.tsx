@@ -1,8 +1,6 @@
 import { PartnerCard } from "@/components/site/partner-card";
 import { SectionHeading } from "@/components/site/section-heading";
-import { getPartners } from "@/lib/content";
-
-export const dynamic = "force-dynamic";
+import { getPublicPartners as getPartners } from "@/lib/public-content";
 
 export default async function PartnersPage() {
   const partners = await getPartners();
