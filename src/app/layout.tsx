@@ -5,6 +5,7 @@ import { AiAssistantWidget } from "@/components/site/ai-assistant-widget";
 import { FloatingContactButtons } from "@/components/site/floating-contact-buttons";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { ScrollReveal } from "@/components/site/scroll-reveal";
 import { getSiteSettings } from "@/lib/content";
 import "./globals.css";
 
@@ -155,7 +156,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
-        <main>{children}</main>
+        <main><ScrollReveal>{children}</ScrollReveal></main>
         {settings ? (
           <AiAssistantWidget
             settings={{

@@ -235,3 +235,18 @@ body > .skiptranslate,
 body {
   top: 0 !important;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-scroll-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition: opacity 0.5s ease var(--reveal-delay, 0ms), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  [data-scroll-reveal].is-scroll-revealed {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    will-change: auto;
+  }
+}
