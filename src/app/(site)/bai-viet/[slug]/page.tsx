@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Image from "next/image";
 import sanitizeHtml from "sanitize-html";
 import { getPublicPostBySlug as getPostBySlug } from "@/lib/public-content";
 
@@ -130,8 +131,7 @@ export default async function PostDetailPage({
       <p className="mt-3 text-sm text-slate-500">{displayDate}</p>
       {post.featuredImage ? (
         <div className="mt-8 flex max-h-[620px] min-h-[260px] items-center justify-center overflow-hidden rounded-[2rem] bg-slate-100 p-2 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={post.featuredImage} alt={post.title} className="max-h-[600px] w-full object-contain" />
+          <Image src={post.featuredImage} alt={post.title} width={1400} height={788} sizes="(max-width: 1280px) 100vw, 1280px" className="max-h-[600px] w-full object-contain" />
         </div>
       ) : null}
       <div

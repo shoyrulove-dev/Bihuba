@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Be_Vietnam_Pro, Noto_Sans } from "next/font/google";
-import { AiAssistantWidget } from "@/components/site/ai-assistant-widget";
-import { FloatingContactButtons } from "@/components/site/floating-contact-buttons";
+import { DeferredSiteWidgets } from "@/components/site/deferred-site-widgets";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { ScrollReveal } from "@/components/site/scroll-reveal";
@@ -129,15 +128,15 @@ export default async function RootLayout({
         />
         <main><ScrollReveal>{children}</ScrollReveal></main>
         {settings ? (
-          <AiAssistantWidget
-            settings={{
+          <DeferredSiteWidgets
+            aiSettings={{
               enabled: settings.aiAssistant.enabled,
               model: settings.aiAssistant.model,
               systemPrompt: "",
             }}
+            actions={settings.floatingActions}
           />
         ) : null}
-        {settings ? <FloatingContactButtons actions={settings.floatingActions} /> : null}
         {settings ? <SiteFooter settings={settings} /> : null}
       </body>
     </html>

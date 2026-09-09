@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FeatureBannerItem } from "@/types/cms";
 
 function ChevronLeftIcon() {
@@ -46,12 +47,19 @@ export function FeatureBannerCarousel({ items }: { items: FeatureBannerItem[] })
 
   return (
     <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-[#04162E] shadow-[0_28px_90px_rgba(2,12,27,0.2)]">
-      <div
-        className="relative min-h-[360px] bg-cover bg-center sm:min-h-[500px] lg:min-h-[600px]"
-        style={{
-          backgroundImage: `linear-gradient(180deg, rgba(2,9,24,0.12) 0%, rgba(2,9,24,0.08) 62%, rgba(2,9,24,0.34) 100%), url('${active.imageUrl}')`,
-        }}
-      >
+      <div className="relative min-h-[360px] sm:min-h-[500px] lg:min-h-[600px]">
+        <Image
+          key={active.imageUrl}
+          src={active.imageUrl}
+          alt=""
+          fill
+          priority={current === 0}
+          fetchPriority={current === 0 ? "high" : "auto"}
+          sizes="(max-width: 1648px) calc(100vw - 24px), 1600px"
+          quality={70}
+          className="object-cover object-center"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,9,24,0.12)_0%,rgba(2,9,24,0.08)_62%,rgba(2,9,24,0.34)_100%)]" />
         <div className="grid min-h-[360px] gap-8 px-6 py-8 sm:min-h-[500px] sm:px-10 sm:py-10 lg:min-h-[600px] lg:grid-cols-[1fr_auto] lg:items-end">
           <div />
 

@@ -5,6 +5,10 @@ import { SupportersMarquee } from "@/components/site/supporters-marquee";
 import { SiteSettingsShape } from "@/types/cms";
 
 export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
+  const configuredLogo = settings.logoUrl || "";
+  const footerLogo = !configuredLogo || configuredLogo.includes("bihuba-mark.svg") || configuredLogo.includes("bihuba-logo-glow.png")
+    ? "/bihuba-logo-glow.webp"
+    : configuredLogo;
   return (
     <>
       <SupportersMarquee items={settings.supporterCompanies || []} />
@@ -15,7 +19,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsShape }) {
               <div className="flex items-center gap-4">
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-[1.5rem] bg-white/8 p-3">
                   <Image
-                    src={settings.logoUrl || "/bihuba-mark.svg"}
+                    src={footerLogo}
                     alt={settings.shortName || "BIHUBA"}
                     width={112}
                     height={112}

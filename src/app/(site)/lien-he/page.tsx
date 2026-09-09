@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/site/section-heading";
+import Image from "next/image";
 import { getPublicSiteSettings as getSiteSettings } from "@/lib/public-content";
 
 function getMapSrc(address?: string) {
@@ -19,10 +20,12 @@ export default async function ContactPage() {
 
       <div className="mx-auto mt-8 max-w-6xl overflow-hidden rounded-[1.5rem] border border-slate-200 bg-slate-100">
         {settings.contact.officeImageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={settings.contact.officeImageUrl}
             alt="Văn phòng BIHUBA"
+            width={1600}
+            height={900}
+            sizes="(max-width: 1152px) calc(100vw - 48px), 1152px"
             className="aspect-[16/9] w-full object-contain"
           />
         ) : (

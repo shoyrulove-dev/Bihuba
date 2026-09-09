@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPublicMemberBySlug as getMemberBySlug } from "@/lib/public-content";
@@ -41,14 +42,12 @@ export default async function MemberDetailPage({
       <section className="bg-[#031634] px-6 py-10 text-white">
         <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_24px_70px_rgba(2,6,23,0.28)]">
           <div className="flex aspect-[16/9] items-center justify-center overflow-hidden bg-slate-950">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={heroImage} alt={member.name} className="h-full w-full object-contain" />
+            <Image src={heroImage} alt={member.name} width={1600} height={900} priority sizes="(max-width: 1152px) calc(100vw - 48px), 1152px" className="h-full w-full object-contain" />
           </div>
           <div className="grid gap-6 border-t border-white/10 bg-slate-950/70 p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
             <div className="flex h-24 w-24 items-center justify-center rounded-[1.4rem] bg-white p-2">
               {member.logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={member.logo} alt={member.name} className="h-full w-full object-contain" />
+                <Image src={member.logo} alt={member.name} width={96} height={96} className="h-full w-full object-contain" />
               ) : (
                 <span className="text-xl font-black text-[var(--theme-primary)]">
                   {member.name.slice(0, 2).toUpperCase()}
@@ -119,10 +118,11 @@ export default async function MemberDetailPage({
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
             <div className="flex h-[280px] items-center justify-center overflow-hidden rounded-[1.6rem] bg-slate-100 p-4">
               {member.introImage || member.logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={member.introImage || member.logo}
                   alt={member.name}
+                  width={640}
+                  height={560}
                   className="max-h-full max-w-full object-contain"
                 />
               ) : (
@@ -187,8 +187,7 @@ export default async function MemberDetailPage({
               >
                 <div className="flex h-44 items-center justify-center bg-slate-100">
                   {product.imageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={product.imageUrl} alt={product.title} className="h-full w-full object-contain" />
+                    <Image src={product.imageUrl} alt={product.title} width={640} height={352} sizes="(max-width: 768px) 100vw, 33vw" className="h-full w-full object-contain" />
                   ) : (
                     <div className="px-6 text-center text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
                       {product.type === "product" ? "Sản phẩm" : "Dịch vụ"}

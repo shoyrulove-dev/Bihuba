@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { getPublicPartnerBySlug as getPartnerBySlug } from "@/lib/public-content";
 
@@ -28,17 +29,19 @@ export default async function PartnerDetailPage({
         <div className="mx-auto max-w-6xl px-6 py-8">
           <div className="overflow-hidden rounded-[1.6rem] border border-white/12 bg-slate-950">
             {partner.bannerImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={partner.bannerImage}
                 alt={partner.name}
+                width={1600}
+                height={900}
+                priority
+                sizes="(max-width: 1152px) calc(100vw - 48px), 1152px"
                 className="aspect-[16/9] w-full bg-slate-950 object-contain"
               />
             ) : (
               <div className="flex aspect-[16/9] w-full items-center justify-center bg-[radial-gradient(circle_at_20%_20%,rgba(86,214,255,0.24),transparent_34%),linear-gradient(135deg,#061a39,#0f2f61)] px-8 text-center">
                 {partner.logo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={partner.logo} alt={partner.name} className="h-32 w-32 rounded-3xl bg-white object-contain p-4" />
+                  <Image src={partner.logo} alt={partner.name} width={128} height={128} className="h-32 w-32 rounded-3xl bg-white object-contain p-4" />
                 ) : (
                   <span className="text-3xl font-bold">{partner.name}</span>
                 )}
@@ -58,10 +61,11 @@ export default async function PartnerDetailPage({
         <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr]">
           <aside className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
             {partner.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={partner.logo}
                 alt={partner.name}
+                width={80}
+                height={80}
                 className="h-20 w-20 rounded-2xl border border-slate-200 object-contain p-2"
               />
             ) : null}
@@ -102,10 +106,12 @@ export default async function PartnerDetailPage({
                       className="overflow-hidden rounded-[1.3rem] border border-slate-200 bg-white shadow-[0_16px_38px_rgba(15,23,42,0.06)]"
                     >
                       {item.imageUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
+                        <Image
                           src={item.imageUrl}
                           alt={item.title || partner.name}
+                          width={800}
+                          height={450}
+                          sizes="(max-width: 768px) 100vw, 50vw"
                           className="aspect-[16/9] w-full bg-slate-100 object-contain"
                         />
                       ) : null}

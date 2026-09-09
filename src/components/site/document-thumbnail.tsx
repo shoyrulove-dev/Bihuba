@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { DownloadShape } from "@/types/cms";
 
 function buildPreviewLines(item: DownloadShape, format: string) {
@@ -27,8 +28,7 @@ export function DocumentThumbnail({
   return (
     <div className={`relative shrink-0 overflow-hidden rounded-[1rem] bg-[linear-gradient(135deg,#08275a,#1d4ed8)] p-[3px] shadow-[0_12px_26px_rgba(15,23,42,0.14)] ${dimensions}`}>
       {item.coverImage && !imageFailed ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={item.coverImage} alt={item.title} className="h-full w-full rounded-[0.82rem] bg-slate-100 object-contain p-1" loading="lazy" decoding="async" onError={() => setImageFailed(true)} />
+        <Image src={item.coverImage} alt={item.title} fill sizes={size === "card" ? "96px" : "72px"} className="rounded-[0.82rem] bg-slate-100 object-contain p-1" onError={() => setImageFailed(true)} />
       ) : (
         <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[0.82rem] bg-white">
           <div className="h-2 w-full bg-[linear-gradient(90deg,#22d3ee,#2563eb)]" />
