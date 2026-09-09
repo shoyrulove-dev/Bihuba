@@ -1,4 +1,5 @@
 import { createHmac, pbkdf2Sync, timingSafeEqual } from "node:crypto";
+import { compare, hash } from "bcryptjs";
 import { cookies } from "next/headers";
 import {
   ADMIN_SESSION_COOKIE,
@@ -12,6 +13,7 @@ import {
 } from "@/lib/auth-shared";
 import { connectToDatabase } from "@/lib/db";
 import { UserModel } from "@/models/user";
+import { CounterModel } from "@/models/counter";
 
 export {
   ADMIN_SESSION_COOKIE,
@@ -23,7 +25,17 @@ export {
 export type { AdminRole, SessionUser };
 
 export function hashPassword(password: string) {
-  return pbkdf2Sync(password, "bihuba-auth-salt", 120000, 64, "sha512").toString("hex");
+  return hash(password, 12);
+}
+
+async function verifyPassword(password: string, passwordHash: string) {
+  if (passwordHash.startsWith("$2")) return compare(password, passwordHash);
+
+  // Upgrade legacy PBKDF2 hashes transparently after a successful login.
+  const legacyHash = pbkdf2Sync(password, "bihuba-auth-salt", 120000, 64, "sha512").toString("hex");
+  const stored = Buffer.from(passwordHash);
+  const incoming = Buffer.from(legacyHash);
+  return stored.length === incoming.length && timingSafeEqual(stored, incoming);
 }
 
 function base64UrlEncode(value: string) {
@@ -44,7 +56,7 @@ export async function ensureAdminUser() {
 
   const credentials = getAdminCredentials();
   const existingAdmin = await UserModel.findOne({ userId: 1 });
-  const passwordHash = hashPassword(credentials.password);
+  const passwordHash = await hashPassword(credentials.password);
 
   if (!existingAdmin) {
     await UserModel.create({
@@ -78,6 +90,10 @@ export async function ensureAdminUser() {
       existingAdmin.passwordHash = passwordHash;
       shouldSave = true;
     }
+    if (!existingAdmin.sessionVersion) {
+      existingAdmin.sessionVersion = 1;
+      shouldSave = true;
+    }
     if (shouldSave) {
       await existingAdmin.save();
     }
@@ -95,11 +111,13 @@ export async function authenticateAdmin(username: string, password: string) {
   const user = await UserModel.findOne({ username: username.trim().toLowerCase() }).lean();
   if (!user) return null;
 
-  const incomingHash = hashPassword(password);
-  const stored = Buffer.from(String(user.passwordHash));
-  const incoming = Buffer.from(incomingHash);
-  if (stored.length !== incoming.length || !timingSafeEqual(stored, incoming)) {
+  const passwordHash = String(user.passwordHash);
+  if (!(await verifyPassword(password, passwordHash))) {
     return null;
+  }
+
+  if (!passwordHash.startsWith("$2")) {
+    await UserModel.updateOne({ _id: user._id }, { passwordHash: await hashPassword(password) });
   }
 
   return {
@@ -107,6 +125,7 @@ export async function authenticateAdmin(username: string, password: string) {
     username: String(user.username),
     role: user.role as AdminRole,
     name: String(user.name),
+    sessionVersion: Number(user.sessionVersion || 1),
   } satisfies SessionUser;
 }
 
@@ -145,6 +164,7 @@ export function parseSessionToken(token?: string | null): SessionUser | null {
       username: String(payload.username),
       role: payload.role,
       name: String(payload.name),
+      sessionVersion: Number(payload.sessionVersion || 0),
     };
   } catch {
     return null;
@@ -154,13 +174,18 @@ export function parseSessionToken(token?: string | null): SessionUser | null {
 export async function getCurrentAdminUser() {
   const cookieStore = await cookies();
   const session = parseSessionToken(cookieStore.get(ADMIN_SESSION_COOKIE)?.value);
+  if (!session || !(await connectToDatabase())) return null;
+  const user = await UserModel.findOne({ userId: session.userId }).select("sessionVersion role username name").lean();
+  if (!user || Number(user.sessionVersion || 1) !== session.sessionVersion || user.role === "business") return null;
   return session;
 }
 
 export async function getCurrentMemberUser() {
   const cookieStore = await cookies();
   const session = parseSessionToken(cookieStore.get(MEMBER_SESSION_COOKIE)?.value);
-  return session?.role === "business" ? session : null;
+  if (!session || session.role !== "business" || !(await connectToDatabase())) return null;
+  const user = await UserModel.findOne({ userId: session.userId }).select("sessionVersion role").lean();
+  return user?.role === "business" && Number(user.sessionVersion || 1) === session.sessionVersion ? session : null;
 }
 
 export async function isAuthenticatedAdmin() {
@@ -182,7 +207,7 @@ export async function changeAdminPassword(userId: number, nextPassword: string) 
 
   await UserModel.findOneAndUpdate(
     { userId },
-    { passwordHash: hashPassword(nextPassword) },
+    { $set: { passwordHash: await hashPassword(nextPassword) }, $inc: { sessionVersion: 1 } },
     { runValidators: true }
   );
 }
@@ -191,6 +216,12 @@ export async function getNextUserId() {
   const connection = await connectToDatabase();
   if (!connection) return 2;
 
-  const lastUser = await UserModel.findOne().sort({ userId: -1 }).lean();
-  return lastUser ? Number(lastUser.userId) + 1 : 2;
+  const lastUser = await UserModel.findOne().sort({ userId: -1 }).select("userId").lean();
+  const minimum = Math.max(1, Number(lastUser?.userId || 1));
+  const counter = await CounterModel.findOneAndUpdate(
+    { _id: "users" },
+    [{ $set: { seq: { $add: [{ $max: [{ $ifNull: ["$seq", minimum] }, minimum] }, 1] } } }],
+    { upsert: true, new: true }
+  ).lean();
+  return Number(counter?.seq || minimum + 1);
 }

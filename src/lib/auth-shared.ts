@@ -10,6 +10,7 @@ export type SessionUser = {
   username: string;
   role: AdminRole;
   name: string;
+  sessionVersion: number;
 };
 
 export type SessionPayload = SessionUser & {
@@ -17,10 +18,19 @@ export type SessionPayload = SessionUser & {
 };
 
 export function getAdminCredentials() {
+  const username = process.env.ADMIN_USERNAME;
+  const password = process.env.ADMIN_PASSWORD;
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+
+  if (process.env.NODE_ENV === "production" && (!username || !password || !sessionSecret)) {
+    throw new Error(
+      "Missing required production auth configuration: ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_SESSION_SECRET."
+    );
+  }
+
   return {
-    username: process.env.ADMIN_USERNAME ?? "admin",
-    password: process.env.ADMIN_PASSWORD ?? "Bihuba@2026",
-    sessionSecret:
-      process.env.ADMIN_SESSION_SECRET ?? "bihuba-session-secret-2026",
+    username: username ?? "admin",
+    password: password ?? "development-only-password",
+    sessionSecret: sessionSecret ?? "development-only-session-secret",
   };
 }

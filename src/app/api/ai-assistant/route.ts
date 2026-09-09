@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSiteSettings } from "@/lib/content";
+import { enforceRateLimit, rejectCrossSiteRequest, rejectOversizedBody } from "@/lib/request-security";
 
 type ChatMessage = {
   role: "user" | "assistant";
@@ -24,7 +25,7 @@ function normalizeMessages(input: unknown): ChatMessage[] {
       if (!message || typeof message !== "object") return null;
       const record = message as Record<string, unknown>;
       const role = record.role === "assistant" ? "assistant" : record.role === "user" ? "user" : null;
-      const content = String(record.content || "").trim();
+      const content = String(record.content || "").trim().slice(0, 2000);
       return role && content ? { role, content } : null;
     })
     .filter((message): message is ChatMessage => Boolean(message))
@@ -60,7 +61,14 @@ async function requestCompletion(provider: AiProvider, messages: ChatMessage[], 
   return content.trim();
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
+  const oversized = rejectOversizedBody(request, 30_000);
+  if (oversized) return oversized;
+  const limited = await enforceRateLimit(request, { scope: "ai-assistant", limit: 20, windowSeconds: 300 });
+  if (limited) return limited;
+
   const settings = await getSiteSettings({ includeSecrets: true });
   const aiSettings = settings.aiAssistant;
 

@@ -1,8 +1,14 @@
 import { MEMBER_SESSION_COOKIE, SESSION_MAX_AGE_DEFAULT, SESSION_MAX_AGE_REMEMBER, authenticateAdmin, createSessionToken } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { recordActivity } from "@/lib/activity-log";
+import { enforceRateLimit, rejectCrossSiteRequest } from "@/lib/request-security";
 
 export async function POST(request: NextRequest) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
+  const limited = await enforceRateLimit(request, { scope: "member-login", limit: 10, windowSeconds: 900 });
+  if (limited) return limited;
+
   const formData = await request.formData();
   const user = await authenticateAdmin(String(formData.get("username") ?? ""), String(formData.get("password") ?? ""));
   if (!user || user.role !== "business") return NextResponse.redirect(new URL("/hoi-vien/dang-nhap?error=1", request.url), { status: 303 });

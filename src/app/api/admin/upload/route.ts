@@ -2,6 +2,7 @@ import { createHmac, randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentAdminUser } from "@/lib/auth";
 import { canUploadAssets } from "@/lib/permissions";
+import { rejectCrossSiteRequest } from "@/lib/request-security";
 
 export const runtime = "nodejs";
 
@@ -53,6 +54,8 @@ async function authorizeUpload() {
 }
 
 export async function GET(request: NextRequest) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
   const auth = await authorizeUpload();
   if ("error" in auth) return auth.error;
 
@@ -76,6 +79,8 @@ export async function GET(request: NextRequest) {
 // Binary fallback for older clients. The current admin uploads directly to
 // ImageKit after obtaining a short-lived signature from GET.
 export async function POST(request: NextRequest) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
   const auth = await authorizeUpload();
   if ("error" in auth) return auth.error;
 

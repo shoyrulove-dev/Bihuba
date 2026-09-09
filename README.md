@@ -83,8 +83,17 @@ Lưu ý:
 ## Build production
 
 ```bash
-npm run build
+npm run check
 ```
+
+Lệnh `check` chạy tuần tự lint, TypeScript, test bảo mật cơ bản và production build.
+
+## Yêu cầu bảo mật production
+
+- Bắt buộc khai báo `ADMIN_USERNAME`, `ADMIN_PASSWORD` và `ADMIN_SESSION_SECRET`; ứng dụng sẽ từ chối xác thực nếu thiếu cấu hình production.
+- Hồ sơ E-KYC luôn ở trạng thái chờ duyệt. Chỉ quản trị viên có thể tạo hồ sơ hội viên công khai sau khi kiểm tra giấy tờ.
+- Các endpoint đăng nhập, E-KYC và AI có giới hạn tần suất; dữ liệu rate-limit được lưu trong MongoDB.
+- Đổi mật khẩu sẽ thu hồi các phiên đăng nhập cũ.
 
 ## Ghi chú MongoDB Atlas
 

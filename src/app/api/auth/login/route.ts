@@ -8,12 +8,18 @@ import {
 import { getDefaultAdminPath } from "@/lib/permissions";
 import { NextRequest, NextResponse } from "next/server";
 import { recordActivity } from "@/lib/activity-log";
+import { enforceRateLimit, rejectCrossSiteRequest, safeInternalPath } from "@/lib/request-security";
 
 export async function POST(request: NextRequest) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
+  const limited = await enforceRateLimit(request, { scope: "admin-login", limit: 8, windowSeconds: 900 });
+  if (limited) return limited;
+
   const formData = await request.formData();
   const username = String(formData.get("username") ?? "");
   const password = String(formData.get("password") ?? "");
-  const nextPath = String(formData.get("next") ?? "/admin");
+  const nextPath = safeInternalPath(String(formData.get("next") ?? "/admin"), "/admin");
   const remember = String(formData.get("remember") ?? "") === "30d";
   const user = await authenticateAdmin(username, password);
 

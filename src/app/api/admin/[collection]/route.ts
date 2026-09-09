@@ -12,6 +12,7 @@ import { slugify } from "@/lib/slug";
 import { repairDeepText } from "@/lib/text";
 import { recordActivity } from "@/lib/activity-log";
 import { invalidatePublicContent } from "@/lib/public-content";
+import { rejectCrossSiteRequest } from "@/lib/request-security";
 
 type Context = {
   params: Promise<{
@@ -159,6 +160,8 @@ export async function GET(_: NextRequest, context: Context) {
 }
 
 export async function POST(request: NextRequest, context: Context) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
   const session = await getCurrentAdminUser();
   if (!session) {
     return NextResponse.json({ message: "Chưa đăng nhập." }, { status: 401 });
@@ -244,7 +247,7 @@ export async function POST(request: NextRequest, context: Context) {
     payload.username = String(payload.username ?? "").trim().toLowerCase();
     payload.email = String(payload.email ?? "").trim().toLowerCase();
     payload.phone = String(payload.phone ?? "").trim();
-    payload.passwordHash = hashPassword(String(payload.password ?? ""));
+    payload.passwordHash = await hashPassword(String(payload.password ?? ""));
     payload.isProtected = false;
     delete payload.password;
   }

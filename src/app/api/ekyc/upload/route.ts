@@ -1,5 +1,6 @@
 import { createHmac, randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { enforceRateLimit, rejectCrossSiteRequest } from "@/lib/request-security";
 
 export const runtime = "nodejs";
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
@@ -11,6 +12,11 @@ function isValidKind(value: string): value is "logo" | "certificate" {
 // Files are uploaded from the browser straight to ImageKit. This avoids the
 // 4.5 MB request-body ceiling imposed by Vercel Functions.
 export async function GET(request: NextRequest) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
+  const limited = await enforceRateLimit(request, { scope: "ekyc-upload", limit: 12, windowSeconds: 3600 });
+  if (limited) return limited;
+
   const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
   const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
   const kind = String(request.nextUrl.searchParams.get("kind") || "");
@@ -26,5 +32,6 @@ export async function GET(request: NextRequest) {
     publicKey,
     folder: `${process.env.IMAGEKIT_BASE_FOLDER || "bihuba"}/ekyc/${kind}`,
     maxFileSize: MAX_UPLOAD_BYTES,
+    allowedFileTypes: kind === "logo" ? ["image/jpeg", "image/png", "image/webp"] : ["image/jpeg", "image/png", "image/webp", "application/pdf"],
   });
 }

@@ -8,6 +8,7 @@ import { DownloadModel } from "@/models/download";
 import { repairDeepText } from "@/lib/text";
 import { recordActivity } from "@/lib/activity-log";
 import { invalidatePublicContent } from "@/lib/public-content";
+import { rejectCrossSiteRequest } from "@/lib/request-security";
 
 type Context = {
   params: Promise<{
@@ -101,6 +102,8 @@ function normalizePostCategory(payload: Record<string, unknown>) {
 }
 
 export async function PUT(request: NextRequest, context: Context) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
   const session = await getCurrentAdminUser();
   if (!session) {
     return NextResponse.json({ message: "Chưa đăng nhập." }, { status: 401 });
@@ -190,7 +193,8 @@ export async function PUT(request: NextRequest, context: Context) {
     normalizeUserPermissions(payload);
 
     if (payload.password) {
-      payload.passwordHash = hashPassword(String(payload.password));
+      payload.passwordHash = await hashPassword(String(payload.password));
+      payload.sessionVersion = Number(existingUser.sessionVersion || 1) + 1;
       delete payload.password;
     } else {
       delete payload.password;
@@ -212,7 +216,9 @@ export async function PUT(request: NextRequest, context: Context) {
   });
 }
 
-export async function DELETE(_: NextRequest, context: Context) {
+export async function DELETE(request: NextRequest, context: Context) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
   const session = await getCurrentAdminUser();
   if (!session) {
     return NextResponse.json({ message: "Chưa đăng nhập." }, { status: 401 });

@@ -44,6 +44,11 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    sessionVersion: {
+      type: Number,
+      default: 1,
+      min: 1,
+    },
     isProtected: {
       type: Boolean,
       default: false,

@@ -5,10 +5,13 @@ import { EkycApplicationModel } from "@/models/ekyc-application";
 import { MemberModel } from "@/models/member";
 import { recordActivity } from "@/lib/activity-log";
 import { invalidatePublicContent } from "@/lib/public-content";
+import { rejectCrossSiteRequest } from "@/lib/request-security";
 
 const editableFields = ["name", "industry", "address", "phone", "email", "website", "description", "logo", "coverImage", "introImage", "companyTagline"] as const;
 
 export async function PATCH(request: NextRequest) {
+  const rejected = rejectCrossSiteRequest(request);
+  if (rejected) return rejected;
   const session = await getCurrentMemberUser();
   if (!session) return NextResponse.json({ message: "Vui lòng đăng nhập lại." }, { status: 401 });
   if (!(await connectToDatabase())) return NextResponse.json({ message: "Chưa thể kết nối dữ liệu." }, { status: 503 });

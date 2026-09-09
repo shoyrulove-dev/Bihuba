@@ -28,6 +28,23 @@ export async function getActivityLogs(limit = 200) {
   return serialize(await ActivityLogModel.find().sort({ createdAt: -1 }).limit(limit).lean());
 }
 
+export async function getMonthlyActivity() {
+  const now = new Date();
+  const months = Array.from({ length: 12 }, (_, index) => {
+    const date = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11 + index, 1));
+    return { key: `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}`, label: `T${date.getUTCMonth() + 1}`, value: 0 };
+  });
+  if (!(await connectToDatabase())) return months;
+
+  const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1));
+  const rows = await ActivityLogModel.aggregate([
+    { $match: { createdAt: { $gte: from } } },
+    { $group: { _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } }, value: { $sum: 1 } } },
+  ]);
+  const values = new Map(rows.map((row) => [`${row._id.year}-${row._id.month}`, Number(row.value)]));
+  return months.map((month) => ({ ...month, value: values.get(month.key) || 0 }));
+}
+
 export async function getOperationsSummary() {
   if (!(await connectToDatabase())) {
     return { rfqTotal: 0, rfqMatched: 0, transactionTotal: 0, paidAmount: 0, notificationTotal: 0, readNotifications: 0 };
