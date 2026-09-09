@@ -95,6 +95,13 @@ Lệnh `check` chạy tuần tự lint, TypeScript, test bảo mật cơ bản v
 - Các endpoint đăng nhập, E-KYC và AI có giới hạn tần suất; dữ liệu rate-limit được lưu trong MongoDB.
 - Đổi mật khẩu sẽ thu hồi các phiên đăng nhập cũ.
 
+## Monitoring và backup
+
+- `GET /api/health` kiểm tra cả ứng dụng và kết nối MongoDB.
+- GitHub Actions kiểm tra production mỗi 10 phút, tự mở issue khi lỗi và đóng issue khi dịch vụ phục hồi.
+- Vercel Cron chạy backup lúc 02:15 hằng ngày (Asia/Bangkok). Backup được gzip, mã hóa AES-256-GCM và lưu tại thư mục `backups` trên ImageKit.
+- Khôi phục có chủ đích bằng `npm run restore:backup -- <file> --confirm-replace`; thao tác này thay thế dữ liệu hiện tại.
+
 ## Ghi chú MongoDB Atlas
 
 Trong quá trình build từ máy hiện tại, app đang fallback sang dữ liệu mẫu vì MongoDB Atlas từng trả lỗi DNS/SRV:

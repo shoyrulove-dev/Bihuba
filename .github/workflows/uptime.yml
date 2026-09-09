@@ -1,0 +1,57 @@
+name: BIHUBA uptime monitor
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check public routes and database
+        id: health
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in / /tin-tuc /hoi-vien /api/health; do
+            curl --fail --silent --show-error --max-time 20 "https://bihuba.vercel.app${path}" >/dev/null
+          done
+      - name: Open or update incident issue
+        if: steps.health.outcome == 'failure'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const title = '[Uptime] BIHUBA production is unavailable';
+            try {
+              await github.rest.issues.getLabel({ owner: context.repo.owner, repo: context.repo.repo, name: 'uptime' });
+            } catch {
+              await github.rest.issues.createLabel({ owner: context.repo.owner, repo: context.repo.repo, name: 'uptime', color: 'd73a4a', description: 'Automated uptime incident' });
+            }
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open', labels: 'uptime'
+            });
+            const body = `Automated health check failed at ${new Date().toISOString()}.\n\nURL: https://bihuba.vercel.app/api/health\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const existing = issues.find(issue => issue.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, body });
+            } else {
+              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body, labels: ['uptime'] });
+            }
+      - name: Close resolved incident
+        if: steps.health.outcome == 'success'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const title = '[Uptime] BIHUBA production is unavailable';
+            const { data: issues } = await github.rest.issues.listForRepo({ owner: context.repo.owner, repo: context.repo.repo, state: 'open' });
+            const incident = issues.find(issue => issue.title === title);
+            if (incident) {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: incident.number, body: `Service recovered at ${new Date().toISOString()}.` });
+              await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: incident.number, state: 'closed' });
+            }

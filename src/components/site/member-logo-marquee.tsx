@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MemberShape } from "@/types/cms";
 
 function MemberLogoBadge({ member }: { member: MemberShape }) {
@@ -9,13 +10,12 @@ function MemberLogoBadge({ member }: { member: MemberShape }) {
     >
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-[var(--theme-primary)]">
         {member.logo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={member.logo}
             alt={member.name}
+            width={40}
+            height={40}
             className="h-10 w-10 rounded-full object-contain"
-            loading="lazy"
-            decoding="async"
           />
         ) : (
           member.name.slice(0, 2).toUpperCase()

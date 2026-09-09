@@ -1,18 +1,17 @@
 import Link from "next/link";
+import Image from "next/image";
 import { PartnerShape } from "@/types/cms";
 
 export function PartnerCard({ partner }: { partner: PartnerShape }) {
   return (
     <article className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
-      <Link href={`/doi-tac/${partner.slug}`} className="flex aspect-video w-full items-center justify-center overflow-hidden bg-slate-100">
+      <Link href={`/doi-tac/${partner.slug}`} className="relative flex aspect-video w-full items-center justify-center overflow-hidden bg-slate-100">
         {partner.bannerImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={partner.bannerImage} alt={partner.name} className="h-full w-full object-contain" loading="lazy" />
+          <Image src={partner.bannerImage} alt={partner.name} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-contain" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_20%_20%,rgba(86,214,255,0.24),transparent_34%),linear-gradient(135deg,#061a39,#0f2f61)] px-6 text-center">
             {partner.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={partner.logo} alt={partner.name} className="h-24 w-24 rounded-2xl bg-white object-contain p-3" />
+              <Image src={partner.logo} alt={partner.name} width={96} height={96} className="h-24 w-24 rounded-2xl bg-white object-contain p-3" />
             ) : (
               <span className="text-xl font-bold text-white">{partner.name}</span>
             )}

@@ -5,6 +5,7 @@ import { connectToDatabase } from "@/lib/db";
 import { EkycApplicationModel } from "@/models/ekyc-application";
 import { UserModel } from "@/models/user";
 import { enforceRateLimit, rejectCrossSiteRequest, rejectOversizedBody } from "@/lib/request-security";
+import { verifyBusinessRegistration } from "@/lib/tax-verification";
 
 export const runtime = "nodejs";
 
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest) {
   if (existed || existedTaxCode) return NextResponse.json({ message: "Email hoặc mã số thuế này đã được đăng ký." }, { status: 409 });
 
   const userId = await getNextUserId();
+  const taxVerification = await verifyBusinessRegistration({ taxCode: payload.taxCode, companyName: payload.companyName, certificateUrl: payload.certificateUrl });
   await UserModel.create({
     userId, name: payload.companyName, username: payload.email, email: payload.email, phone: payload.phone,
     role: "business", permissions: ["posts"], passwordHash: await hashPassword(password), isProtected: false,
@@ -55,8 +57,8 @@ export async function POST(request: NextRequest) {
 
   const application = await EkycApplicationModel.create({
     userId, ...payload, status: "needs_review",
-    autoCheck: { approved: false, formatChecksPassed: assessment.approved, checkedAt: new Date().toISOString(), reasons: assessment.reasons },
-    reportReason: assessment.reasons.join(" ") || "Hồ sơ mới đang chờ Văn phòng BIHUBA xác minh.",
+    autoCheck: { approved: false, formatChecksPassed: assessment.approved, taxVerification, checkedAt: new Date().toISOString(), reasons: [...assessment.reasons, ...taxVerification.reasons] },
+    reportReason: [...assessment.reasons, ...taxVerification.reasons].join(" ") || "Hồ sơ mới đang chờ Văn phòng BIHUBA xác minh.",
     reportedAt: new Date(), memberId: null,
   });
   void application;

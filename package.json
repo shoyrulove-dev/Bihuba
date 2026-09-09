@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
-    "seed": "node --env-file=.env.local scripts/seed.mjs"
+    "seed": "node --env-file=.env.local scripts/seed.mjs",
+    "restore:backup": "node --env-file=.env.local scripts/restore-backup.mjs"
   },
   "dependencies": {
     "@imagekit/nodejs": "^7.11.0",
@@ -25,6 +26,7 @@
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
     "bcryptjs": "^3.0.2",
+    "bson": "^7.3.2",
     "exceljs": "^4.4.0",
     "mongoose": "^9.9.5",
     "next": "^16.3.4",

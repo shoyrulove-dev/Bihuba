@@ -1,17 +1,17 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SupporterItem } from "@/types/cms";
 
 function SupporterBubble({ item }: { item: SupporterItem }) {
   const bubble = (
     <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-full bg-white p-2 transition hover:-translate-y-1">
       {item.logoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={item.logoUrl}
           alt={item.name}
+          width={96}
+          height={96}
           className="h-full w-full rounded-full object-contain"
-          loading="lazy"
-          decoding="async"
         />
       ) : (
         <span className="text-center text-[10px] font-bold uppercase text-slate-900">{item.name}</span>

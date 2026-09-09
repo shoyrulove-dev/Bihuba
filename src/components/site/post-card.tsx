@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { PostShape } from "@/types/cms";
 
 export function PostCard({ post }: { post: PostShape }) {
@@ -6,10 +7,9 @@ export function PostCard({ post }: { post: PostShape }) {
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
-      <div className="flex aspect-[16/9] w-full items-center justify-center overflow-hidden bg-slate-100">
+      <div className="relative flex aspect-[16/9] w-full items-center justify-center overflow-hidden bg-slate-100">
         {post.featuredImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={post.featuredImage} alt={post.title} className="h-full w-full object-contain" loading="lazy" />
+          <Image src={post.featuredImage} alt={post.title} fill sizes="(min-width: 1280px) 33vw, (min-width: 1024px) 50vw, 100vw" className="object-contain" />
         ) : null}
       </div>
       <div className="flex min-h-[244px] flex-1 flex-col space-y-3 p-5">

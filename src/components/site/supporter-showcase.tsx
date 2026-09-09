@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SupporterItem } from "@/types/cms";
 
 type GroupedItems = Record<string, SupporterItem[]>;
@@ -42,13 +43,12 @@ export function SupporterShowcase({ items }: { items: SupporterItem[] }) {
                 const card = (
                   <div className="flex h-full min-h-[126px] flex-col items-center justify-center rounded-[1.4rem] border border-slate-200 bg-slate-50 px-4 py-5 text-center transition hover:-translate-y-1 hover:border-cyan-300 hover:bg-white">
                     {item.logoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <Image
                         src={item.logoUrl}
                         alt={item.name}
+                        width={240}
+                        height={56}
                         className="h-14 w-full object-contain"
-                        loading="lazy"
-                        decoding="async"
                       />
                     ) : (
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-cyan-100 text-sm font-bold text-cyan-800">

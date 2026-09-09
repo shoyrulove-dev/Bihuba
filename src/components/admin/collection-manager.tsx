@@ -12,6 +12,11 @@ import {
   SupporterItem,
   ThemeSettings,
 } from "@/types/cms";
+import { AddIcon, ChevronLeftIcon, ChevronRightIcon, CloseIcon, DeleteIcon, EditIcon, StatusIcon } from "@/components/admin/collection-manager-icons";
+import { IMAGEKIT_UPLOAD_NOTE, uploadAdminAsset } from "@/components/admin/collection-manager-upload";
+import type { CollectionManagerProps, ContactItem, FieldConfig, FieldSection, FormState, NavItem, StatItem } from "@/components/admin/collection-manager-types";
+
+export type { FieldConfig } from "@/components/admin/collection-manager-types";
 
 const RichTextEditor = dynamic(
   () => import("@/components/admin/rich-text-editor").then((mod) => mod.RichTextEditor),
@@ -24,120 +29,6 @@ const RichTextEditor = dynamic(
     ),
   }
 );
-
-type FieldType =
-  | "text"
-  | "password"
-  | "textarea"
-  | "select"
-  | "date"
-  | "checkbox"
-  | "url"
-  | "richtext"
-  | "image"
-  | "file"
-  | "stats"
-  | "nav"
-  | "contact"
-  | "social"
-  | "links"
-  | "permissions"
-  | "supporters"
-  | "banners"
-  | "products"
-  | "theme"
-  | "ai";
-
-export type FieldConfig = {
-  name: string;
-  label: string;
-  type?: FieldType;
-  options?: Array<{ label: string; value: string }>;
-  placeholder?: string;
-  helpText?: string;
-  section?: string;
-  fullWidth?: boolean;
-};
-
-type CollectionManagerProps = {
-  collection: string;
-  title: string;
-  description: string;
-  fields: FieldConfig[];
-  initialItems: Record<string, unknown>[];
-  filterField?: string;
-  filterOptions?: Array<{ label: string; value: string }>;
-  singleton?: boolean;
-  allowDelete?: boolean;
-  hideSingletonEditButton?: boolean;
-  closeHref?: string;
-  panelMaxWidthClass?: string;
-  defaultSectionsOpen?: boolean;
-  serverPagination?: { page: number; pageSize: number; totalItems: number; query?: string; filter?: string };
-};
-
-type StatItem = { label: string; value: string };
-type NavItem = { label: string; href: string };
-type ContactItem = {
-  address: string;
-  phone: string;
-  email: string;
-  website?: string;
-  officeImageUrl?: string;
-  googleMapUrl?: string;
-};
-type FormState = Record<string, unknown>;
-
-type FieldSection = {
-  title: string;
-  fields: FieldConfig[];
-};
-
-const IMAGEKIT_UPLOAD_NOTE =
-  "ImageKit Free: ảnh/audio/raw tối đa 25MB/file, video 100MB. Lite: 40MB/300MB video. Pro: 50MB/2GB video. File quá lớn nên upload Google Drive rồi dán link chia sẻ vào ô URL.";
-
-const MAX_IMAGEKIT_FILE_SIZE = 25 * 1024 * 1024;
-
-async function uploadAdminAsset(file: File, folder: string) {
-  if (file.size > MAX_IMAGEKIT_FILE_SIZE) {
-    throw new Error(
-      "File vượt quá giới hạn 25MB. Hãy tải lên Google Drive rồi dán link chia sẻ vào ô URL."
-    );
-  }
-
-  const authResponse = await fetch(
-    `/api/admin/upload?folder=${encodeURIComponent(folder)}`,
-    { cache: "no-store", signal: AbortSignal.timeout(30_000) }
-  );
-  const authResult = (await authResponse.json().catch(() => ({}))) as Record<string, unknown>;
-
-  if (!authResponse.ok) {
-    throw new Error(String(authResult.message || "Không thể xác thực phiên tải file."));
-  }
-
-  const payload = new FormData();
-  payload.append("file", file);
-  payload.append("fileName", file.name);
-  payload.append("folder", String(authResult.folder || folder));
-  payload.append("useUniqueFileName", "true");
-  payload.append("publicKey", String(authResult.publicKey || ""));
-  payload.append("token", String(authResult.token || ""));
-  payload.append("expire", String(authResult.expire || ""));
-  payload.append("signature", String(authResult.signature || ""));
-
-  const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
-    method: "POST",
-    body: payload,
-    signal: AbortSignal.timeout(120_000),
-  });
-  const result = (await response.json().catch(() => ({}))) as Record<string, unknown>;
-
-  if (!response.ok || !result.url) {
-    throw new Error(String(result.message || "Tải lên ImageKit thất bại."));
-  }
-
-  return String(result.url);
-}
 
 const defaultAiAssistantSettings: AiAssistantSettings = {
   enabled: true,
@@ -162,86 +53,6 @@ const permissionOptions = [
   { label: "Quản lý giao dịch", value: "transactions" },
   { label: "Quản lý thông báo", value: "notifications" },
 ];
-
-function EditIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M4 20h4l10-10-4-4L4 16v4Z" />
-      <path d="M13 7l4 4" />
-    </svg>
-  );
-}
-
-function DeleteIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M5 7h14M9 7V4h6v3M8 7l1 12h6l1-12" />
-    </svg>
-  );
-}
-
-function AddIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M12 5v14M5 12h14" />
-    </svg>
-  );
-}
-
-function ChevronLeftIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M15 6l-6 6 6 6" />
-    </svg>
-  );
-}
-
-function ChevronRightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M9 6l6 6-6 6" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M6 6l12 12M18 6 6 18" />
-    </svg>
-  );
-}
-
-function StatusIcon({ status }: { status: unknown }) {
-  const value = String(status);
-  if (value === "published") {
-    return (
-      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300" title="Đã duyệt" aria-label="Đã duyệt">
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.4">
-          <path d="m5 12 4 4L19 6" />
-        </svg>
-      </span>
-    );
-  }
-  if (value === "pending") {
-    return (
-      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-amber-400/15 text-amber-200" title="Chờ duyệt" aria-label="Chờ duyệt">
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor">
-          <circle cx="6" cy="12" r="1.8" />
-          <circle cx="12" cy="12" r="1.8" />
-          <circle cx="18" cy="12" r="1.8" />
-        </svg>
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-400/15 text-slate-300" title="Bản nháp" aria-label="Bản nháp">
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="6" />
-      </svg>
-    </span>
-  );
-}
 
 function getRoleLabel(role: unknown) {
   if (role === "admin") return "Admin";
