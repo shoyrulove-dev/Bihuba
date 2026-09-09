@@ -1,10 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { DownloadCard } from "@/components/site/download-card";
 import { FeatureBannerCarousel } from "@/components/site/feature-banner-carousel";
 import { MemberCard } from "@/components/site/member-card";
 import { PostCard } from "@/components/site/post-card";
 import { SectionHeading } from "@/components/site/section-heading";
 import { getPublicDownloads as getDownloads, getPublicMembers as getMembers, getPublicPosts as getPosts, getPublicSiteSettings as getSiteSettings } from "@/lib/public-content";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const marketplaceSteps = [
   { number: "01", title: "Tìm đúng đối tác", body: "Tra cứu doanh nghiệp, ngành nghề, sản phẩm và năng lực cung ứng trong cộng đồng." },
