@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MemberShape } from "@/types/cms";
 
 function getMemberFallbackBanner(member: MemberShape) {
@@ -26,13 +27,12 @@ export function MemberCard({
           href={`/hoi-vien/${member.slug}`}
           className="relative flex aspect-video w-full items-center justify-center overflow-hidden bg-[linear-gradient(135deg,#edf7ff,#f8fafc)]"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={bannerImage}
             alt={`Banner ${member.name}`}
-            className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]"
-            loading="lazy"
-            decoding="async"
+            fill
+            sizes="(min-width: 1024px) 33vw, 360px"
+            className="object-contain transition duration-500 group-hover:scale-[1.02]"
           />
           <span className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-slate-950/45 to-transparent" />
           <span className="absolute bottom-3 left-4 rounded-full border border-white/40 bg-slate-950/72 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur">
@@ -44,8 +44,7 @@ export function MemberCard({
           <div className="flex items-start gap-3">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white text-xs font-black text-[var(--theme-primary)] shadow-sm">
               {member.logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={member.logo} alt="" className="h-full w-full object-contain p-1" loading="lazy" />
+                <Image src={member.logo} alt="" width={48} height={48} className="h-full w-full object-contain p-1" />
               ) : (
                 member.name.slice(0, 2).toUpperCase()
               )}
@@ -80,13 +79,12 @@ export function MemberCard({
         <div className="grid gap-3 sm:grid-cols-[52px_minmax(0,1fr)_auto] sm:items-center">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[0.9rem] bg-slate-100 text-xs font-bold text-[var(--theme-primary)]">
             {member.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={member.logo}
                 alt={member.name}
+                width={44}
+                height={44}
                 className="h-11 w-11 rounded-[0.75rem] object-contain"
-                loading="lazy"
-                decoding="async"
               />
             ) : (
               member.name.slice(0, 2).toUpperCase()
@@ -114,16 +112,15 @@ export function MemberCard({
       <article className="overflow-hidden rounded-[1.6rem] border border-slate-200 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.06)]">
         <Link
           href={`/hoi-vien/${member.slug}`}
-          className="flex aspect-video w-full items-center justify-center overflow-hidden bg-slate-100"
+          className="relative flex aspect-video w-full items-center justify-center overflow-hidden bg-slate-100"
         >
           {bannerImage ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={bannerImage}
               alt={member.name}
-              className="h-full w-full object-contain"
-              loading="lazy"
-              decoding="async"
+              fill
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              className="object-contain"
             />
           ) : (
             <div className="px-8 text-center text-3xl font-black text-[var(--theme-primary)]">{member.name}</div>
@@ -147,13 +144,12 @@ export function MemberCard({
         <div className="flex items-start gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.2rem] bg-slate-100 text-xs font-bold text-[var(--theme-primary)]">
             {member.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={member.logo}
                 alt={member.name}
+                width={48}
+                height={48}
                 className="h-12 w-12 rounded-[1rem] object-contain"
-                loading="lazy"
-                decoding="async"
               />
             ) : (
               member.name.slice(0, 2).toUpperCase()
