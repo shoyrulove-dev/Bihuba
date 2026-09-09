@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: imageKitHostname,
       },
+      {
+        protocol: "https",
+        hostname: "bihuba.vercel.app",
+      },
     ],
   },
   async headers() {
